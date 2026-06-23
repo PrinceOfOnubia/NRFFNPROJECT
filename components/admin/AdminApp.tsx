@@ -52,7 +52,7 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
               </button>
             );
           })}
-          <div className="npl-side__foot"><a href="/" className="npl-nav"><LogOut size={19} /> <span>Exit portal</span></a></div>
+          <div className="npl-side__foot"><a href="/" className="npl-nav"><LogOut size={19} /> <span>Sign out</span></a></div>
         </aside>
 
         <div className="npl-main">

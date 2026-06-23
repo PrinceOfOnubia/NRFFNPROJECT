@@ -806,7 +806,30 @@
 }
 
 /* ---------- Screenshot QA refinement pass ---------- */
-.nlp-brand__img { height: 52px; }
+.nlp-brand__img { height: 60px; }
+.nlp-foot {
+  padding-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+}
+.nlp-foot__grid {
+  grid-template-columns: minmax(0, 1.55fr) minmax(180px, .6fr) minmax(180px, .6fr);
+  align-items: start;
+  gap: clamp(1.5rem, 2vw, 3rem);
+}
+.nlp-foot__brand p {
+  max-width: 620px;
+  margin-bottom: 1rem;
+}
+.nlp-foot__brand strong {
+  color: #fff;
+  font-weight: 900;
+}
+.nlp-foot__col {
+  justify-self: end;
+  min-width: 160px;
+}
+.nlp-foot__certificate {
+  margin-top: .75rem;
+}
 .nlp-nav__inner { height: 86px; }
 .nlp-hero h1 .accent-blue { color: var(--c-royal); }
 .nlp-hero h1 .accent-green { color: var(--c-green); }
@@ -865,16 +888,17 @@
 .nlp-mobile-slide { display: contents; }
 
 @media (max-width: 860px) {
-  .nlp-brand__img { height: 48px; }
+  .nlp-brand__img { height: 56px; }
   .nlp-nav__inner { height: 82px; }
   .nlp-burger {
-    width: 54px;
-    height: 54px;
-    border: 2px solid #cddaf1;
+    width: 44px;
+    height: 44px;
+    border: 0;
     border-radius: 0;
     display: grid;
     place-items: center;
-    background: #fff;
+    background: transparent;
+    color: var(--c-royal-900);
   }
   .nlp-nav__links,
   .nlp-nav__login,
@@ -883,13 +907,15 @@
 }
 
 @media (max-width: 760px) {
-  .nlp-brand__img { height: 44px; }
+  .nlp-brand__img { height: 50px; }
   .nlp-hero__eyebrow {
-    white-space: normal;
-    font-size: .78rem;
-    line-height: 1.65;
-    letter-spacing: .13em;
-    width: 100%;
+    white-space: nowrap;
+    font-size: clamp(.43rem, 2.25vw, .58rem);
+    line-height: 1.2;
+    letter-spacing: .1em;
+    width: auto;
+    max-width: 100%;
+    padding: .52rem .72rem;
   }
   .nlp-mobile-slider {
     display: grid;
@@ -923,6 +949,36 @@
   .nlp-academy__grid { grid-template-columns: 1fr; gap: 2rem; }
   .nlp-academy__panel { min-height: 520px; }
   .nlp-cta__btns .nlp-btn { width: 100%; min-height: 64px; }
+  .nlp-foot__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem 1rem;
+  }
+  .nlp-foot__brand {
+    grid-column: 1 / -1;
+  }
+  .nlp-foot__brand p {
+    max-width: none;
+    font-size: .86rem;
+    line-height: 1.65;
+  }
+  .nlp-foot__certificate {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .nlp-foot__col {
+    justify-self: stretch;
+    min-width: 0;
+  }
+  .nlp-foot__col h4 {
+    margin-bottom: .7rem;
+  }
+  .nlp-foot__col a {
+    font-size: .86rem;
+    padding: .32rem 0;
+  }
+  .nlp-foot__bottom {
+    padding-top: 1.2rem;
+  }
 }
 
 @media (min-width: 861px) {

@@ -26,6 +26,10 @@
   align-items: flex-end;
   gap: 10px;
 }
+body:has(.npl) .floatingActions,
+body:has(.nauth) .floatingActions {
+  display: none;
+}
 .floatingActions__button {
   width: 48px;
   height: 48px;
@@ -107,8 +111,8 @@
 .propertyDetail__related-card a { display: inline-block; margin-top: .8rem; color: #1046a3; font-weight: 800; text-decoration: none; }
 
 @media (max-width: 760px) {
-  .floatingActions { right: max(12px,env(safe-area-inset-right)); bottom: calc(78px + env(safe-area-inset-bottom)); }
-  .floatingActions__button { width: 46px; height: 46px; }
+  .floatingActions { right: max(12px,env(safe-area-inset-right)); bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .floatingActions__button { width: 44px; height: 44px; }
   .propertyDetail__nav img { width: 120px; }
   .propertyDetail__hero { border-radius: 0; min-height: 530px; }
   .propertyDetail__hero::after { background: linear-gradient(0deg,rgba(7,31,68,.94),rgba(7,31,68,.42)); }

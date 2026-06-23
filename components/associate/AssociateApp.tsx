@@ -74,7 +74,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
             <div key={grp.label}>
               <div className="npl-side__group">{grp.label}</div>
               {grp.items.map(([label, Icon]) => (
-                <button key={label} className={`npl-nav${page === label ? " active" : ""}`} onClick={() => go(label)}>
+                <button key={label} data-page={label} className={`npl-nav${page === label ? " active" : ""}`} onClick={() => go(label)}>
                   <Icon size={19} /> <span>{label}</span>
                   {label === "Notifications" && unread > 0 && <span className="npl-nav__badge">{unread}</span>}
                 </button>
@@ -82,7 +82,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
             </div>
           ))}
           <div className="npl-side__foot">
-            <a href="/" className="npl-nav"><LogOut size={19} /> <span>Exit portal</span></a>
+            <a href="/" className="npl-nav"><LogOut size={19} /> <span>Sign out</span></a>
           </div>
         </aside>
 
@@ -127,7 +127,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
 
       {/* MOBILE BOTTOM NAV */}
       <nav className="npl-mobnav">
-        {(["Overview", "CRM", "Earnings", "Referrals", "Academy"] as PageKey[]).map((p) => {
+        {(["Overview", "CRM", "Earnings", "Referrals", "Profile"] as PageKey[]).map((p) => {
           const Icon = NAV.find((n) => n[0] === p)![1];
           return (
             <button key={p} className={page === p ? "active" : ""} onClick={() => go(p)}>
@@ -191,13 +191,13 @@ const tempClass = (t: string) => (t === "Hot" ? "hot" : t === "Warm" ? "warn" : 
 function Overview({ go, onWithdraw }: { go: (p: PageKey) => void; onWithdraw: () => void }) {
   return (
     <>
-      <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#0a3476 55%,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
+      <div className="npl-card npl-overview-hero" style={{ background: "linear-gradient(150deg,#071f44,#0a3476 55%,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
         <div>
           <span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Good morning, {member.name.split(" ")[0]}</span>
           <h2 style={{ color: "#fff", fontSize: "1.7rem", margin: ".4rem 0" }}>You&apos;re {Math.round((rankProgress.volume / rankProgress.target) * 100)}% to {rankProgress.next}</h2>
           <p style={{ color: "rgba(255,255,255,.78)" }}>{naira(rankProgress.volume)} of {naira(rankProgress.target)} team volume · Rank: {member.rank}</p>
         </div>
-        <div style={{ display: "flex", gap: ".7rem", flexWrap: "wrap" }}>
+        <div className="npl-hero-actions" style={{ display: "flex", gap: ".7rem", flexWrap: "wrap" }}>
           <button className="npl-btn npl-btn--primary" onClick={() => go("Referrals")}><Share2 size={16} /> Share link</button>
           <button className="npl-btn npl-btn--ghost" onClick={onWithdraw}><Wallet size={16} /> Withdraw</button>
         </div>

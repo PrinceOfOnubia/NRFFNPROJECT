@@ -531,8 +531,8 @@
   }
   .npl-top {
     display: grid;
-    grid-template-columns: 56px minmax(0, 1fr) 56px 56px;
-    min-height: 104px;
+    grid-template-columns: 48px minmax(0, 1fr) 46px 46px;
+    min-height: 88px;
     gap: .7rem;
     align-items: center;
     padding: .85rem 1rem;
@@ -544,9 +544,9 @@
   .npl-top__sub { font-size: .9rem; }
   .npl-top .npl-icnbtn,
   .npl-top .npl-pill-user {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
   }
   .npl-top .npl-pill-user {
     display: grid;
@@ -556,9 +556,12 @@
     background: transparent;
   }
   .npl-top .npl-avatar {
-    width: 52px;
-    height: 52px;
-    font-size: 1rem;
+    width: 44px;
+    height: 44px;
+    font-size: .9rem;
+  }
+  .npl-side .npl-nav[data-page="Academy"] {
+    display: none;
   }
 }
 
@@ -576,30 +579,31 @@
   }
   .npl-refbox {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(118px, 36%) minmax(0, 1fr);
+    align-items: center;
     justify-items: stretch;
     gap: 1rem;
   }
   .npl-qr {
-    width: min(220px, 100%);
+    width: 100%;
     height: auto;
     aspect-ratio: 1;
     justify-self: start;
   }
   .npl-linkfield {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(98px, .42fr);
     padding: .55rem;
-    border-radius: 18px;
+    border-radius: 999px;
   }
   .npl-linkfield input {
     width: 100%;
     padding: .25rem .45rem;
-    text-align: center;
+    text-align: left;
   }
   .npl-share {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .npl-share a,
   .npl-share button {
@@ -624,20 +628,43 @@
 
 @media (max-width: 430px) {
   .npl-top {
-    grid-template-columns: 52px minmax(0, 1fr) 52px 52px;
+    grid-template-columns: 46px minmax(0, 1fr) 44px 44px;
     gap: .55rem;
     padding-inline: .8rem;
   }
   .npl-top .npl-icnbtn,
   .npl-top .npl-pill-user {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
   }
   .npl-top .npl-avatar {
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
   }
   .npl-top h1 { font-size: 1.25rem; }
   .npl-top__sub { font-size: .78rem; }
   .npl-share { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .npl-overview-hero {
+    padding: 1.2rem !important;
+  }
+  .npl-overview-hero h2 {
+    font-size: clamp(1.85rem, 8vw, 2.55rem) !important;
+    line-height: 1.06 !important;
+  }
+  .npl-overview-hero p {
+    font-size: 1.05rem !important;
+    line-height: 1.45 !important;
+  }
+  .npl-hero-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100%;
+  }
+  .npl-hero-actions .npl-btn {
+    width: 100%;
+    min-height: 58px;
+  }
 }
