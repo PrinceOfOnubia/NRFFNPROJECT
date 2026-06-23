@@ -1,0 +1,542 @@
+/* Final dashboard consistency pass: keep primary blue for true actions only. */
+.profileArea,
+.dashboardContent {
+  background: #ffffff;
+}
+
+.checkoutOverlay {
+  display: flex;
+  justify-content: flex-end;
+  place-items: initial;
+  padding: 0;
+  background: rgba(21, 28, 30, 0.56);
+  backdrop-filter: none;
+}
+
+.checkoutShell {
+  width: min(50vw, 760px);
+  min-width: 620px;
+  height: 100%;
+  max-height: 100vh;
+  border: 0;
+  border-left: 1px solid #dfe8ef;
+  border-radius: 0;
+  box-shadow: -22px 0 55px rgba(18, 33, 39, 0.18);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+}
+
+.checkoutHeader {
+  padding: 18px 22px;
+  background: #ffffff;
+}
+
+.checkoutHeader h2 {
+  color: #25292c;
+  font-size: 20px;
+}
+
+.checkoutHeader span {
+  color: #8b96b1;
+  font-size: 12px;
+}
+
+.checkoutHeader button,
+.mobileSheet .sheetTitle button {
+  background: #eef8fb !important;
+  color: #7d899a !important;
+}
+
+.checkoutProgress {
+  max-width: none;
+  margin: 18px 22px 0;
+}
+
+.checkoutBody {
+  padding: 22px;
+  overflow-y: auto;
+}
+
+.checkoutGrid {
+  grid-template-columns: 1fr;
+}
+
+.orderSummary {
+  order: -1;
+  padding: 20px 22px;
+  border: 0;
+  border-radius: 18px;
+  background: #eafcfe;
+}
+
+.orderSummary h3 {
+  margin-bottom: 10px;
+  color: #8b96b1;
+  font-size: 14px;
+}
+
+.checkoutProperty,
+.checkoutFacts p,
+.methodPanel,
+.resultReceipt,
+.documentGroup,
+.assetList > article,
+.emptyPanel,
+.walletPanel {
+  background: #ffffff;
+}
+
+.checkoutForm input,
+.methodPanel input,
+.tinField input,
+.tinField select {
+  border: 0;
+  background: #f1f8fb;
+}
+
+.checkoutBack,
+.resultActions > button:not(.checkoutPrimary),
+.failureDemo,
+.drawerFooter button:first-child,
+.confirmActions button:first-child {
+  border: 1px solid #d8e4ee;
+  background: #ffffff;
+  color: #25292c;
+}
+
+.checkoutPrimary,
+.drawerFooter button:last-child,
+.verificationCard button,
+.walletAction button,
+.emptyPanel button,
+.walletPanel .emptyState button {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #ffffff;
+}
+
+.dashFilters button,
+.dashFilters button:first-child,
+.dashFilters button.active,
+.sizeChoices button,
+.sizeChoices button.active,
+.planSwitch button,
+.planSwitch button.active {
+  border: 1px solid #d8e4ee !important;
+  background: #f1f8fb !important;
+  color: #25292c !important;
+  box-shadow: none !important;
+}
+
+.dashFilters button:hover,
+.dashFilters button:focus-visible,
+.sizeChoices button:hover,
+.planSwitch button:hover {
+  border-color: #c5dce8;
+  background: #eaf6fa;
+  color: #25292c;
+}
+
+.sizeChoices button.active,
+.planSwitch button.active {
+  border-color: #b9dce8 !important;
+  background: #e9fbfc !important;
+  color: var(--teal) !important;
+}
+
+.purchasePanel,
+.paymentPlanCard,
+.ownershipPlanCard {
+  background: #ffffff;
+}
+
+.purchasePanel {
+  border-color: #dfe8ef;
+}
+
+.planSwitch,
+.unitStepper button {
+  background: #f1f8fb;
+}
+
+.portfolioOverview,
+.documentsHero,
+.realtorHero,
+.teamHero,
+.marketingBanner {
+  border-color: #dfe8ef;
+  background: #ffffff !important;
+}
+
+.portfolioStats article,
+.realtorMetricGrid article,
+.commissionStats article,
+.teamStats article,
+.realtorPanel,
+.leadTable,
+.commissionTable,
+.campaignGrid > article {
+  border: 1px solid #edf2f5;
+  box-shadow: none;
+  background: #ffffff;
+}
+
+.nextPayment {
+  background: #f1f8fb;
+}
+
+.dashboardSummaryCard {
+  min-height: 220px;
+  align-content: start;
+  justify-items: start;
+  text-align: left;
+  gap: 18px;
+}
+
+.dashboardSummaryCard header {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  align-items: center;
+  column-gap: 13px;
+  width: 100%;
+}
+
+.dashboardSummaryCard .summaryIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: #e9fbfc;
+  color: var(--teal);
+  display: grid;
+  place-items: center;
+}
+
+.dashboardSummaryCard h3 {
+  margin: 0;
+}
+
+.dashboardSummaryCard header small {
+  grid-column: 2;
+  margin-top: 3px;
+  color: #6f7b8d;
+  font-size: 13px;
+}
+
+.propertyMiniList,
+.activityTimeline {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+}
+
+.propertyMiniList > div,
+.activityTimeline > div {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 12px;
+  border: 1px solid #edf2f5;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.propertyMiniList strong,
+.activityTimeline strong {
+  display: block;
+  color: #25292c;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.propertyMiniList small,
+.activityTimeline small,
+.activityTimeline time,
+.summaryEmptyCopy {
+  color: #6f7b8d;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.propertyMiniList b {
+  color: #25292c;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #8b96b1;
+}
+
+.statusDot.successful,
+.activityIcon.successful {
+  background: #e6f6ef;
+  color: #28775a;
+}
+
+.statusDot.pending,
+.activityIcon.pending {
+  background: #fff4da;
+  color: #97671d;
+}
+
+.statusDot.failed,
+.activityIcon.failed {
+  background: #ffe8e8;
+  color: #af4747;
+}
+
+.statusDot.successful {
+  background: #28775a;
+}
+
+.statusDot.pending {
+  background: #d6922d;
+}
+
+.statusDot.failed {
+  background: #af4747;
+}
+
+.activityIcon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #edf3f6;
+  color: #557185;
+}
+
+.summaryEmptyCopy {
+  margin: 0;
+}
+
+.dashboardSummaryCard button {
+  margin-top: auto;
+}
+
+.leadDrawer {
+  width: min(50vw, 560px);
+  min-width: 500px;
+  box-shadow: -22px 0 55px rgba(18, 33, 39, 0.18);
+}
+
+.leadDrawer header > button,
+.drawerHead button,
+.checkoutHeader button,
+.mobileSheet .sheetTitle button {
+  border-color: #d8e4ee;
+  background: #eef8fb !important;
+  color: #7d899a !important;
+}
+
+.leadContactActions button,
+.followUpEditor button,
+.marketingBanner button,
+.campaignBody button,
+.realtorPanel header button,
+.commissionHistory header button {
+  border: 1px solid #d8e4ee;
+  background: #ffffff;
+  color: #25292c;
+}
+
+.followUpEditor,
+.pipelineColumn,
+.campaignVisual,
+.leadTable > div,
+.commissionTable > div {
+  background: #f8fafc;
+}
+
+.crmViewSwitch {
+  background: #f1f8fb;
+}
+
+.crmViewSwitch button.active {
+  background: #ffffff;
+  color: #25292c;
+}
+
+.commissionHero {
+  border-color: #dfe8ef;
+  background: #ffffff !important;
+  color: #172e45;
+}
+
+.commissionHero > div > span,
+.commissionHero p {
+  color: #6f7b8d;
+}
+
+.commissionHero button,
+.teamHero button,
+.realtorPageHeader > button,
+.addLeadDrawer > footer button:last-child,
+.activityComposer button {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #ffffff;
+}
+
+.addLeadDrawer > footer button:first-child {
+  border-color: #d8e4ee;
+  background: #ffffff;
+  color: #25292c;
+}
+
+.panelTitle:has(+ .emptyState) {
+  margin-bottom: 18px;
+}
+
+.mobileSheet {
+  max-height: min(82vh, 720px);
+  overflow-y: auto;
+}
+
+.mobileSheet > button:last-child {
+  margin-top: 0;
+  border-top: 0;
+  background: transparent !important;
+  color: #25292c !important;
+}
+
+.mobileSheet > button:last-child svg {
+  color: #25292c !important;
+}
+
+.userMenu button:last-child {
+  color: #25292c;
+  background: #ffffff;
+}
+
+.userMenu button:last-child:hover {
+  background: #f3fbfc;
+}
+
+@media (max-width: 900px) {
+  .checkoutShell {
+    width: min(100%, 560px);
+    min-width: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .profileTop {
+    padding: 0 16px;
+    gap: 10px;
+  }
+
+  .profileTop h1 {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 28px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .topActions {
+    gap: 8px;
+  }
+
+  .notificationsPopup,
+  .userMenu {
+    position: fixed;
+    top: 82px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+  }
+
+  .notificationsPopup {
+    max-height: calc(100vh - 112px);
+    overflow-y: auto;
+  }
+
+  .checkoutOverlay {
+    align-items: stretch;
+  }
+
+  .checkoutShell {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .checkoutHeader,
+  .checkoutBody,
+  .checkoutFooter {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .checkoutProgress {
+    margin-right: 18px;
+    margin-left: 18px;
+  }
+
+  .checkoutFooter {
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+
+  .checkoutFooter,
+  .checkoutFooter .paymentActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .checkoutFooter > span {
+    display: none;
+  }
+
+  .checkoutBack,
+  .checkoutPrimary,
+  .failureDemo {
+    width: 100%;
+  }
+
+  .orderSummary {
+    border-radius: 16px;
+  }
+
+  .portfolioOverview {
+    padding: 22px;
+  }
+
+  .dashboardSummaryCard {
+    min-height: 0;
+  }
+
+  .propertyMiniList > div,
+  .activityTimeline > div {
+    grid-template-columns: auto 1fr;
+  }
+
+  .propertyMiniList b,
+  .activityTimeline time {
+    grid-column: 2;
+  }
+
+  .leadDrawer {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dashFilters {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .dashFilters button {
+    width: 100%;
+    justify-content: center;
+  }
+}

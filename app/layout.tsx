@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./revision.css";
+import "./styles/associate.css";
+import "./styles/ui-fixes.css";
+import "./styles/landing.css";
+import "./styles/portal.css";
+import FloatingActions from "../components/FloatingActions";
 
 export const metadata: Metadata = {
   title: "NRFFN | Real estate wealth network",
@@ -15,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>{children}<FloatingActions /></body>
     </html>
   );
 }
