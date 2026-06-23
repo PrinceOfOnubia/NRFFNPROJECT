@@ -41,7 +41,7 @@ export default function AuthScreen({
     <div className="nauth">
       <aside className="nauth__brand">
         <img className="bg" src="/img/auth.jpg" alt="" aria-hidden="true" />
-        <a href="/" className="nauth__logo"><span className="chip"><img src="/assets/nrffn-logo-blue.png" alt="NRFFN" /></span></a>
+        <span aria-hidden="true" />
         <div className="nauth__brand-mid">
           <h2>Nigeria&apos;s largest real estate wealth network</h2>
           <p>{COPY[role].tagline}</p>
@@ -62,7 +62,6 @@ export default function AuthScreen({
       <main className="nauth__form-wrap">
         <div className="nauth__card">
           <a href="/" className="nauth__back"><ArrowLeft size={16} /> Back to home</a>
-          <a href="/" className="nauth__logo nauth__mlogo"><span className="chip"><img src="/assets/nrffn-logo-blue.png" alt="NRFFN" /></span></a>
 
           <span className="nauth__eyebrow">{COPY[role].label} portal</span>
           <h1>{isRegister ? "Create your account" : "Welcome back"}</h1>

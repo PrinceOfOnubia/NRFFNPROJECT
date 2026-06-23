@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 import {
-  Bell, Building2, Check, ChevronRight, Clock3, Copy, Download, FileText, Home, LogOut,
-  MapPin, Menu, Search, Share2, ShieldCheck, Store, TrendingUp, Users, Wallet, X, Landmark, MessageCircle
+  Bell, Building2, Calendar, Check, ChevronRight, Clock3, Copy, Download, FileText, Home, Info,
+  LogOut, MapPin, Menu, Search, Share2, ShieldCheck, Store, TrendingUp, Users, Wallet, X, Landmark, MessageCircle
 } from "lucide-react";
 import {
   naira, investor, portfolio, wallet, holdings, marketplace, transactions, installments,
-  documents, valueTrend, referral, type Listing
+  documents, valueTrend, referral, clientNotifications, type Listing
 } from "../../lib/client/data";
 import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
 import { propertySlug } from "../../lib/property-catalog";
 
-type PageKey = "Home" | "Wallet" | "Marketplace" | "Investments" | "Documents" | "Referral" | "Profile";
+type PageKey = "Home" | "Wallet" | "Marketplace" | "Investments" | "Documents" | "Referral" | "Notifications" | "Profile";
 
 const NAV: [PageKey, typeof Home, string][] = [
   ["Home", Home, "MAIN"],
@@ -21,6 +21,7 @@ const NAV: [PageKey, typeof Home, string][] = [
   ["Wallet", Wallet, "MONEY"],
   ["Documents", FileText, "MONEY"],
   ["Referral", Share2, "MORE"],
+  ["Notifications", Bell, "MORE"],
   ["Profile", Users, "MORE"]
 ];
 const SUB: Record<PageKey, string> = {
@@ -30,6 +31,7 @@ const SUB: Record<PageKey, string> = {
   Investments: "Your holdings & payment plans",
   Documents: "Receipts, allocations & certificates",
   Referral: "Invite & earn",
+  Notifications: "Activity & updates",
   Profile: "Account & verification"
 };
 
@@ -82,6 +84,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
             {page === "Wallet" && <WalletView />}
             {page === "Documents" && <Documents_ />}
             {page === "Referral" && <Referral_ />}
+            {page === "Notifications" && <Notifications_ />}
             {page === "Profile" && <Profile />}
           </main>
         </div>
@@ -260,7 +263,7 @@ function WalletView() {
     <>
       <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div><span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Available balance</span><h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(wallet.available)}</h2></div>
-        <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}><button className="npl-btn npl-btn--primary"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--secondary">Withdraw</button></div>
+        <div className="npl-wallet-actions"><button className="npl-btn npl-btn--primary"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--secondary">Withdraw</button></div>
       </div>
       <div className="npl-grid cols-3">
         <Metric icon={Wallet} label="Available" value={naira(wallet.available)} variant="gold" />
@@ -290,22 +293,60 @@ function WalletView() {
 }
 
 /* ===================== DOCUMENTS ===================== */
-const docIcon: Record<string, typeof Home> = { Allocation: Landmark, Receipt: FileText, Contract: FileText, Certificate: ShieldCheck, Survey: MapPin };
+const docIcon: Record<string, typeof Home> = { Allocation: Landmark, Receipt: FileText, Contract: FileText, Certificate: ShieldCheck, Survey: MapPin, Schedule: Calendar };
 function Documents_() {
+  const groups = documents.reduce<Record<string, typeof documents>>((acc, doc) => {
+    const key = `${doc.property}-${doc.reference}`;
+    acc[key] = acc[key] ? [...acc[key], doc] : [doc];
+    return acc;
+  }, {});
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Document center" title="Your documents" sub="Receipts, allocation letters, contracts and certificates." /></div>
-      <div className="npl-grid" style={{ gap: ".8rem" }}>
-        {documents.map((d) => {
-          const Ic = docIcon[d.type] || FileText;
+      <div className="npl-card"><PageHead eyebrow="Document center" title="Property documents" sub="Receipts, schedules and allocation letters grouped by each property purchase." /></div>
+      <div className="npl-docgroups">
+        {Object.values(groups).map((docs) => {
+          const first = docs[0];
           return (
-            <div className="npl-notif" key={d.id}>
-              <span className="npl-notif__ic"><Ic size={19} /></span>
-              <div style={{ flex: 1 }}><b>{d.name}</b><p>{d.property} · {d.type} · {d.date}</p></div>
-              <button className="npl-btn npl-btn--ghost" style={{ padding: ".5rem .9rem" }}><Download size={15} /> Download</button>
-            </div>
+            <section className="npl-docgroup" key={first.reference}>
+              <header>
+                <div>
+                  <span>{first.ownership}</span>
+                  <h3>{first.property}</h3>
+                  <p>{first.unit} · {first.reference}</p>
+                </div>
+                <i className={first.investmentStatus === "Successful" ? "ok" : "warn"}>{first.investmentStatus}</i>
+              </header>
+              <div className="npl-doccards">
+                {docs.map((d) => {
+                  const Ic = docIcon[d.type] || FileText;
+                  return (
+                    <button className={`npl-doccard${d.locked ? " locked" : ""}`} key={d.id}>
+                      <span><Ic size={18} /></span>
+                      <div><b>{d.name}</b><small>{d.availability}</small></div>
+                      {d.locked ? <Info size={17} /> : <Download size={17} />}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
           );
         })}
+      </div>
+    </>
+  );
+}
+
+function Notifications_() {
+  return (
+    <>
+      <div className="npl-card"><PageHead eyebrow="Activity" title="Notifications" sub="Investment, wallet and document updates." /></div>
+      <div className="npl-grid" style={{ gap: ".8rem" }}>
+        {clientNotifications.map((n) => (
+          <div className={`npl-notif${n.unread ? " unread" : ""}`} key={n.title}>
+            <span className="npl-notif__ic"><Bell size={19} /></span>
+            <div style={{ flex: 1 }}><b>{n.title}</b><p>{n.body}</p><small>{n.at}</small></div>
+          </div>
+        ))}
       </div>
     </>
   );

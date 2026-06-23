@@ -197,6 +197,9 @@ const TESTIMONIALS: [string, string, string, string][] = [
   ["av-3.jpg", "Dr. Amaka Obi", "Gold Member · Port Harcourt", "Verified properties, digital documents, real training. This is how real estate should work in Nigeria."]
 ];
 
+const chunk = <T,>(items: T[], size: number) =>
+  Array.from({ length: Math.ceil(items.length / size) }, (_, index) => items.slice(index * size, index * size + size));
+
 /* ---------------- hooks ---------------- */
 
 function useReveal() {
@@ -274,7 +277,7 @@ export default function LandingPage() {
         <div className="nlp__wrap nlp-hero__grid">
           <div className="nlp-reveal">
             <span className="nlp-eyebrow nlp-hero__eyebrow"><Sparkles size={16} /> Real Estate · Technology · Education · Wealth Creation</span>
-            <h1>Nigeria&apos;s Largest <span className="accent">Real Estate Wealth Building</span> Network</h1>
+            <h1>Nigeria&apos;s Largest <span className="accent-blue">Real Estate Wealth</span> <span className="accent-green">Building</span> Network</h1>
             <p className="nlp-hero__lead">
               Learn, invest and grow through verified real estate opportunities, practical education and technology built for sustainable wealth creation.
             </p>
@@ -373,11 +376,15 @@ export default function LandingPage() {
             <h2>Everything you need to build wealth</h2>
             <p>Whether you are a beginner or an experienced realtor, membership unlocks a complete ecosystem.</p>
           </div>
-          <div className="nlp-benefit-grid">
-            {BENEFITS.map(([label, Icon], i) => (
-              <div className="nlp-benefit nlp-reveal" key={label} style={{ transitionDelay: `${(i % 4) * 60}ms` }}>
-                <span className="nlp-benefit__ic"><Icon size={20} /></span>
-                <span>{label}</span>
+          <div className="nlp-benefit-grid nlp-mobile-slider nlp-mobile-slider--benefits">
+            {chunk(BENEFITS, 4).map((group, slideIndex) => (
+              <div className="nlp-mobile-slide" key={`benefits-${slideIndex}`}>
+                {group.map(([label, Icon], i) => (
+                  <div className="nlp-benefit nlp-reveal" key={label} style={{ transitionDelay: `${(i % 4) * 60}ms` }}>
+                    <span className="nlp-benefit__ic"><Icon size={20} /></span>
+                    <span>{label}</span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -460,9 +467,9 @@ export default function LandingPage() {
           <div className="nlp-vision nlp-reveal">
             <span className="nlp-eyebrow nlp-eyebrow--gold"><Crown size={14} /> Our Vision</span>
             <h3 style={{ marginTop: "1rem" }}>
-              To become Africa&apos;s leading real estate empowerment network.
+              &ldquo;To become Africa&apos;s leading real estate empowerment network.&rdquo;
             </h3>
-            <p>Raising millions of financially independent real estate entrepreneurs across the continent.</p>
+            <p>&ldquo;Raising millions of financially independent real estate entrepreneurs across the continent.&rdquo;</p>
           </div>
           <div className="nlp-mission nlp-reveal">
             <span className="nlp-eyebrow"><Target size={14} /> Our Mission</span>
@@ -484,12 +491,16 @@ export default function LandingPage() {
             <h2>The principles behind the network</h2>
             <p>Six values that shape how every member learns, earns and leads.</p>
           </div>
-          <div className="nlp-value-grid">
-            {VALUES.map(([Icon, title, copy], i) => (
-              <div className="nlp-value nlp-reveal" key={title} style={{ transitionDelay: `${(i % 3) * 70}ms` }}>
-                <span className="nlp-value__ic"><Icon size={24} /></span>
-                <h3>{title}</h3>
-                <p>{copy}</p>
+          <div className="nlp-value-grid nlp-mobile-slider nlp-mobile-slider--values">
+            {chunk(VALUES, 3).map((group, slideIndex) => (
+              <div className="nlp-mobile-slide" key={`values-${slideIndex}`}>
+                {group.map(([Icon, title, copy], i) => (
+                  <div className="nlp-value nlp-reveal" key={title} style={{ transitionDelay: `${(i % 3) * 70}ms` }}>
+                    <span className="nlp-value__ic"><Icon size={24} /></span>
+                    <h3>{title}</h3>
+                    <p>{copy}</p>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -598,21 +609,23 @@ export default function LandingPage() {
             <h2>Real people. Real results.</h2>
             <p>From first-time learners to platinum investors — hear how NRFFN is changing the game.</p>
           </div>
-          <div className="nlp-tm-grid">
+          <div className="nlp-tm-grid nlp-mobile-slider nlp-mobile-slider--trust">
             {TESTIMONIALS.map(([img, name, role, quote]) => (
-              <figure className="nlp-tmcard nlp-reveal" key={name}>
-                <div className="nlp-tmcard__stars">
-                  {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
-                </div>
-                <p>&ldquo;{quote}&rdquo;</p>
-                <figcaption className="nlp-tmcard__who">
-                  <img src={`/img/${img}`} alt={name} loading="lazy" />
-                  <span>
-                    <b>{name}</b>
-                    <span>{role}</span>
-                  </span>
-                </figcaption>
-              </figure>
+              <div className="nlp-mobile-slide" key={name}>
+                <figure className="nlp-tmcard nlp-reveal">
+                  <div className="nlp-tmcard__stars">
+                    {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+                  </div>
+                  <p>&ldquo;{quote}&rdquo;</p>
+                  <figcaption className="nlp-tmcard__who">
+                    <img src={`/img/${img}`} alt={name} loading="lazy" />
+                    <span>
+                      <b>{name}</b>
+                      <span>{role}</span>
+                    </span>
+                  </figcaption>
+                </figure>
+              </div>
             ))}
           </div>
           <div className="nlp-trustband nlp-reveal">
@@ -647,14 +660,10 @@ export default function LandingPage() {
         <div className="nlp__wrap">
           <div className="nlp-foot__grid">
             <div className="nlp-foot__brand">
-              <a href="#top" className="nlp-brand">
-                <span className="nlp-brand__chip"><img src="/assets/nrffn-logo-blue.png" alt="NRFFN" /></span>
-              </a>
               <p>
                 Nigerian Realtors Financial Freedom Network Ltd. Building wealth through real estate, technology,
                 education and networking.
               </p>
-              <a href="/associate/register" className="nlp-btn nlp-btn--primary">Join Free Today <ArrowRight size={16} /></a>
               <div className="nlp-foot__certificate">
                 <a className="nlp-btn nlp-btn--ghost" href="/documents/nrffn-ltd-certificate.pdf" target="_blank" rel="noreferrer">View NRFFN Certificate</a>
                 <a className="nlp-btn nlp-btn--primary" href="/documents/nrffn-ltd-certificate.pdf" download>Download Certificate</a>
