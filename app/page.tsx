@@ -31,6 +31,7 @@ import {
   Wallet,
   X
 } from "lucide-react";
+import { propertySlug } from "../lib/property-catalog";
 
 /* ---------------- content ---------------- */
 
@@ -161,7 +162,7 @@ const PROPERTIES: Property[] = [
   {
     img: "/img/prop-1.jpg",
     tag: "Full Ownership",
-    tagColor: "linear-gradient(135deg,#e6c158,#c9a227)",
+    tagColor: "linear-gradient(135deg,#f3ce54,#d8ad24)",
     name: "Emerald Heights Residence",
     location: "Lekki Phase 1, Lagos",
     price: "₦95,000,000",
@@ -171,7 +172,7 @@ const PROPERTIES: Property[] = [
   {
     img: "/img/prop-2.jpg",
     tag: "Co-Ownership",
-    tagColor: "linear-gradient(135deg,#5b9bff,#1046a3)",
+    tagColor: "linear-gradient(135deg,#f3ce54,#d8ad24)",
     name: "The Sterling Apartments",
     location: "Maitama, Abuja",
     price: "₦12,500,000",
@@ -181,7 +182,7 @@ const PROPERTIES: Property[] = [
   {
     img: "/img/land.jpg",
     tag: "Land Banking",
-    tagColor: "linear-gradient(135deg,#34c77b,#0a8a4a)",
+    tagColor: "linear-gradient(135deg,#f3ce54,#d8ad24)",
     name: "Greenfield Estate Plots",
     location: "Epe Corridor, Lagos",
     price: "₦4,800,000",
@@ -272,14 +273,10 @@ export default function LandingPage() {
       <header id="top" className="nlp-hero">
         <div className="nlp__wrap nlp-hero__grid">
           <div className="nlp-reveal">
-            <span className="nlp-eyebrow"><Sparkles size={14} /> Building Wealth Through Real Estate &amp; Technology</span>
-            <h1>
-              Nigeria&apos;s Largest <span className="accent">Real Estate Wealth-Building</span> Network
-            </h1>
+            <span className="nlp-eyebrow nlp-hero__eyebrow"><Sparkles size={16} /> Real Estate · Technology · Education · Wealth Creation</span>
+            <h1>Nigeria&apos;s Largest <span className="accent">Real Estate Wealth Building</span> Network</h1>
             <p className="nlp-hero__lead">
-              Join thousands of realtors, marketers, investors, developers and entrepreneurs leveraging
-              real estate, technology, education and networking to build sustainable wealth. NRFFN gives you the
-              tools, training, mentorship and compensation system you need to succeed.
+              Learn, invest and grow through verified real estate opportunities, practical education and technology built for sustainable wealth creation.
             </p>
             <div className="nlp-hero__cta">
               <a href="/associate/register" className="nlp-btn nlp-btn--primary nlp-btn--lg">
@@ -340,24 +337,30 @@ export default function LandingPage() {
       {/* REGULATORS */}
       <section className="nlp-regs">
         <div className="nlp__wrap nlp-regs__row">
-          <p>Registered &amp; compliant with</p>
+          <div className="nlp-regs__intro">
+            <span className="nlp-regs__icon"><ShieldCheck size={20} /></span>
+            <div>
+              <p>Registered &amp; compliant with</p>
+              <small>Verified standards and trusted industry oversight</small>
+            </div>
+          </div>
           <div className="nlp-regs__badges">
-            <span className="nlp-regbadge">
+            <article className="nlp-regbadge">
               <img src="/assets/regulator-cac.jpg" alt="Corporate Affairs Commission" />
               <span>CAC<small>Registered Ltd.</small></span>
-            </span>
-            <span className="nlp-regbadge">
+            </article>
+            <article className="nlp-regbadge">
               <img src="/assets/regulator-redan.jpg" alt="REDAN" />
               <span>REDAN<small>Developers Assoc.</small></span>
-            </span>
-            <span className="nlp-regbadge">
+            </article>
+            <article className="nlp-regbadge">
               <img src="/assets/regulator-lasrera.jpg" alt="LASRERA" />
               <span>LASRERA<small>Regulatory Authority</small></span>
-            </span>
-            <span className="nlp-regbadge">
-              <span className="nlp-hero__float-ic" style={{ background: "linear-gradient(140deg,#1046a3,#0a3476)" }}><ShieldCheck size={18} /></span>
+            </article>
+            <article className="nlp-regbadge">
+              <span className="nlp-regbadge__verified"><ShieldCheck size={20} /></span>
               <span>Verified<small>Ethical Practice</small></span>
-            </span>
+            </article>
           </div>
         </div>
       </section>
@@ -414,7 +417,7 @@ export default function LandingPage() {
       </section>
 
       {/* PROPERTY SHOWCASE */}
-      <section className="nlp-props">
+      <section className="nlp-props" id="properties">
         <div className="nlp__wrap">
           <div className="nlp-sec-head nlp-reveal">
             <span className="nlp-eyebrow"><Building2 size={14} /> Investment Opportunities</span>
@@ -436,6 +439,9 @@ export default function LandingPage() {
                     <div>Returns<b>{p.roi}</b></div>
                     <div style={{ display: "flex", flexDirection: "column" }}>Plan<b>{p.model}</b></div>
                   </div>
+                  <a href={`/properties/${propertySlug(p.name)}`} className="nlp-btn nlp-btn--ghost nlp-prop__cta">
+                    View Property <ArrowRight size={16} />
+                  </a>
                 </div>
               </article>
             ))}
@@ -537,7 +543,7 @@ export default function LandingPage() {
                 </ul>
                 <a
                   href="/associate/register"
-                  className={`nlp-btn ${t.featured ? "nlp-btn--gold" : "nlp-btn--ghost"}`}
+                  className={`nlp-btn ${t.featured ? "nlp-btn--featured" : "nlp-btn--ghost"}`}
                 >
                   {t.price === "Free" ? "Join Free" : "Become a Member"}
                 </a>
@@ -625,10 +631,10 @@ export default function LandingPage() {
             <h2>Your financial freedom roadmap starts today</h2>
             <p>Join NRFFN free and step into Nigeria&apos;s largest real estate wealth-building network.</p>
             <div className="nlp-cta__btns">
-              <a href="/associate/register" className="nlp-btn nlp-btn--gold nlp-btn--lg">
+              <a href="/associate/register" className="nlp-btn nlp-btn--primary nlp-btn--lg">
                 Join Free Today <ArrowRight size={18} />
               </a>
-              <a href="/login" className="nlp-btn nlp-btn--ghost nlp-btn--lg" style={{ color: "#fff", borderColor: "rgba(255,255,255,0.35)", background: "rgba(255,255,255,0.1)" }}>
+              <a href="/login" className="nlp-btn nlp-btn--ghost nlp-btn--lg nlp-cta__secondary">
                 Member Login
               </a>
             </div>
@@ -648,7 +654,11 @@ export default function LandingPage() {
                 Nigerian Realtors Financial Freedom Network Ltd. Building wealth through real estate, technology,
                 education and networking.
               </p>
-              <a href="/associate/register" className="nlp-btn nlp-btn--gold">Join Free Today <ArrowRight size={16} /></a>
+              <a href="/associate/register" className="nlp-btn nlp-btn--primary">Join Free Today <ArrowRight size={16} /></a>
+              <div className="nlp-foot__certificate">
+                <a className="nlp-btn nlp-btn--ghost" href="/documents/nrffn-ltd-certificate.pdf" target="_blank" rel="noreferrer">View NRFFN Certificate</a>
+                <a className="nlp-btn nlp-btn--primary" href="/documents/nrffn-ltd-certificate.pdf" download>Download Certificate</a>
+              </div>
             </div>
             <div className="nlp-foot__col">
               <h4>Platform</h4>

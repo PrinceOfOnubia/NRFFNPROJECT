@@ -9,6 +9,7 @@ import {
   naira, platformStats, revenueTrend, membershipTiers, users, properties, commissions,
   auditLogs, roles, systemHealth
 } from "../../lib/admin/data";
+import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
 
 type Role = "Admin" | "Super Admin";
 type PageKey =
@@ -27,6 +28,7 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
   const pages = role === "Super Admin" ? SUPER_PAGES : ADMIN_PAGES;
   const [page, setPage] = useState<PageKey>(pages.includes(initialPage) ? initialPage : "Dashboard");
   const [open, setOpen] = useState(false);
+  const [panel, setPanel] = useState<PortalPanel>(null);
   const go = (p: PageKey) => { setPage(p); setOpen(false); };
 
   return (
@@ -58,8 +60,8 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
             <button className="npl-icnbtn npl-mtop" onClick={() => setOpen(true)} aria-label="Menu"><Menu size={20} /></button>
             <div><h1>{page === "Audit" ? "Audit Logs" : page}</h1><div className="npl-top__sub">{role} control panel</div></div>
             <label className="npl-top__search"><Search size={16} /><input placeholder="Search users, properties, payouts" /></label>
-            <button className="npl-icnbtn" aria-label="Notifications"><Bell size={19} /><span className="dot" /></button>
-            <div className="npl-pill-user"><span className="npl-avatar">{role === "Super Admin" ? "SA" : "AD"}</span><span style={{ fontSize: ".85rem" }}>{role === "Super Admin" ? "Super" : "Admin"}</span></div>
+            <button className="npl-icnbtn" aria-label="Notifications" onClick={() => setPanel("notifications")}><Bell size={19} /><span className="dot" /></button>
+            <button className="npl-pill-user" onClick={() => setPanel("profile")}><span className="npl-avatar">{role === "Super Admin" ? "SA" : "AD"}</span><span style={{ fontSize: ".85rem" }}>{role === "Super Admin" ? "Super" : "Admin"}</span></button>
           </header>
 
           <main className="npl-content">
@@ -80,6 +82,7 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
       <nav className="npl-mobnav">
         {pages.slice(0, 5).map((p) => { const Icon = NAV[p]; return <button key={p} className={page === p ? "active" : ""} onClick={() => go(p)}><Icon size={20} /><span>{p}</span></button>; })}
       </nav>
+      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={role === "Super Admin" ? "Super Admin" : "NRFFN Admin"} initials={role === "Super Admin" ? "SA" : "AD"} role={role} />
     </div>
   );
 }
@@ -106,7 +109,7 @@ function Dashboard({ role, go }: { role: Role; go: (p: PageKey) => void }) {
           <h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(platformStats.revenue)}</h2>
           <p style={{ color: "rgba(255,255,255,.82)" }}><span className="npl-badge ok" style={{ marginRight: 6 }}>+18%</span> {platformStats.newThisMonth} new members this month</p>
         </div>
-        <button className="npl-btn npl-btn--gold" onClick={() => go(role === "Super Admin" ? "Revenue" : "Analytics")}><TrendingUp size={16} /> View analytics</button>
+        <button className="npl-btn npl-btn--primary" onClick={() => go(role === "Super Admin" ? "Revenue" : "Analytics")}><TrendingUp size={16} /> View analytics</button>
       </div>
       <div className="npl-grid cols-4">
         <Metric icon={Users} label="Total members" value={platformStats.members.toLocaleString()} note={<span className="npl-up">{platformStats.activeMembers.toLocaleString()} active</span>} variant="royal" />
@@ -236,7 +239,7 @@ function CommissionTable({ limit }: { limit?: number }) {
               <td data-label="Type"><span className="npl-badge blue">{c.type}</span></td>
               <td data-label="Amount"><b>{naira(c.amount)}</b></td>
               <td data-label="Status"><span className={`npl-badge ${c.status === "Paid" ? "ok" : c.status === "Approved" ? "blue" : "warn"}`}>{c.status}</span></td>
-              <td data-label="">{c.status === "Pending" && <button className="npl-btn npl-btn--primary" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }}>Approve</button>}</td>
+              <td data-label="">{c.status === "Pending" && <button className="npl-btn npl-btn--success" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }}>Approve</button>}</td>
             </tr>
           ))}
         </tbody>

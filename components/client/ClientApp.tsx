@@ -9,6 +9,8 @@ import {
   naira, investor, portfolio, wallet, holdings, marketplace, transactions, installments,
   documents, valueTrend, referral, type Listing
 } from "../../lib/client/data";
+import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
+import { propertySlug } from "../../lib/property-catalog";
 
 type PageKey = "Home" | "Wallet" | "Marketplace" | "Investments" | "Documents" | "Referral" | "Profile";
 
@@ -35,6 +37,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
   const [page, setPage] = useState<PageKey>(initialPage);
   const [open, setOpen] = useState(false);
   const [buy, setBuy] = useState<Listing | null>(null);
+  const [panel, setPanel] = useState<PortalPanel>(null);
   const go = (p: PageKey) => { setPage(p); setOpen(false); };
 
   return (
@@ -68,8 +71,8 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
             <div><h1>{page}</h1><div className="npl-top__sub">{SUB[page]}</div></div>
             <label className="npl-top__search"><Search size={16} /><input placeholder="Search properties, documents" /></label>
             <button className="npl-top__wallet" onClick={() => go("Wallet")}><Wallet size={16} /> {naira(wallet.available)}</button>
-            <button className="npl-icnbtn" aria-label="Notifications"><Bell size={19} /><span className="dot" /></button>
-            <div className="npl-pill-user"><span className="npl-avatar">{investor.initials}</span><span style={{ fontSize: ".85rem" }}>{investor.name.split(" ")[0]}</span></div>
+            <button className="npl-icnbtn" aria-label="Notifications" onClick={() => setPanel("notifications")}><Bell size={19} /><span className="dot" /></button>
+            <button className="npl-pill-user" onClick={() => setPanel("profile")}><span className="npl-avatar">{investor.initials}</span><span style={{ fontSize: ".85rem" }}>{investor.name.split(" ")[0]}</span></button>
           </header>
 
           <main className="npl-content">
@@ -92,6 +95,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
       </nav>
 
       {buy && <BuyDrawer listing={buy} onClose={() => setBuy(null)} />}
+      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={investor.name} initials={investor.initials} role="Investor Member" />
     </div>
   );
 }
@@ -124,7 +128,7 @@ function HomeView({ go, onBuy }: { go: (p: PageKey) => void; onBuy: (l: Listing)
           <h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(portfolio.currentValue)}</h2>
           <p style={{ color: "rgba(255,255,255,.82)" }}><span className="npl-badge ok" style={{ marginRight: 6 }}>+{portfolio.roi}%</span> {naira(portfolio.gain)} total gain · {naira(portfolio.monthlyIncome)}/mo income</p>
         </div>
-        <button className="npl-btn npl-btn--gold" onClick={() => go("Marketplace")}><Store size={16} /> Invest more</button>
+        <button className="npl-btn npl-btn--success" onClick={() => go("Marketplace")}><Store size={16} /> Invest more</button>
       </div>
 
       <div className="npl-grid cols-4">
@@ -177,7 +181,10 @@ function ListingCard({ l, onBuy }: { l: Listing; onBuy: (l: Listing) => void }) 
           <div><small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem" }}>From</small><div style={{ fontWeight: 800, color: "var(--c-ink)" }}>{naira(l.price)}</div></div>
           <span className="npl-badge ok">{l.roi}</span>
         </div>
-        <button className="npl-btn npl-btn--primary" style={{ marginTop: ".7rem", width: "100%" }} onClick={() => onBuy(l)}>Invest now</button>
+        <div className="npl-property-actions">
+          <a className="npl-btn npl-btn--secondary" href={`/properties/${propertySlug(l.name)}`}>View Property</a>
+          <button className="npl-btn npl-btn--success" onClick={() => onBuy(l)}>Invest now</button>
+        </div>
       </div>
     </div>
   );
@@ -253,7 +260,7 @@ function WalletView() {
     <>
       <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div><span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Available balance</span><h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(wallet.available)}</h2></div>
-        <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}><button className="npl-btn npl-btn--gold"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--ghost" style={{ background: "rgba(255,255,255,.12)", color: "#fff", borderColor: "rgba(255,255,255,.3)" }}>Withdraw</button></div>
+        <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}><button className="npl-btn npl-btn--primary"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--secondary">Withdraw</button></div>
       </div>
       <div className="npl-grid cols-3">
         <Metric icon={Wallet} label="Available" value={naira(wallet.available)} variant="gold" />
@@ -379,7 +386,7 @@ function BuyDrawer({ listing, onClose }: { listing: Listing; onClose: () => void
         <div className="npl-field"><label>Payment plan</label><select value={plan} onChange={(e) => setPlan(e.target.value)}><option>Outright</option><option>Installment (12 months)</option><option>Flex</option></select></div>
         <div className="npl-field"><label>Units</label><input type="number" defaultValue={1} min={1} /></div>
         <div className="npl-note"><b>Verified asset</b><br /><span>Title documents, location data and inspection media reviewed by NRFFN.</span></div>
-        <button className="npl-btn npl-btn--primary" style={{ width: "100%" }} onClick={onClose}><ShieldCheck size={16} /> Proceed to checkout</button>
+        <button className="npl-btn npl-btn--success" style={{ width: "100%" }} onClick={onClose}><ShieldCheck size={16} /> Proceed to checkout</button>
       </div>
     </div>
   );

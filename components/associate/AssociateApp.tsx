@@ -11,6 +11,8 @@ import {
   transactions, leads, leadStages, team, referralStats, courses, academyStats, quiz,
   notifications, funnel, weeklyEarnings, type Lead
 } from "../../lib/associate/data";
+import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
+import { propertySlug } from "../../lib/property-catalog";
 
 type PageKey =
   | "Overview" | "Earnings" | "Referrals" | "CRM" | "Academy"
@@ -47,6 +49,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
   const [open, setOpen] = useState(false);
   const [drawer, setDrawer] = useState<null | "withdraw" | "lead">(null);
   const [activeLead, setActiveLead] = useState<Lead | null>(null);
+  const [panel, setPanel] = useState<PortalPanel>(null);
 
   const go = (p: PageKey) => { setPage(p); setOpen(false); };
   const unread = notifications.filter((n) => n.unread).length;
@@ -98,13 +101,13 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
             <button className="npl-top__wallet" onClick={() => go("Earnings")}>
               <Wallet size={16} /> {naira(wallet.available)}
             </button>
-            <button className="npl-icnbtn" onClick={() => go("Notifications")} aria-label="Notifications">
+            <button className="npl-icnbtn" onClick={() => setPanel("notifications")} aria-label="Notifications">
               <Bell size={19} />{unread > 0 && <span className="dot" />}
             </button>
-            <div className="npl-pill-user">
+            <button className="npl-pill-user" onClick={() => setPanel("profile")}>
               <span className="npl-avatar">{member.initials}</span>
               <span style={{ fontSize: ".85rem" }}>{member.name.split(" ")[0]}</span>
-            </div>
+            </button>
           </header>
 
           <main className="npl-content">
@@ -137,6 +140,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
       {/* DRAWERS */}
       {drawer === "withdraw" && <WithdrawDrawer onClose={() => setDrawer(null)} />}
       {drawer === "lead" && activeLead && <LeadDrawer lead={activeLead} onClose={() => setDrawer(null)} />}
+      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={member.name} initials={member.initials} role="Realtor Member" />
     </div>
   );
 }
@@ -177,7 +181,7 @@ function Bars({ data, labels }: { data: number[]; labels: string[] }) {
   return (
     <>
       <div className="npl-bars">{data.map((v, i) => <div key={i} className="bar" style={{ height: `${(v / max) * 100}%` }} />)}</div>
-      <div className="npl-bars-x">{labels.map((l) => <span key={l}>{l}</span>)}</div>
+      <div className="npl-bars-x">{labels.map((l, index) => <span key={`${l}-${index}`}>{l}</span>)}</div>
     </>
   );
 }
@@ -194,7 +198,7 @@ function Overview({ go, onWithdraw }: { go: (p: PageKey) => void; onWithdraw: ()
           <p style={{ color: "rgba(255,255,255,.78)" }}>{naira(rankProgress.volume)} of {naira(rankProgress.target)} team volume · Rank: {member.rank}</p>
         </div>
         <div style={{ display: "flex", gap: ".7rem", flexWrap: "wrap" }}>
-          <button className="npl-btn npl-btn--gold" onClick={() => go("Referrals")}><Share2 size={16} /> Share link</button>
+          <button className="npl-btn npl-btn--primary" onClick={() => go("Referrals")}><Share2 size={16} /> Share link</button>
           <button className="npl-btn npl-btn--ghost" onClick={onWithdraw}><Wallet size={16} /> Withdraw</button>
         </div>
       </div>
@@ -249,7 +253,7 @@ function Earnings({ onWithdraw }: { onWithdraw: () => void }) {
           <h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(wallet.total)}</h2>
           <p style={{ color: "rgba(255,255,255,.78)" }}>Lifetime earnings across all streams</p>
         </div>
-        <button className="npl-btn npl-btn--gold" onClick={onWithdraw}><Wallet size={16} /> Withdraw funds</button>
+        <button className="npl-btn npl-btn--secondary" onClick={onWithdraw}><Wallet size={16} /> Withdraw funds</button>
       </div>
 
       <div className="npl-grid cols-3">
@@ -547,7 +551,8 @@ function Properties() {
                 <div><small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem" }}>Price</small><div style={{ fontWeight: 800, color: "var(--c-ink)" }}>{p.price}</div></div>
                 <div style={{ textAlign: "right" }}><small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem" }}>Your commission</small><div style={{ fontWeight: 800, color: "var(--c-royal)" }}>{p.comm}</div></div>
               </div>
-              <div className="npl-share" style={{ marginTop: ".7rem" }}><button><MessageCircle size={14} /> WhatsApp</button><button><Share2 size={14} /> Share</button></div>
+              <a className="npl-btn npl-btn--secondary" href={`/properties/${propertySlug(p.name)}`}>View Property</a>
+              <div className="npl-share" style={{ marginTop: ".2rem" }}><button><MessageCircle size={14} /> WhatsApp</button><button><Share2 size={14} /> Share</button></div>
             </div>
           </div>
         ))}
