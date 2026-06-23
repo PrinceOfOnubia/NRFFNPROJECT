@@ -1,0 +1,2077 @@
+.realtorWorkspace {
+  color: #172e45;
+}
+
+.realtorHero,
+.teamHero,
+.commissionHero,
+.marketingBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px;
+  border: 1px solid #d8e7f0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #edf7fc, #fff);
+}
+
+.realtorHero > div:first-child > span,
+.realtorPageHeader > div > span,
+.teamHero > div > span,
+.commissionHero > div > span {
+  color: #55758d;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.realtorHero h2,
+.teamHero h2,
+.realtorPageHeader h2 {
+  margin: 5px 0 7px;
+  color: #113853;
+  font-size: 29px;
+}
+
+.realtorHero p,
+.teamHero p,
+.realtorPageHeader p {
+  margin: 0;
+  color: #667d8f;
+}
+
+.rankCard {
+  display: grid;
+  min-width: 230px;
+  gap: 4px;
+  padding: 18px;
+  border-radius: 15px;
+  background: #164f76;
+  color: #fff;
+}
+
+.rankCard svg {
+  margin-bottom: 5px;
+  color: #b8dcf1;
+}
+
+.rankCard span,
+.rankCard small {
+  color: #c8dfed;
+  font-size: 12px;
+}
+
+.rankCard strong {
+  font-size: 19px;
+}
+
+.realtorMetricGrid,
+.commissionStats,
+.teamStats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 16px;
+}
+
+.realtorMetricGrid.six {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.analyticsGrid,
+.propertyToolGrid,
+.profileSettingsGrid,
+.academyProgress {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.analyticsGrid {
+  grid-template-columns: 1fr 1fr 1.1fr;
+}
+
+.miniChartPanel,
+.funnelPanel,
+.activityPanel {
+  min-height: 260px;
+}
+
+.miniBars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: end;
+  height: 150px;
+  gap: 9px;
+  margin-top: 22px;
+}
+
+.miniBars span {
+  min-height: 18px;
+  border-radius: 8px 8px 0 0;
+  background: #1e5a80;
+}
+
+.funnelPanel {
+  display: grid;
+  align-content: start;
+  gap: 11px;
+}
+
+.funnelRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 32px;
+  align-items: center;
+  gap: 9px;
+  color: #587184;
+  font-size: 12px;
+}
+
+.funnelRow i {
+  display: block;
+  height: 9px;
+  border-radius: 999px;
+  background: #2c7d5f;
+}
+
+.activityPanel {
+  display: grid;
+  align-content: start;
+  gap: 13px;
+}
+
+.activityPanel article {
+  display: grid;
+  grid-template-columns: 12px 1fr;
+  gap: 10px;
+}
+
+.activityPanel article > span {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: #2c7d5f;
+}
+
+.activityPanel p {
+  margin: 4px 0;
+  color: #607789;
+  line-height: 1.45;
+}
+
+.activityPanel small {
+  color: #8796a1;
+}
+
+.realtorMetricGrid article,
+.commissionStats article,
+.teamStats article {
+  display: grid;
+  gap: 7px;
+  min-height: 122px;
+  padding: 18px;
+  border: 1px solid #dfe9f0;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(12, 48, 74, 0.04);
+}
+
+.realtorMetricGrid span,
+.commissionStats span,
+.teamStats span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #61798d;
+  font-size: 13px;
+}
+
+.realtorMetricGrid strong,
+.commissionStats strong,
+.teamStats strong {
+  color: #15486b;
+  font-size: 23px;
+}
+
+.realtorMetricGrid small,
+.commissionStats small {
+  color: #8493a0;
+}
+
+.realtorHomeGrid,
+.teamLayout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.realtorPanel {
+  padding: 21px;
+  border: 1px solid #dfe9f0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.realtorPanel > header,
+.commissionHistory > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.realtorPanel h3 {
+  margin: 0 0 4px;
+  color: #183b55;
+  font-size: 19px;
+}
+
+.realtorPanel header p {
+  margin: 0;
+  color: #7b8e9e;
+  font-size: 13px;
+}
+
+.realtorPanel header button,
+.teamHero button,
+.commissionHero button,
+.realtorPageHeader > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid #c7dce9;
+  border-radius: 9px;
+  background: #fff;
+  color: #235d84;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.followUpList {
+  display: grid;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.followUpList > button {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 11px;
+  border: 0;
+  border-radius: 11px;
+  background: #f7fafc;
+  color: #29465d;
+  text-align: left;
+  cursor: pointer;
+}
+
+.leadAvatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e7f1f7;
+  color: #356786;
+  font-weight: 800;
+}
+
+.leadAvatar.hot {
+  background: #fff0e8;
+  color: #bd5b32;
+}
+
+.leadAvatar.warm {
+  background: #fff7df;
+  color: #9b7419;
+}
+
+.followUpList div {
+  display: grid;
+  gap: 3px;
+}
+
+.followUpList small,
+.followUpList time {
+  color: #7d8d9a;
+  font-size: 12px;
+}
+
+.followUpList time {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pipelineHealth {
+  display: grid;
+  gap: 13px;
+  margin-top: 20px;
+}
+
+.pipelineHealth > div {
+  display: grid;
+  gap: 7px;
+}
+
+.pipelineHealth span {
+  display: flex;
+  justify-content: space-between;
+  color: #526c81;
+  font-size: 13px;
+}
+
+.pipelineHealth i {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edf2f5;
+}
+
+.pipelineHealth em {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #71a9cd;
+}
+
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.quickActions.four {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.quickActions button {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  align-items: center;
+  gap: 12px;
+  min-height: 86px;
+  padding: 15px;
+  border: 1px solid #dce7ee;
+  border-radius: 14px;
+  background: #fff;
+  color: #35647f;
+  text-align: left;
+  cursor: pointer;
+}
+
+.quickActions span {
+  display: grid;
+  gap: 4px;
+}
+
+.quickActions strong {
+  color: #203e55;
+}
+
+.quickActions small {
+  color: #81919e;
+}
+
+.realtorPageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.realtorPageHeader > button {
+  border-color: #1e5a80;
+  background: #1e5a80;
+  color: #fff;
+}
+
+.crmToolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 15px;
+}
+
+.crmViewSwitch {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 10px;
+  background: #eef4f8;
+}
+
+.crmViewSwitch button {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #667c8e;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.crmViewSwitch button.active {
+  background: #fff;
+  color: #1d557b;
+  box-shadow: 0 3px 10px rgba(20, 67, 98, 0.08);
+}
+
+.crmToolbar > label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 13px;
+  border: 1px solid #dae5ec;
+  border-radius: 10px;
+  background: #fff;
+  color: #708596;
+}
+
+.crmToolbar input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  font: inherit;
+}
+
+.crmToolbar > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  border: 1px solid #dae5ec;
+  border-radius: 10px;
+  background: #fff;
+  color: #516b7f;
+  cursor: pointer;
+}
+
+.crmPipeline {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(220px, 1fr));
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.crmPipeline.eight {
+  grid-template-columns: repeat(8, minmax(220px, 1fr));
+}
+
+.pipelineColumn {
+  min-height: 470px;
+  padding: 11px;
+  border-radius: 14px;
+  background: #f3f7fa;
+}
+
+.pipelineColumn > header {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 4px 12px;
+  color: #526c7f;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.pipelineColumn > header b {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.pipelineColumn > div {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+}
+
+.pipelineColumn > div > p {
+  color: #91a0ab;
+  font-size: 12px;
+  text-align: center;
+}
+
+.leadCard {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #dce6ec;
+  border-radius: 11px;
+  background: #fff;
+  color: #385469;
+  text-align: left;
+  box-shadow: 0 5px 15px rgba(12, 49, 72, 0.04);
+  cursor: pointer;
+}
+
+.leadCard > div,
+.leadCard footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leadCard h3,
+.leadCard p {
+  margin: 0;
+}
+
+.leadCard h3 {
+  color: #1c3e55;
+  font-size: 16px;
+}
+
+.leadCard p,
+.leadCard small,
+.leadCard footer {
+  color: #81909b;
+  font-size: 11px;
+}
+
+.leadCard > strong {
+  color: #285c7d;
+}
+
+.temperature {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  background: #eef4f7;
+  color: #647c8e;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.temperature.hot {
+  background: #fff0e8;
+  color: #b6532b;
+}
+
+.temperature.warm {
+  background: #fff6da;
+  color: #9a7215;
+}
+
+.leadTable,
+.commissionTable {
+  overflow: hidden;
+  border: 1px solid #dde7ee;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.leadTable > div,
+.leadTable > button,
+.commissionTable > div,
+.commissionTable > article {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 0.8fr 0.8fr 0.9fr;
+  align-items: center;
+  gap: 12px;
+  min-width: 760px;
+  padding: 13px 16px;
+  border: 0;
+  border-bottom: 1px solid #e8eef2;
+  background: #fff;
+  color: #526b7e;
+  text-align: left;
+}
+
+.crmLeadTable > div,
+.crmLeadTable > button {
+  grid-template-columns: 1.15fr 0.9fr 0.7fr 1fr 1fr 0.85fr 0.45fr;
+  min-width: 980px;
+}
+
+.transactionTable > div,
+.transactionTable > article {
+  grid-template-columns: 0.8fr 0.8fr 0.8fr 0.75fr 1.4fr;
+}
+
+.leadTable > div,
+.commissionTable > div {
+  background: #f4f8fa;
+  color: #38566c;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.leadTable > button {
+  width: 100%;
+  cursor: pointer;
+}
+
+.leadTable span:first-child,
+.commissionTable article span:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.leadTable small,
+.commissionTable small {
+  color: #8795a0;
+}
+
+.leadTable i,
+.commissionTable i {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #edf3f6;
+  color: #557185;
+  font-size: 11px;
+  font-style: normal;
+}
+
+.leadDrawer {
+  width: min(100%, 500px);
+  height: 100%;
+  margin-left: auto;
+  overflow-y: auto;
+  background: #fff;
+  box-shadow: -18px 0 60px rgba(5, 32, 53, 0.2);
+}
+
+.leadDrawer > header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 21px;
+  border-bottom: 1px solid #e2e9ee;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.leadDrawer > header > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.leadDrawer h2,
+.leadDrawer header p {
+  margin: 0;
+}
+
+.leadDrawer h2 {
+  color: #183c55;
+  font-size: 21px;
+}
+
+.leadDrawer header p {
+  color: #7a8d9c;
+  font-size: 12px;
+}
+
+.leadDrawer header > button {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #dae4eb;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.leadDrawerBody {
+  display: grid;
+  gap: 18px;
+  padding: 21px;
+}
+
+.leadContactActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.leadContactActions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+  border: 1px solid #cbdde8;
+  border-radius: 9px;
+  background: #f6fafc;
+  color: #2d6487;
+  cursor: pointer;
+}
+
+.leadInfoCard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #e0e9ef;
+  border-radius: 12px;
+  background: #e0e9ef;
+}
+
+.leadInfoCard p {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 13px;
+  background: #fff;
+}
+
+.leadInfoCard span {
+  color: #82919d;
+  font-size: 11px;
+}
+
+.leadInfoCard strong {
+  color: #28485f;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.leadStageSelect,
+.leadForm label {
+  display: grid;
+  gap: 7px;
+  color: #465f72;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.leadStageSelect select,
+.leadForm input,
+.leadForm select {
+  min-height: 46px;
+  padding: 0 13px;
+  border: 1px solid #d7e2e9;
+  border-radius: 9px;
+  background: #fff;
+  color: #243e53;
+  font: inherit;
+}
+
+.followUpEditor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 11px;
+  background: #eef6fa;
+}
+
+.followUpEditor h3,
+.followUpEditor p {
+  margin: 0;
+}
+
+.followUpEditor p {
+  margin-top: 4px;
+  color: #698095;
+  font-size: 12px;
+}
+
+.followUpEditor button,
+.activityComposer button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  border: 1px solid #bad3e3;
+  border-radius: 8px;
+  background: #fff;
+  color: #2b6488;
+  cursor: pointer;
+}
+
+.activityComposer h3,
+.leadTimeline h3 {
+  margin: 0 0 9px;
+  color: #24465d;
+}
+
+.activityComposer textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  padding: 11px;
+  border: 1px solid #d7e2e9;
+  border-radius: 9px;
+  font: inherit;
+}
+
+.activityComposer button {
+  margin-top: 8px;
+  border-color: #1e5b80;
+  background: #1e5b80;
+  color: #fff;
+}
+
+.leadTimeline {
+  display: grid;
+  gap: 12px;
+}
+
+.leadTimeline article {
+  display: grid;
+  grid-template-columns: 13px 1fr;
+  gap: 10px;
+}
+
+.leadTimeline article > span {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: #76aaca;
+}
+
+.leadTimeline p {
+  margin: 4px 0;
+  color: #5d7486;
+  line-height: 1.45;
+}
+
+.leadTimeline small {
+  color: #8997a2;
+}
+
+.addLeadDrawer {
+  display: flex;
+  flex-direction: column;
+}
+
+.leadForm {
+  flex: 1;
+}
+
+.addLeadDrawer > footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  padding: 16px 21px;
+  border-top: 1px solid #e3eaf0;
+  background: #fff;
+}
+
+.addLeadDrawer > footer button {
+  min-height: 43px;
+  padding: 0 17px;
+  border: 1px solid #d3e0e8;
+  border-radius: 9px;
+  background: #fff;
+  color: #526a7d;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.addLeadDrawer > footer button:last-child {
+  border-color: #1e5a80;
+  background: #1e5a80;
+  color: #fff;
+}
+
+.addLeadDrawer > footer button:disabled {
+  opacity: 0.45;
+}
+
+.commissionHero {
+  background: linear-gradient(135deg, #154b70, #26759c);
+  color: #fff;
+}
+
+.commissionHero > div {
+  display: grid;
+  gap: 4px;
+}
+
+.commissionHero > div > span,
+.commissionHero p {
+  color: #c8e0ec;
+}
+
+.commissionHero strong {
+  font-size: 38px;
+}
+
+.commissionHero p {
+  margin: 0;
+}
+
+.commissionHistory {
+  margin-top: 16px;
+}
+
+.commissionTable {
+  margin-top: 17px;
+  overflow-x: auto;
+}
+
+.commissionTable i.available {
+  background: #e6f6ef;
+  color: #28775a;
+}
+
+.commissionTable i.pending {
+  background: #fff4da;
+  color: #97671d;
+}
+
+.commissionTable i.paid {
+  background: #e9f1fa;
+  color: #38698b;
+}
+
+.commissionTable i.completed,
+.commissionTable i.approved {
+  background: #e6f6ef;
+  color: #28775a;
+}
+
+.commissionTable i.failed {
+  background: #f8e9e8;
+  color: #8a3d38;
+}
+
+.referralLinkCard {
+  align-items: center;
+}
+
+.referralLinkCard small {
+  display: block;
+  margin-top: 5px;
+  color: #708496;
+}
+
+.networkTree {
+  margin-top: 16px;
+}
+
+.treeRoot,
+.treeLevel {
+  display: grid;
+  align-items: center;
+  gap: 6px;
+}
+
+.treeRoot {
+  max-width: 180px;
+  justify-items: center;
+  margin: 20px auto;
+  padding: 16px;
+  border: 1px solid #dce7ed;
+  border-radius: 12px;
+}
+
+.treeRoot span,
+.treeLevel span {
+  color: #768997;
+  font-size: 12px;
+}
+
+.treeLevel {
+  grid-template-columns: 90px 1fr 1.4fr;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f7fafc;
+}
+
+.treeLevel i {
+  height: 2px;
+  background: #bfd4e1;
+}
+
+.propertyToolGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.propertyToolGrid article {
+  overflow: hidden;
+  border: 1px solid #dce7ed;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.propertyToolGrid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.propertyToolGrid article > div {
+  display: grid;
+  gap: 8px;
+  padding: 15px;
+}
+
+.propertyToolGrid h3,
+.propertyToolGrid p {
+  margin: 0;
+}
+
+.propertyToolGrid article span {
+  color: #2c7d5f;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.propertyToolGrid p,
+.propertyToolGrid small {
+  color: #6f8292;
+}
+
+.propertyToolGrid article strong {
+  color: #164f76;
+  font-size: 18px;
+}
+
+.propertyToolGrid article div div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.propertyToolGrid button,
+.actionDrawer footer button,
+.actionDrawer .leadDrawerBody > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  border: 1px solid #ccdde7;
+  border-radius: 8px;
+  background: #fff;
+  color: #326987;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.propertyToolGrid article > div > button,
+.actionDrawer footer button:last-child {
+  border-color: #1e5a80;
+  background: #1e5a80;
+  color: #fff;
+}
+
+.rankSystem {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.rankSystem > div {
+  display: grid;
+  gap: 6px;
+}
+
+.rankSystem i,
+.courseProgress {
+  overflow: hidden;
+  height: 9px;
+  border-radius: 999px;
+  background: #edf2f5;
+}
+
+.rankSystem i::before {
+  display: none;
+}
+
+.rankSystem i {
+  display: block;
+  background: #2c7d5f;
+}
+
+.academyProgress {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.academyGrid > article {
+  overflow: visible;
+}
+
+.courseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: max-content;
+  color: #2d6487;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.courseProgress {
+  position: relative;
+  height: 12px;
+  margin: 12px 0;
+}
+
+.courseProgress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #2c7d5f;
+}
+
+.courseProgress b {
+  position: absolute;
+  right: 0;
+  top: -21px;
+  color: #496579;
+  font-size: 12px;
+}
+
+.notificationList {
+  display: grid;
+  gap: 10px;
+}
+
+.notificationList article,
+.profileSettingsGrid article {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #dce7ed;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.notificationList article {
+  grid-template-columns: 36px 1fr auto;
+}
+
+.notificationList p,
+.profileSettingsGrid p {
+  margin: 4px 0 0;
+  color: #687f90;
+}
+
+.notificationList span {
+  color: #2c7d5f;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.profileSettingsGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.profileSettingsGrid article {
+  grid-template-columns: 38px 1fr auto;
+}
+
+.profileSettingsGrid h3 {
+  margin: 0;
+  color: #1c4058;
+}
+
+.profileSettingsGrid button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  border: 1px solid #ccdde7;
+  border-radius: 8px;
+  background: #fff;
+  color: #326987;
+  cursor: pointer;
+}
+
+.actionDrawer {
+  display: flex;
+  flex-direction: column;
+}
+
+.actionDrawer footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  padding: 16px 21px;
+  border-top: 1px solid #e3eaf0;
+  background: #fff;
+}
+
+.statusStack {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+
+.statusStack span {
+  display: grid;
+  min-height: 38px;
+  place-items: center;
+  border-radius: 8px;
+  background: #f4f8fa;
+  color: #526b7e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.associateTopSearch {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  width: min(360px, 34vw);
+  padding: 0 12px;
+  border: 1px solid #dbe7ee;
+  border-radius: 10px;
+  background: #fff;
+  color: #708596;
+}
+
+.associateTopSearch input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  font: inherit;
+}
+
+.walletShortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid #c7dce9;
+  border-radius: 10px;
+  background: #fff;
+  color: #235d84;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.teamHero button {
+  border-color: #1d587e;
+  background: #1d587e;
+  color: #fff;
+}
+
+.genealogyPanel {
+  overflow-x: auto;
+}
+
+.genealogyRoot {
+  display: grid;
+  justify-items: center;
+  max-width: 160px;
+  gap: 3px;
+  margin: 25px auto;
+}
+
+.genealogyRoot > span,
+.genealogyMember > span {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 50%;
+  background: #1f5a80;
+  color: #fff;
+  font-weight: 800;
+}
+
+.genealogyRoot small,
+.genealogyMember small {
+  color: #81909b;
+}
+
+.genealogyBranches {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(145px, 1fr));
+  gap: 18px;
+  min-width: 520px;
+}
+
+.genealogyMember {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 16px 10px;
+  border: 1px solid #dce7ed;
+  border-radius: 13px;
+  background: #f9fbfc;
+}
+
+.genealogyMember::before {
+  position: absolute;
+  top: -25px;
+  width: 1px;
+  height: 25px;
+  background: #bfd2df;
+  content: "";
+}
+
+.genealogyChild {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.genealogyChild > span {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e6f1f7;
+}
+
+.genealogyChild p {
+  display: grid;
+  margin: 0;
+}
+
+.leaderboard {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+}
+
+.leaderboard article {
+  display: grid;
+  grid-template-columns: 25px 36px 1fr auto;
+  align-items: center;
+  gap: 9px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f7fafc;
+}
+
+.leaderboard article > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e5f0f6;
+  color: #3c708f;
+}
+
+.leaderboard article > div {
+  display: grid;
+}
+
+.leaderboard small {
+  color: #83929e;
+}
+
+.leaderboard em {
+  color: #285d7c;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.marketingBanner {
+  margin-top: 20px;
+  justify-content: flex-start;
+}
+
+.marketingBanner > div {
+  flex: 1;
+}
+
+.marketingBanner h3,
+.marketingBanner p {
+  margin: 0;
+}
+
+.marketingBanner p {
+  margin-top: 5px;
+  color: #5f778a;
+}
+
+.marketingBanner button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  border: 1px solid #c5dae7;
+  border-radius: 9px;
+  background: #fff;
+  color: #286184;
+  cursor: pointer;
+}
+
+.campaignGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.campaignGrid > article {
+  overflow: hidden;
+  border: 1px solid #dce7ed;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.campaignVisual {
+  display: flex;
+  min-height: 130px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 18px;
+  background: linear-gradient(135deg, #dceef8, #f5fbfe);
+  color: #4c84a7;
+}
+
+.campaignVisual span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #fff;
+  color: #3a6c8b;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.campaignBody {
+  padding: 17px;
+}
+
+.campaignBody h3 {
+  margin: 0;
+  color: #1c4058;
+}
+
+.campaignBody p {
+  min-height: 60px;
+  color: #657b8d;
+  line-height: 1.5;
+}
+
+.campaignBody > div {
+  display: flex;
+  gap: 7px;
+}
+
+.campaignBody button {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 38px;
+  border: 1px solid #ccdde7;
+  border-radius: 8px;
+  background: #fff;
+  color: #326987;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+  .realtorMetricGrid,
+  .teamStats,
+  .realtorMetricGrid.six,
+  .analyticsGrid,
+  .propertyToolGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .campaignGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .profileTop:has(.associateTopSearch) {
+    height: auto;
+    min-height: 112px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .profileTop:has(.associateTopSearch) .topActions {
+    flex: 1;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .profileTop:has(.associateTopSearch) h1 {
+    padding-top: 8px;
+  }
+
+  .realtorHero,
+  .teamHero,
+  .commissionHero,
+  .marketingBanner,
+  .realtorPageHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .realtorHero h2,
+  .teamHero h2,
+  .realtorPageHeader h2 {
+    font-size: 24px;
+  }
+
+  .rankCard {
+    min-width: 0;
+  }
+
+  .realtorMetricGrid,
+  .commissionStats,
+  .teamStats,
+  .quickActions,
+  .quickActions.four,
+  .realtorMetricGrid.six,
+  .analyticsGrid,
+  .propertyToolGrid,
+  .academyProgress,
+  .profileSettingsGrid,
+  .campaignGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .realtorHomeGrid,
+  .teamLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .crmToolbar {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .crmToolbar > label {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .crmPipeline,
+  .crmPipeline.eight {
+    grid-template-columns: repeat(8, 82vw);
+  }
+
+  .leadTable,
+  .commissionTable {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .leadTable > div,
+  .commissionTable > div {
+    display: none;
+  }
+
+  .leadTable > button,
+  .commissionTable > article,
+  .crmLeadTable > button,
+  .transactionTable > article {
+    grid-template-columns: 1fr;
+    min-width: 0;
+    margin-bottom: 10px;
+    border: 1px solid #dce7ed;
+    border-radius: 12px;
+  }
+
+  .leadDrawer {
+    width: 100%;
+  }
+
+  .leadInfoCard {
+    grid-template-columns: 1fr;
+  }
+
+  .followUpEditor {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .campaignBody p {
+    min-height: 0;
+  }
+
+  .propertyToolGrid article div div,
+  .statusStack,
+  .treeLevel,
+  .profileSettingsGrid article,
+  .notificationList article {
+    grid-template-columns: 1fr;
+  }
+
+  .associateTopSearch {
+    order: 4;
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .walletShortcut {
+    min-width: 0;
+  }
+}
+
+/* Associate dashboard production polish: consistency layer. */
+.realtorWorkspace,
+.associateProfileReplica {
+  --associate-primary-text: #20252b;
+  --associate-secondary-text: #667085;
+  --associate-disabled-text: #98a2b3;
+  --associate-line: #dfe8ef;
+  --associate-soft: #f8fafc;
+  color: var(--associate-primary-text);
+}
+
+.realtorHero,
+.teamHero,
+.commissionHero,
+.marketingBanner,
+.realtorPanel,
+.realtorMetricGrid article,
+.commissionStats article,
+.teamStats article,
+.propertyToolGrid article,
+.campaignGrid > article,
+.notificationList article,
+.profileSettingsGrid article {
+  border-color: var(--associate-line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.realtorHero,
+.teamHero,
+.marketingBanner {
+  background: #ffffff;
+}
+
+.commissionHero {
+  background: #ffffff;
+  color: var(--associate-primary-text);
+}
+
+.rankCard {
+  border-radius: 8px;
+  background: var(--teal);
+}
+
+.realtorHero h2,
+.teamHero h2,
+.commissionHero strong,
+.realtorPageHeader h2,
+.realtorPanel h3,
+.campaignBody h3,
+.propertyToolGrid h3,
+.profileSettingsGrid h3,
+.leadDrawer h2,
+.leadCard h3,
+.realtorMetricGrid strong,
+.commissionStats strong,
+.teamStats strong,
+.leaderboard em,
+.propertyToolGrid article strong {
+  color: var(--associate-primary-text);
+  font-weight: 600;
+}
+
+.realtorHero > div:first-child > span,
+.realtorPageHeader > div > span,
+.teamHero > div > span,
+.commissionHero > div > span,
+.realtorHero p,
+.teamHero p,
+.commissionHero p,
+.realtorPageHeader p,
+.realtorPanel header p,
+.realtorMetricGrid span,
+.commissionStats span,
+.teamStats span,
+.realtorMetricGrid small,
+.commissionStats small,
+.teamStats small,
+.campaignBody p,
+.propertyToolGrid p,
+.propertyToolGrid small,
+.leadDrawer header p,
+.leadCard p,
+.leadCard small,
+.leadCard footer,
+.notificationList p,
+.profileSettingsGrid p {
+  color: var(--associate-secondary-text);
+}
+
+.miniBars span,
+.rankSystem i,
+.courseProgress i,
+.funnelRow i,
+.activityPanel article > span {
+  background: var(--green);
+}
+
+.realtorPanel header button,
+.teamHero button,
+.commissionHero button,
+.realtorPageHeader > button,
+.activityComposer button,
+.addLeadDrawer > footer button:last-child,
+.propertyToolGrid article > div > button,
+.actionDrawer footer button:last-child {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #ffffff;
+}
+
+.quickActions button,
+.crmToolbar > button,
+.leadContactActions button,
+.followUpEditor button,
+.marketingBanner button,
+.campaignBody button,
+.propertyToolGrid button,
+.profileSettingsGrid button,
+.actionDrawer .leadDrawerBody > button,
+.actionDrawer footer button:first-child {
+  border-color: #cfdce6;
+  background: #ffffff;
+  color: var(--associate-primary-text);
+}
+
+.propertyToolGrid article > div > button,
+.realtorPageHeader > button {
+  min-height: 44px;
+}
+
+.positiveAction,
+.buyPlotButton {
+  border-color: var(--green) !important;
+  background: var(--green) !important;
+  color: #ffffff !important;
+}
+
+.buyPlotButton {
+  min-height: 54px;
+  border-radius: 8px;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(8, 123, 28, 0.18);
+}
+
+.leadDrawer {
+  width: min(100%, 50vw);
+  min-width: 620px;
+  border-left: 1px solid var(--associate-line);
+  box-shadow: -18px 0 44px rgba(15, 23, 42, 0.14);
+}
+
+.leadDrawer > header {
+  padding: 20px 28px;
+}
+
+.leadDrawerBody {
+  gap: 20px;
+  padding: 28px;
+}
+
+.leadDrawer header > button {
+  background: #eef6ff;
+  color: var(--associate-secondary-text);
+}
+
+.leadForm textarea {
+  min-height: 110px;
+  resize: vertical;
+  padding: 13px;
+  border: 1px solid #d7e2e9;
+  border-radius: 8px;
+  color: var(--associate-primary-text);
+  font: inherit;
+}
+
+.drawerSummaryCard,
+.drawerSection,
+.inviteReferralCard,
+.certificateGrid article {
+  border: 1px solid var(--associate-line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.drawerSummaryCard {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+}
+
+.drawerSummaryCard span,
+.drawerSection h3 {
+  color: var(--associate-secondary-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.drawerSummaryCard strong {
+  color: var(--associate-primary-text);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.drawerSummaryCard p,
+.drawerSection p {
+  margin: 0;
+  color: var(--associate-secondary-text);
+  line-height: 1.55;
+}
+
+.drawerSummaryCard.property strong {
+  color: var(--green);
+}
+
+.drawerSection {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+}
+
+.drawerSection h3 {
+  margin: 0;
+  color: var(--associate-primary-text);
+  font-size: 16px;
+}
+
+.drawerMiniTable {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  overflow: hidden;
+  border: 1px solid var(--associate-line);
+  border-radius: 8px;
+}
+
+.drawerMiniTable > * {
+  padding: 12px;
+  border-bottom: 1px solid var(--associate-line);
+  color: var(--associate-secondary-text);
+}
+
+.drawerMiniTable > *:nth-last-child(-n + 3) {
+  border-bottom: 0;
+}
+
+.drawerMiniTable strong {
+  color: var(--associate-primary-text);
+  font-weight: 600;
+}
+
+.drawerMiniTable em {
+  color: var(--green);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.inviteReferralCard {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 20px;
+}
+
+.qrBox {
+  display: grid;
+  width: 120px;
+  height: 120px;
+  place-items: center;
+  border: 1px dashed #b8c7d3;
+  border-radius: 8px;
+  background: var(--associate-soft);
+  color: var(--teal);
+}
+
+.inviteReferralCard h3,
+.inviteReferralCard p {
+  margin: 0;
+}
+
+.inviteReferralCard p {
+  color: var(--associate-secondary-text);
+}
+
+.inviteReferralCard label {
+  margin-top: 14px;
+}
+
+.inviteReferralCard label span {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.inviteReferralCard input {
+  min-width: 0;
+}
+
+.certificateGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.certificateGrid article {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.certificateGrid article:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.certificateGrid h3,
+.certificateGrid p {
+  margin: 0;
+}
+
+.certificateGrid p {
+  color: var(--associate-secondary-text);
+}
+
+.certificateGrid span {
+  width: max-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #eaf7ec;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.certificateGrid span.locked {
+  background: #f2f4f7;
+  color: var(--associate-disabled-text);
+}
+
+.certificateGrid button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.drawerToast {
+  position: sticky;
+  top: 80px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  margin: 16px 28px 0;
+  padding: 10px 13px;
+  border: 1px solid #b7e4c7;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.toggleRows {
+  display: grid;
+  gap: 10px;
+}
+
+.toggleRows label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid var(--associate-line);
+  border-radius: 8px;
+}
+
+.securityList {
+  display: grid;
+  gap: 12px;
+}
+
+.securityList button {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 68px;
+  padding: 12px;
+  border: 1px solid var(--associate-line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--associate-primary-text);
+  text-align: left;
+}
+
+.securityList button > span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 8px;
+  background: #eef6ff;
+  color: var(--teal);
+}
+
+.securityList strong {
+  display: block;
+  font-weight: 600;
+}
+
+.securityList small {
+  color: var(--associate-secondary-text);
+}
+
+@media (max-width: 760px) {
+  .leadDrawer {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .inviteReferralCard,
+  .certificateGrid,
+  .drawerMiniTable {
+    grid-template-columns: 1fr;
+  }
+
+  .drawerMiniTable > * {
+    border-bottom: 1px solid var(--associate-line) !important;
+  }
+}
