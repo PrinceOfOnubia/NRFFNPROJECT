@@ -140,7 +140,7 @@ export default function MembershipHub({
                   setOpen(false);
                 }}
               >
-                Pay {selected.price} &amp; upgrade
+                Upgrade
               </button>
             </div>
             <small className="npl-membership-drawer__note">

@@ -388,14 +388,11 @@
   .npl-metric { min-height: 0; }
   .npl-setup { padding: .9rem; }
   .npl-membership-grid {
-    grid-template-columns: none;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(82%, 1fr);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: .35rem;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
   }
-  .npl-membership-card { scroll-snap-align: start; }
+  .npl-membership-card { min-height: unset; }
   .npl-membership-drawer__summary,
   .npl-membership-drawer__actions { grid-template-columns: 1fr; }
   .npl-profile-actions { gap: .45rem; }
@@ -855,7 +852,6 @@
   border: 1px solid var(--c-line);
   background: linear-gradient(180deg, #fff, #fbfdff);
   box-shadow: var(--shadow-sm);
-  min-height: 100%;
 }
 .npl-membership-card.is-current {
   border-color: #cfe0f7;
