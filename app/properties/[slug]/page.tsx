@@ -14,6 +14,7 @@ import { notFound } from "next/navigation";
 import { getProperty, propertyCatalog } from "../../../lib/property-catalog";
 import PropertyGallery from "../../../components/property/PropertyGallery";
 import PropertyInvestPanel from "../../../components/property/PropertyInvestPanel";
+import RelatedPropertiesStrip from "../../../components/property/RelatedPropertiesStrip";
 
 export function generateStaticParams() {
   return propertyCatalog.map(({ slug }) => ({ slug }));
@@ -68,16 +69,6 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
           </div>
           <h1>{property.name}</h1>
           <p className="propertyDetail__lead"><MapPin size={17} /> {property.location}</p>
-          <div className="propertyDetail__hero-meta">
-            <div>
-              <small>From</small>
-              <b>{property.price}</b>
-            </div>
-            <div>
-              <small>Return</small>
-              <b>{property.roi}</b>
-            </div>
-          </div>
 
           <div className="propertyDetail__summary">
             <div className="propertyDetail__summary-head">
@@ -97,6 +88,19 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
               <b>{property.price}</b>
             </div>
           </div>
+
+          <section className="propertyDetail__section propertyDetail__inspectionMobile" id="inspection-mobile">
+            <span className="propertyDetail__eyebrow">Inspection</span>
+            <h2>Location and inspection</h2>
+            <div className="propertyDetail__location">
+              <MapPin size={22} />
+              <div>
+                <b>{property.location}</b>
+                <p>Book a guided physical or virtual inspection with an NRFFN property adviser.</p>
+              </div>
+              <a href="https://wa.me/2348000000000?text=I%20would%20like%20to%20book%20a%20property%20inspection" className="npl-btn npl-btn--ghost">Book inspection</a>
+            </div>
+          </section>
 
           <PropertyInvestPanel property={property} />
         </aside>
@@ -169,19 +173,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
       <section className="propertyDetail__related">
         <span className="propertyDetail__eyebrow">More opportunities</span>
         <h2>Related properties</h2>
-        <div className="propertyDetail__related-grid">
-          {related.map((item) => (
-            <article className="propertyDetail__related-card" key={item.slug}>
-              <img src={item.hero} alt={item.name} />
-              <div>
-                <span>{item.model}</span>
-                <h3>{item.name}</h3>
-                <p>{item.location}</p>
-                <a className="propertyDetail__textlink" href={`/properties/${item.slug}`}>View property <ArrowRight size={14} /></a>
-              </div>
-            </article>
-          ))}
-        </div>
+        <RelatedPropertiesStrip items={related} />
       </section>
     </main>
   );

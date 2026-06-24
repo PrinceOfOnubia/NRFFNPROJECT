@@ -342,12 +342,14 @@
     padding: .25rem;
     border: 0;
     background: transparent;
+    display: grid;
+    place-items: center;
   }
   .npl-top .npl-icnbtn,
   .npl-top .npl-pill-user {
     width: 46px;
     height: 46px;
-    border-radius: 12px;
+    border-radius: 50%;
   }
   .npl-top .npl-avatar {
     width: 44px;
@@ -385,7 +387,15 @@
   .npl-refstats { gap: .7rem; }
   .npl-metric { min-height: 0; }
   .npl-setup { padding: .9rem; }
-  .npl-membership-grid { grid-template-columns: 1fr; }
+  .npl-membership-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(82%, 1fr);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: .35rem;
+  }
+  .npl-membership-card { scroll-snap-align: start; }
   .npl-membership-drawer__summary,
   .npl-membership-drawer__actions { grid-template-columns: 1fr; }
   .npl-profile-actions { gap: .45rem; }
@@ -401,6 +411,13 @@
   .npl-refcard__copy {
     min-height: 46px;
     border-radius: 18px;
+  }
+  .npl-refcard__input {
+    padding: .7rem .75rem .7rem 1rem;
+    gap: .5rem;
+  }
+  .npl-refcard__input input {
+    font-size: .84rem;
   }
 }
 @media (prefers-reduced-motion: reduce) { .npl * { transition:none !important; animation:none !important; } }
@@ -988,4 +1005,10 @@
   .npl-refcard__share a,
   .npl-refcard__share button { width: 62px; height: 62px; border-radius: 16px; }
   .npl-side__foot .npl-nav--danger { min-height: 42px; }
+  .npl-membership-grid {
+    grid-auto-columns: minmax(88%, 1fr);
+  }
+  .npl-pill-user {
+    border-radius: 50%;
+  }
 }

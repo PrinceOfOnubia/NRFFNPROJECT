@@ -393,16 +393,16 @@ function Referrals() {
   const wa = `https://wa.me/?text=${encodeURIComponent("Join me on NRFFN — Nigeria's largest real estate wealth network: " + member.referralLink)}`;
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Referral engine" title="Share & grow your network" sub="Your unique link, QR code, and 5-level genealogy." /></div>
+      <div className="npl-card"><PageHead eyebrow="Referral engine" title="Share & grow your network" sub="Share your referral link, track activity, and grow your 5-level network." /></div>
 
       <div className="npl-grid cols-2">
         <div className="npl-card npl-refcard">
           <div>
-            <h3 style={{ marginBottom: ".35rem" }}>Share your link</h3>
+            <h3 style={{ marginBottom: ".35rem" }}>Share your referral link</h3>
             <p style={{ color: "var(--c-muted)", fontSize: ".95rem" }}>Invite investors through your link and keep track of the money that lands in your wallet.</p>
           </div>
           <div className="npl-refcard__linkbox">
-            <div className="npl-refcard__label">Your sign-up link</div>
+            <div className="npl-refcard__label">Your referral link</div>
             <div className="npl-refcard__input">
               <input readOnly value={member.referralLink} />
               <button className="npl-btn npl-btn--primary npl-refcard__copy" onClick={copy}>{copied ? <Check size={15} /> : <Copy size={15} />} {copied ? "Copied" : "Copy"}</button>

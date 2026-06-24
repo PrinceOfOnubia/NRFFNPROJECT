@@ -437,15 +437,15 @@ function Referral_() {
   const copy = () => { navigator.clipboard?.writeText(referral.link); setCopied(true); setTimeout(() => setCopied(false), 1500); };
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Invite & earn" title="Refer fellow investors" sub="Share your link and earn rewards on every successful referral." /></div>
+      <div className="npl-card"><PageHead eyebrow="Invite & earn" title="Refer fellow investors" sub="Share your referral link and earn rewards on every successful referral." /></div>
       <div className="npl-grid cols-2">
         <div className="npl-card npl-refcard">
           <div>
-            <h3 style={{ marginBottom: ".35rem" }}>Share your link</h3>
+            <h3 style={{ marginBottom: ".35rem" }}>Share your referral link</h3>
             <p style={{ color: "var(--c-muted)", fontSize: ".95rem" }}>Your commission lands in your wallet straight away once someone invests through your link.</p>
           </div>
           <div className="npl-refcard__linkbox">
-            <div className="npl-refcard__label">Your sign-up link</div>
+            <div className="npl-refcard__label">Your referral link</div>
             <div className="npl-refcard__input">
               <input readOnly value={referral.link} />
               <button className="npl-btn npl-btn--primary npl-refcard__copy" onClick={copy}>{copied ? <Check size={15} /> : <Copy size={15} />} {copied ? "Copied" : "Copy"}</button>
