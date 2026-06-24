@@ -511,7 +511,7 @@ function Profile() {
             <div className="npl-field"><label>Email</label><input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
             <div className="npl-field"><label>Phone</label><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
           </div>
-          <button className="npl-btn npl-btn--primary" style={{ alignSelf: "flex-start" }}><Pencil size={15} /> Save changes</button>
+          <button className="npl-btn npl-btn--primary" style={{ alignSelf: "flex-start", marginTop: "1rem" }}><Pencil size={15} /> Save changes</button>
         </div>
       </div>
 

@@ -1,12 +1,10 @@
 import {
   ArrowLeft,
   ArrowRight,
-  Building2,
   Calendar,
   Check,
   FileText,
   Globe,
-  Layers3,
   MapPin,
   Ruler,
   ShieldCheck,
@@ -15,22 +13,10 @@ import {
 import { notFound } from "next/navigation";
 import { getProperty, propertyCatalog } from "../../../lib/property-catalog";
 import PropertyGallery from "../../../components/property/PropertyGallery";
+import PropertyInvestPanel from "../../../components/property/PropertyInvestPanel";
 
 export function generateStaticParams() {
   return propertyCatalog.map(({ slug }) => ({ slug }));
-}
-
-function optionsFor(model: string) {
-  if (model === "Land Banking") return ["300sqm", "500sqm", "1500sqm", "3000sqm"];
-  if (model === "Co-Ownership") return ["1 share", "3 shares", "5 shares", "10 shares"];
-  if (model === "Flex") return ["Starter", "Growth", "Premium"];
-  return ["1 unit", "2 units", "3 units"];
-}
-
-function planFor(model: string) {
-  if (model === "Co-Ownership") return ["Income plan", "Capital growth"];
-  if (model === "Flex") return ["Starter plan", "Upgrade plan"];
-  return ["Outright", "Installment"];
 }
 
 function docPack(model: string) {
@@ -46,26 +32,38 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
   if (!property) notFound();
 
   const related = propertyCatalog.filter((item) => item.slug !== property.slug).slice(0, 3);
-  const sizes = optionsFor(property.model);
-  const plans = planFor(property.model);
+  const summaryLabel = property.model === "Full Ownership" ? "Full ownership" : property.model === "Co-Ownership" ? "Co-ownership" : property.model === "Flex" ? "Flex (flexible)" : property.model;
   const docs = docPack(property.model);
-  const headline = property.model === "Co-Ownership" ? "Co-ownership offerings" : property.model === "Land Banking" ? "Full ownership offerings" : `${property.model} offerings`;
 
   return (
     <main className="npl propertyDetail">
       <div className="propertyDetail__nav">
         <a href="/#properties"><ArrowLeft size={17} /> Back to properties</a>
-        <img src="/assets/nrffn-logo-blue.png" alt="NRFFN" />
       </div>
 
       <section className="propertyDetail__heroGrid">
-        <div className="propertyDetail__media">
-          <PropertyGallery images={[property.hero, ...property.gallery]} name={property.name} />
+        <div className="propertyDetail__mediaStack">
+          <div className="propertyDetail__media">
+            <PropertyGallery images={[property.hero, ...property.gallery]} name={property.name} />
+          </div>
+
+          <section className="propertyDetail__section propertyDetail__inspectionInline" id="inspection">
+            <span className="propertyDetail__eyebrow">Inspection</span>
+            <h2>Location and inspection</h2>
+            <div className="propertyDetail__location">
+              <MapPin size={22} />
+              <div>
+                <b>{property.location}</b>
+                <p>Book a guided physical or virtual inspection with an NRFFN property adviser.</p>
+              </div>
+              <a href="https://wa.me/2348000000000?text=I%20would%20like%20to%20book%20a%20property%20inspection" className="npl-btn npl-btn--ghost">Book inspection</a>
+            </div>
+          </section>
         </div>
 
         <aside className="propertyDetail__offer">
           <div className="propertyDetail__offer-top">
-            <span className="propertyDetail__eyebrow">{property.model}</span>
+            <span className="propertyDetail__eyebrow">{summaryLabel}</span>
             <span className="propertyDetail__pill"><ShieldCheck size={14} /> Verified</span>
           </div>
           <h1>{property.name}</h1>
@@ -81,32 +79,10 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
             </div>
           </div>
 
-          <div className="propertyDetail__block">
-            <span className="propertyDetail__block-label">{headline}</span>
-            <div className="propertyDetail__chips">
-              {sizes.map((size, index) => (
-                <button key={size} className={`propertyDetail__chip${index === 0 ? " active" : ""}`} type="button">
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="propertyDetail__block">
-            <span className="propertyDetail__block-label">Plan type</span>
-            <div className="propertyDetail__switch">
-              {plans.map((plan, index) => (
-                <button key={plan} className={`propertyDetail__switch-btn${index === 0 ? " active" : ""}`} type="button">
-                  {plan}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <div className="propertyDetail__summary">
             <div className="propertyDetail__summary-head">
               <span><TrendingUp size={14} /> Investment summary</span>
-              <b>{property.model === "Full Ownership" ? "Own it outright" : property.model === "Co-Ownership" ? "Own a share" : "Start small"}</b>
+              <b>{summaryLabel}</b>
             </div>
             <div className="propertyDetail__summary-row">
               <span>List price</span>
@@ -122,10 +98,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
             </div>
           </div>
 
-          <div className="propertyDetail__actions">
-            <a href="#docs" className="npl-btn npl-btn--ghost"><FileText size={17} /> View documents</a>
-            <a href="/login?role=Client&next=/client/properties" className="npl-btn npl-btn--success"><Building2 size={17} /> Buy / Invest</a>
-          </div>
+          <PropertyInvestPanel property={property} />
         </aside>
       </section>
 
@@ -166,25 +139,12 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
               {docs.map((doc) => (
                 <div className="propertyDetail__doc" key={doc}>
                   <span className="propertyDetail__fact-ic"><FileText size={18} /></span>
-                  <div><b>{doc}</b><p>Open the property file for more detail</p></div>
-                  <a href="/client/documents" aria-label={`Open ${doc}`}><ArrowRight size={16} /></a>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="propertyDetail__section" id="inspection">
-            <span className="propertyDetail__eyebrow">Inspection</span>
-            <h2>Location and inspection</h2>
-            <div className="propertyDetail__location">
-              <MapPin size={22} />
-              <div>
-                <b>{property.location}</b>
-                <p>Book a guided physical or virtual inspection with an NRFFN property adviser.</p>
+                <div><b>{doc}</b><p>Open the property file for more detail</p></div>
+                <a href="/client/documents" aria-label={`Open ${doc}`}><ArrowRight size={16} /></a>
               </div>
-              <a href="https://wa.me/2348000000000?text=I%20would%20like%20to%20book%20a%20property%20inspection" className="npl-btn npl-btn--ghost">Book inspection</a>
-            </div>
-          </section>
+            ))}
+          </div>
+        </section>
         </div>
 
         <aside className="propertyDetail__aside">
@@ -217,7 +177,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
                 <span>{item.model}</span>
                 <h3>{item.name}</h3>
                 <p>{item.location}</p>
-                <a href={`/properties/${item.slug}`}>View property</a>
+                <a className="propertyDetail__textlink" href={`/properties/${item.slug}`}>View property <ArrowRight size={14} /></a>
               </div>
             </article>
           ))}

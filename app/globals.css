@@ -70,7 +70,7 @@
   margin: 0 auto;
   padding: 1.05rem clamp(1rem, 3vw, 2.5rem);
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 .propertyDetail__nav a {
@@ -91,6 +91,11 @@
   gap: 1.25rem;
   align-items: start;
 }
+.propertyDetail__mediaStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .propertyDetail__media,
 .propertyDetail__offer,
 .propertyDetail__section,
@@ -107,6 +112,8 @@
   padding: 1.25rem;
   position: sticky;
   top: 1rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
 }
 .propertyDetail__offer-top {
   display: flex;
@@ -258,6 +265,9 @@
   color: #6b7793;
   line-height: 1.7;
 }
+.propertyDetail__inspectionInline {
+  width: 100%;
+}
 .propertyDetail__facts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -367,21 +377,292 @@
 .propertyDetail__related-card span { color: #1046a3; font-size: .72rem; font-weight: 800; text-transform: uppercase; }
 .propertyDetail__related-card h3 { margin: .35rem 0; font-size: 1.05rem; }
 .propertyDetail__related-card p { color: #6b7793; font-size: .84rem; }
-.propertyDetail__related-card a { display: inline-block; margin-top: .8rem; color: #1046a3; font-weight: 800; text-decoration: none; }
+.propertyDetail__related-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-top: .9rem;
+  padding: .48rem .8rem;
+  border-radius: 999px;
+  background: #eef5ff;
+  border: 1px solid #d8e4f2;
+  color: #1046a3;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.propertyDetail__related-card a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(16,70,163,.08);
+  background: #e6f0ff;
+}
+
+.propertyDetail__textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-weight: 800;
+}
+
+.propertyInvest__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(9, 22, 44, .52);
+  backdrop-filter: blur(4px);
+}
+.propertyInvest__sheet {
+  width: min(600px, 100%);
+  height: 100%;
+  background: #fff;
+  box-shadow: -24px 0 60px rgba(8, 31, 68, .22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.propertyInvest__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid #e6ecf5;
+}
+.propertyInvest__head h3 { font-size: 1.15rem; }
+.propertyInvest__head p {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  color: #6b7793;
+  font-size: .85rem;
+  margin-top: .25rem;
+}
+.propertyInvest__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem 1.25rem 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+.propertyInvest__meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+}
+.propertyInvest__meta div {
+  padding: .95rem 1rem;
+  border-radius: 16px;
+  border: 1px solid #dfe8f2;
+  background: #f8fbff;
+}
+.propertyInvest__meta small,
+.propertyInvest__summary-row span,
+.propertyInvest__step small {
+  display: block;
+  color: #6b7793;
+  font-size: .78rem;
+}
+.propertyInvest__meta b {
+  display: block;
+  margin-top: .25rem;
+  color: #0c1a33;
+  font-size: 1.05rem;
+}
+.propertyInvest__summary {
+  border: 1px solid #dfe8f2;
+  border-radius: 18px;
+  background: #eef9fc;
+  padding: 1rem;
+  display: grid;
+  gap: .85rem;
+}
+.propertyInvest__summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+}
+.propertyInvest__summary-head span {
+  font-size: .78rem;
+  font-weight: 800;
+  color: #1046a3;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.propertyInvest__summary-head b {
+  color: #0c1a33;
+  font-size: .9rem;
+  text-align: right;
+}
+.propertyInvest__summary-row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  gap: .75rem;
+}
+.propertyInvest__summary-row select {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid #d9e4ef;
+  background: #fff;
+  padding: .72rem .9rem;
+  font: inherit;
+  color: #0c1a33;
+}
+.propertyInvest__summary-row.total {
+  padding-top: .3rem;
+  border-top: 1px solid #d8e4ee;
+}
+.propertyInvest__summary-row.total b { font-size: 1.08rem; }
+.propertyInvest__stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: .7rem;
+  justify-self: start;
+}
+.propertyInvest__stepper button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #d9e4ef;
+  background: #fff;
+  color: #1046a3;
+  display: grid;
+  place-items: center;
+}
+.propertyInvest__steps {
+  display: grid;
+  gap: .65rem;
+}
+.propertyInvest__step {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: .75rem;
+  align-items: center;
+  padding: .85rem .95rem;
+  border-radius: 16px;
+  border: 1px solid #e6ecf5;
+  background: #fff;
+}
+.propertyInvest__step span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #eef5ff;
+  color: #1046a3;
+  font-weight: 800;
+}
+.propertyInvest__step.done span {
+  background: #eaf7ec;
+  color: #087b1c;
+}
+.propertyInvest__step.active {
+  border-color: #cfe1fb;
+  background: #f7fbff;
+}
+.propertyInvest__step b {
+  display: block;
+  color: #0c1a33;
+  font-size: .95rem;
+}
+.propertyInvest__step small { margin-top: .1rem; }
+.propertyInvest__note {
+  display: flex;
+  gap: .8rem;
+  align-items: flex-start;
+  padding: .95rem 1rem;
+  border-radius: 16px;
+  border: 1px solid #cce9d2;
+  background: #eaf7ec;
+}
+.propertyInvest__note svg {
+  color: #087b1c;
+  flex: 0 0 auto;
+  margin-top: .15rem;
+}
+.propertyInvest__note b {
+  display: block;
+  color: #0c1a33;
+  margin-bottom: .15rem;
+}
+.propertyInvest__note p {
+  margin: 0;
+  color: #5f6367;
+  line-height: 1.55;
+}
+.propertyInvest__payment {
+  display: grid;
+  gap: .65rem;
+}
+.propertyInvest__method {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: .75rem;
+  align-items: center;
+  padding: .85rem .95rem;
+  border-radius: 16px;
+  border: 1px solid #dfe8f2;
+  background: #fff;
+  text-align: left;
+}
+.propertyInvest__method span {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #eef5ff;
+  color: #1046a3;
+}
+.propertyInvest__method b {
+  display: block;
+  color: #0c1a33;
+  font-size: .94rem;
+}
+.propertyInvest__method small {
+  color: #6b7793;
+  font-size: .78rem;
+}
+.propertyInvest__footer {
+  display: flex;
+  gap: .75rem;
+  padding: 1rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
+  border-top: 1px solid #e6ecf5;
+  background: rgba(255,255,255,.96);
+}
+.propertyInvest__footer .npl-btn {
+  flex: 1;
+  min-height: 48px;
+}
 
 @media (max-width: 760px) {
   .floatingActions { right: max(12px,env(safe-area-inset-right)); bottom: calc(78px + env(safe-area-inset-bottom)); }
   .floatingActions__button { width: 46px; height: 46px; }
-  .propertyDetail__nav img { width: 120px; }
   .propertyDetail__heroGrid,
   .propertyDetail__layout { grid-template-columns: 1fr; }
   .propertyDetail__offer { position: static; }
+  .propertyDetail__offer { max-height: none; overflow: visible; }
   .propertyDetail__heroGrid { gap: 1rem; }
   .propertyDetail__actions { grid-template-columns: 1fr; }
   .propertyDetail__feature-grid { grid-template-columns: 1fr; }
   .propertyDetail__location { align-items: flex-start; flex-wrap: wrap; }
   .propertyDetail__location .npl-btn { width: 100%; }
   .propertyDetail__related-grid { grid-template-columns: 1fr; }
+  .propertyDetail__mediaStack { gap: .9rem; }
+  .propertyInvest__sheet { width: 100%; }
+  .propertyInvest__meta,
+  .propertyInvest__summary-row { grid-template-columns: 1fr; }
+  .propertyInvest__summary-head,
+  .propertyInvest__summary-row {
+    gap: .45rem;
+  }
+  .propertyInvest__summary-row select { width: 100%; }
+  .propertyInvest__footer { position: sticky; bottom: 0; }
 }
 
 /* Final NRFFN enterprise polish layer. Kept last so it wins the cascade. */

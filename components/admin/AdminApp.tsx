@@ -300,7 +300,7 @@ function AddPropertyDrawer({ onClose }: { onClose: () => void }) {
           <div className="npl-field"><label>Total units</label><input type="number" placeholder="24" /></div>
         </div>
         <div className="npl-field"><label>Expected return</label><input placeholder="18% projected annual return" /></div>
-        <label className="npl-upload"><Plus size={20} /><b>Upload property images</b><small>Cover photo + gallery — JPG or PNG</small><input type="file" accept="image/*" multiple hidden /></label>
+        <label className="npl-upload"><Plus size={20} /><b>Upload property media</b><small>Cover photo, gallery or video — JPG, PNG, MP4 or WebM</small><input type="file" accept="image/*,video/*" multiple hidden /></label>
         <div className="npl-field"><label>Description</label><textarea rows={3} placeholder="Describe the property..." /></div>
         <div className="npl-field"><label>Status</label><select><option>Draft</option><option>Active</option></select></div>
         <div style={{ display: "flex", gap: ".6rem" }}>

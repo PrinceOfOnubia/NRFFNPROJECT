@@ -77,13 +77,18 @@
 .npl-nav svg { flex-shrink: 0; }
 .npl-nav__badge { margin-left: auto; background: var(--hot); color:#fff; font-size:.65rem; font-weight:800; padding: 1px 7px; border-radius: var(--r-pill); }
 .npl-side__foot { margin-top: auto; padding-top: 1rem; }
-.npl-side__foot .npl-nav--danger { justify-content: center; }
+.npl-side__foot .npl-nav--danger { justify-content: flex-start; }
 .npl-nav--danger {
-  color: #ffebe7;
-  background: rgba(212, 69, 47, .16);
-  border: 1px solid rgba(212, 69, 47, .24);
+  color: rgba(255,255,255,.82);
+  background: transparent;
+  border: 1px solid transparent;
 }
-.npl-nav--danger:hover { background: rgba(212, 69, 47, .3); color: #fff; border-color: rgba(212, 69, 47, .42); }
+.npl-nav--danger svg { color: var(--hot); }
+.npl-nav--danger:hover {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border-color: transparent;
+}
 
 /* ---------- Main ---------- */
 .npl-main { display: flex; flex-direction: column; min-width: 0; }
@@ -105,24 +110,25 @@
 }
 .npl-top__search input { border: none; outline: none; background: transparent; font-size: .9rem; width: 200px; color: var(--c-ink); }
 .npl-top__wallet { display:flex; align-items:center; gap:.5rem; background: var(--c-royal); color:#fff; border:none; padding:.6rem 1rem; border-radius: var(--r-pill); font-weight: 800; font-size:.9rem; box-shadow: var(--shadow-sm); }
-.npl-icnbtn { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--c-line); background:#fff; display:grid; place-items:center; color: var(--c-body); position: relative; transition: border-color .2s, color .2s; }
+.npl-icnbtn { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--c-line); background:#fff; display:grid; place-items:center; color: var(--c-body); position: relative; overflow: visible; transition: border-color .2s, color .2s; }
 .npl-icnbtn:hover { border-color: var(--c-royal); color: var(--c-royal); }
 .npl-badgecount {
   position: absolute;
-  top: 7px;
-  right: 7px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
+  top: -7px;
+  right: -7px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
   border-radius: 999px;
   background: var(--hot);
   color: #fff;
-  font-size: .62rem;
+  font-size: .66rem;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #fff;
+  border: 1.5px solid #fff;
+  pointer-events: none;
 }
 .npl-pill-user { display:flex; align-items:center; gap:.5rem; background:#fff; border:1px solid var(--c-line); border-radius: var(--r-pill); padding:.35rem .7rem .35rem .35rem; font-weight:700; color:var(--c-ink); }
 .npl-avatar { width:32px; height:32px; border-radius:50%; background: linear-gradient(140deg,var(--c-royal),var(--c-royal-900)); color:#fff; display:grid; place-items:center; font-size:.8rem; font-weight:800; object-fit: cover; }
@@ -295,6 +301,7 @@
 @media (max-width: 920px) {
   .npl-shell { grid-template-columns: 1fr; }
   .npl-side { position:fixed; left:0; top:0; width:var(--side-w); z-index:100; transform:translateX(-100%); transition: transform .3s; }
+  .npl-side { padding: 1rem .8rem; }
   .npl-shell.open .npl-side { transform:none; }
   .npl-overlay { display:block; position:fixed; inset:0; background:rgba(7,31,68,.45); z-index:95; }
   .npl-top__search { display:none; }
@@ -307,6 +314,9 @@
   .npl-mobnav button { background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:2px; color:var(--c-muted); font-size:.62rem; font-weight:700; padding:.4rem .5rem; border-radius:10px; }
   .npl-mobnav button.active { color:var(--c-royal); }
   .npl-content { padding-bottom: 84px; }
+  .npl-side__group { padding: .8rem .8rem .35rem; }
+  .npl-nav { padding: .62rem .75rem; font-size: .9rem; }
+  .npl-side__foot { padding-top: .7rem; }
 }
 @media (max-width: 720px) {
   .npl-grid.cols-2, .npl-grid.cols-3, .npl-grid.cols-4 { grid-template-columns: 1fr; }
@@ -540,7 +550,8 @@
 /* ---- Property image carousel ---- */
 .npl-gallery { display: flex; flex-direction: column; gap: .7rem; margin-top: 1rem; }
 .npl-gallery__stage { position: relative; border-radius: 14px; overflow: hidden; background: #071f44; aspect-ratio: 16/9; }
-.npl-gallery__stage > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.npl-gallery__stage > img,
+.npl-gallery__stage > video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .npl-gallery__arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 999px; border: 0; background: rgba(255,255,255,.92); color: #071f44; display: grid; place-items: center; cursor: pointer; box-shadow: 0 4px 14px rgba(7,31,68,.25); transition: background .15s, transform .15s; }
 .npl-gallery__arrow:hover { background: #fff; }
 .npl-gallery__arrow.left { left: .8rem; } .npl-gallery__arrow.right { right: .8rem; }
@@ -551,10 +562,12 @@
 .npl-gallery__dots button.active { background: #e6c158; width: 22px; }
 .npl-gallery__thumbs { display: flex; gap: .55rem; overflow-x: auto; padding-bottom: .2rem; }
 .npl-gallery__thumb { flex: 0 0 92px; height: 64px; border-radius: 10px; overflow: hidden; border: 2px solid transparent; cursor: pointer; padding: 0; background: none; }
-.npl-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.npl-gallery__thumb img,
+.npl-gallery__thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .npl-gallery__thumb.active { border-color: #1046a3; }
 .npl-gallery__lightbox { position: fixed; inset: 0; z-index: 120; background: rgba(7,31,68,.92); display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; }
-.npl-gallery__lightbox img { max-width: 86vw; max-height: 84vh; object-fit: contain; border-radius: 10px; }
+.npl-gallery__lightbox img,
+.npl-gallery__lightbox video { max-width: 86vw; max-height: 84vh; object-fit: contain; border-radius: 10px; }
 .npl-gallery__close { position: absolute; top: 1.2rem; right: 1.2rem; width: 44px; height: 44px; border-radius: 999px; border: 0; background: rgba(255,255,255,.15); color: #fff; cursor: pointer; display: grid; place-items: center; }
 
 /* ---- Stepper (checkout / verification) ---- */
@@ -755,6 +768,10 @@
   .npl-top .npl-pill-user {
     width: 44px;
     height: 44px;
+  }
+  .npl-badgecount {
+    top: -5px;
+    right: -5px;
   }
   .npl-top .npl-avatar {
     width: 42px;
