@@ -47,6 +47,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
   const [page, setPage] = useState<PageKey>(initialPage);
   const [open, setOpen] = useState(false);
   const [buy, setBuy] = useState<Listing | null>(null);
+  const [walletAction, setWalletAction] = useState<null | "fund" | "withdraw">(null);
   const [panel, setPanel] = useState<PortalPanel>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [membershipTier, setMembershipTier] = useState("Gold");
@@ -110,7 +111,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
                 onTierChange={setMembershipTier}
               />
             )}
-            {page === "Wallet" && <WalletView />}
+            {page === "Wallet" && <WalletView onFund={() => setWalletAction("fund")} onWithdraw={() => setWalletAction("withdraw")} />}
             {page === "Documents" && <Documents_ />}
             {page === "Referral" && <Referral_ />}
             {page === "Notifications" && <Notifications_ />}
@@ -127,6 +128,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
       </nav>
 
       {buy && <BuyDrawer listing={buy} onClose={() => setBuy(null)} />}
+      {walletAction && <WalletActionDrawer mode={walletAction} onClose={() => setWalletAction(null)} />}
       <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={investor.name} initials={investor.initials} role="Investor Member" avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} membershipTier={membershipTier} />
     </div>
   );
@@ -362,12 +364,15 @@ function Investments() {
 }
 
 /* ===================== WALLET ===================== */
-function WalletView() {
+function WalletView({ onFund, onWithdraw }: { onFund: () => void; onWithdraw: () => void }) {
   return (
     <>
       <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div><span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Available balance</span><h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(wallet.available)}</h2></div>
-        <div className="npl-stack-actions"><button className="npl-btn npl-btn--primary npl-btn--block"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--secondary npl-btn--block">Withdraw</button></div>
+        <div className="npl-stack-actions">
+          <button className="npl-btn npl-btn--primary npl-btn--block" onClick={onFund}><Wallet size={16} /> Fund wallet</button>
+          <button className="npl-btn npl-btn--secondary npl-btn--block" onClick={onWithdraw}>Withdraw</button>
+        </div>
       </div>
       <div className="npl-grid cols-3">
         <Metric icon={Wallet} label="Available" value={naira(wallet.available)} variant="gold" />
@@ -393,6 +398,94 @@ function WalletView() {
         </div>
       </div>
     </>
+  );
+}
+
+function WalletActionDrawer({ mode, onClose }: { mode: "fund" | "withdraw"; onClose: () => void }) {
+  const [step, setStep] = useState(0);
+  const [amount, setAmount] = useState(mode === "fund" ? 500000 : 250000);
+  const [method, setMethod] = useState(mode === "fund" ? "Card" : "Bank transfer");
+
+  const options = mode === "fund"
+    ? [
+      { id: "Card", label: "Card payment", sub: "Use a debit or credit card", icon: CreditCard },
+      { id: "Bank transfer", label: "Bank transfer", sub: "Transfer to the NRFFN account", icon: Landmark },
+      { id: "Wallet", label: "NRFFN wallet", sub: `Use balance ${naira(wallet.available)}`, icon: Wallet },
+      { id: "USSD", label: "USSD", sub: "Pay from any phone", icon: Smartphone },
+    ]
+    : [
+      { id: "Bank transfer", label: "Bank transfer", sub: "Send to your registered bank account", icon: Landmark },
+      { id: "Wallet", label: "Wallet cash-out", sub: "Move funds to your bank account", icon: Wallet },
+    ];
+
+  return (
+    <div className="npl-drawer-overlay" onClick={onClose}>
+      <div className="npl-drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="npl-drawer__head">
+          <div>
+            <h3>{mode === "fund" ? "Fund wallet" : "Withdraw funds"}</h3>
+            <p>{mode === "fund" ? "Add money to your NRFFN wallet" : `Available: ${naira(wallet.available)}`}</p>
+          </div>
+          <button className="npl-icnbtn" onClick={onClose}><X size={18} /></button>
+        </div>
+
+        {step === 0 && (
+          <>
+            <div className="npl-field">
+              <label>Amount</label>
+              <input
+                type="number"
+                min={1}
+                value={amount}
+                onChange={(e) => setAmount(Math.max(1, Number(e.target.value) || 1))}
+              />
+            </div>
+            <div className="npl-field">
+              <label>{mode === "fund" ? "Choose a funding method" : "Choose a withdrawal method"}</label>
+              <div className="npl-optgrid">
+                {options.map((opt) => (
+                  <button
+                    key={opt.id}
+                    className={`npl-opttile${method === opt.id ? " active" : ""}`}
+                    onClick={() => setMethod(opt.id)}
+                  >
+                    <span className="npl-opttile__ic"><opt.icon size={19} /></span>
+                    <span><b>{opt.label}</b><small>{opt.sub}</small></span>
+                    {method === opt.id && <Check size={18} className="npl-opttile__check" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="npl-summary">
+              <div className="npl-summary__row"><span>Amount</span><b>{naira(amount)}</b></div>
+              <div className="npl-summary__row"><span>Method</span><b>{method}</b></div>
+              <div className="npl-summary__row"><span>Status</span><b>{mode === "fund" ? "Ready to fund" : "Ready to withdraw"}</b></div>
+            </div>
+            <button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => setStep(1)}>
+              {mode === "fund" ? "Proceed to funding" : "Proceed to withdrawal"}
+            </button>
+          </>
+        )}
+
+        {step === 1 && (
+          <>
+            <div className="npl-success">
+              <span className="npl-success__badge"><Check size={36} /></span>
+              <h3>{mode === "fund" ? "Wallet funding ready" : "Withdrawal ready"}</h3>
+              <p>{mode === "fund" ? `Use ${method} to add ${naira(amount)} to your wallet.` : `Your withdrawal of ${naira(amount)} via ${method} is queued.`}</p>
+            </div>
+            <div className="npl-summary">
+              <div className="npl-summary__row"><span>Reference</span><b>NRF-{Math.random().toString(36).slice(2, 8).toUpperCase()}</b></div>
+              <div className="npl-summary__row"><span>Amount</span><b>{naira(amount)}</b></div>
+              <div className="npl-summary__row"><span>Method</span><b>{method}</b></div>
+            </div>
+            <button className="npl-btn npl-btn--primary npl-btn--block" onClick={onClose}>
+              {mode === "fund" ? "Done" : "Done"}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 
