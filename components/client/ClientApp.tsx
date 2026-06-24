@@ -234,25 +234,30 @@ function AccountSetupPrompt({ onDismiss, onAction }: { onDismiss: () => void; on
 
 function ListingCard({ l, onBuy }: { l: Listing; onBuy: (l: Listing) => void }) {
   return (
-    <div className="npl-course">
-      <div className="npl-course__media">
+    <article className="npl-propertycard">
+      <div className="npl-propertycard__media">
         <img src={l.img} alt={l.name} />
-        <span className={`npl-badge ${modelBadge(l.model)} npl-course__cat`}>{l.model}</span>
-        {l.badge && <span className="npl-badge hot" style={{ position: "absolute", top: ".7rem", right: ".7rem" }}>{l.badge}</span>}
+        <span className={`npl-badge ${modelBadge(l.model)} npl-propertycard__tag`}>{l.model}</span>
+        {l.badge && <span className="npl-badge hot npl-propertycard__badge">{l.badge}</span>}
       </div>
-      <div className="npl-course__body">
-        <h3>{l.name}</h3>
-        <div className="npl-course__meta"><MapPin size={14} /> {l.location}</div>
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: ".4rem", alignItems: "flex-end" }}>
-          <div><small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem" }}>From</small><div style={{ fontWeight: 800, color: "var(--c-ink)" }}>{naira(l.price)}</div></div>
-          <span className="npl-badge ok">{l.roi}</span>
+      <div className="npl-propertycard__body">
+        <div>
+          <div className="npl-propertycard__head">
+            <h3>{l.name}</h3>
+            <span className="npl-badge blue">{l.status}</span>
+          </div>
+          <div className="npl-propertycard__loc"><MapPin size={14} /> {l.location}</div>
         </div>
-        <div className="npl-property-actions">
-          <a className="npl-btn npl-btn--secondary" href={`/properties/${propertySlug(l.name)}`}>View Property</a>
+        <div className="npl-propertycard__meta">
+          <div><small>From</small><b>{naira(l.price)}</b></div>
+          <div><small>Return</small><b>{l.roi}</b></div>
+        </div>
+        <div className="npl-propertycard__actions">
+          <a className="npl-btn npl-btn--ghost" href={`/properties/${propertySlug(l.name)}`}>View property</a>
           <button className="npl-btn npl-btn--success" onClick={() => onBuy(l)}>Invest now</button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 

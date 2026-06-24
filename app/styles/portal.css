@@ -77,8 +77,13 @@
 .npl-nav svg { flex-shrink: 0; }
 .npl-nav__badge { margin-left: auto; background: var(--hot); color:#fff; font-size:.65rem; font-weight:800; padding: 1px 7px; border-radius: var(--r-pill); }
 .npl-side__foot { margin-top: auto; padding-top: 1rem; }
-.npl-nav--danger { color: #ffd4d0; }
-.npl-nav--danger:hover { background: rgba(212, 69, 47, .15); color: #fff; }
+.npl-side__foot .npl-nav--danger { justify-content: center; }
+.npl-nav--danger {
+  color: #ffebe7;
+  background: rgba(212, 69, 47, .16);
+  border: 1px solid rgba(212, 69, 47, .24);
+}
+.npl-nav--danger:hover { background: rgba(212, 69, 47, .3); color: #fff; border-color: rgba(212, 69, 47, .42); }
 
 /* ---------- Main ---------- */
 .npl-main { display: flex; flex-direction: column; min-width: 0; }
@@ -384,6 +389,82 @@
 .npl-pill-user:hover { border-color: var(--c-royal); }
 .npl-property-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; margin-top: .7rem; }
 .npl-property-actions .npl-btn { padding-inline: .75rem; }
+.npl-propertycard {
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.npl-propertycard__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.npl-propertycard__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.npl-propertycard__tag,
+.npl-propertycard__badge {
+  position: absolute;
+  top: .75rem;
+}
+.npl-propertycard__tag { left: .75rem; }
+.npl-propertycard__badge { right: .75rem; }
+.npl-propertycard__body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+.npl-propertycard__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .8rem;
+}
+.npl-propertycard__head h3 { font-size: 1rem; }
+.npl-propertycard__loc {
+  margin-top: .35rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  color: var(--c-muted);
+  font-size: .8rem;
+}
+.npl-propertycard__meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+}
+.npl-propertycard__meta div {
+  border-radius: var(--r-md);
+  background: var(--c-cream);
+  border: 1px solid var(--c-line);
+  padding: .75rem;
+}
+.npl-propertycard__meta small {
+  display: block;
+  color: var(--c-muted);
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.npl-propertycard__meta b {
+  display: block;
+  color: var(--c-ink);
+  margin-top: .2rem;
+}
+.npl-propertycard__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .6rem;
+}
+.npl-propertycard__actions .npl-btn { width: 100%; }
 .npl-drawer-overlay { animation: npl-overlay-in .18s ease-out; }
 .npl-drawer { width: min(440px, 100%); padding: clamp(1.25rem, 1rem + 1vw, 1.75rem); animation: npl-drawer-in .24s ease-out; }
 .npl-drawer--compact { gap: 1.4rem; }
@@ -421,10 +502,11 @@
     height: 44px;
     font-size: .9rem;
   }
-  .npl-side { padding: .9rem .7rem; gap: 2px; }
-  .npl-side__group { padding-top: .8rem; }
-  .npl-nav { padding: .6rem .7rem; border-radius: 10px; font-size: .88rem; }
-  .npl-side__foot { position: sticky; bottom: 0; margin-top: .6rem; padding-top: .8rem; background: linear-gradient(180deg, rgba(7,31,68,0), var(--c-royal-900) 18%); }
+  .npl-side { padding: .8rem .6rem; gap: 1px; }
+  .npl-side__brand { padding-bottom: 1rem; }
+  .npl-side__group { padding-top: .65rem; }
+  .npl-nav { padding: .52rem .62rem; border-radius: 10px; font-size: .84rem; gap: .65rem; }
+  .npl-side__foot { position: sticky; bottom: 0; margin-top: .45rem; padding-top: .65rem; background: linear-gradient(180deg, rgba(7,31,68,0), var(--c-royal-900) 18%); }
   .npl-hero-actions { gap: .55rem; }
 }
 @media (max-width: 720px) {
@@ -434,6 +516,7 @@
   .npl-pagehead h2 { font-size: 1.35rem; }
   .npl-pagehead p { font-size: .88rem; }
   .npl-property-actions { grid-template-columns: 1fr; }
+  .npl-propertycard__actions { grid-template-columns: 1fr; }
   .npl-btn { width: 100%; }
   .npl-card__head .npl-btn,.npl-share .npl-btn { width: auto; }
   .npl-drawer { width: min(100%, 390px); padding-bottom: calc(1.4rem + env(safe-area-inset-bottom)); }
@@ -680,4 +763,5 @@
   .npl-setup__cta { min-height: 52px; font-size: .94rem; }
   .npl-refcard__share a,
   .npl-refcard__share button { width: 72px; height: 72px; border-radius: 18px; }
+  .npl-side__foot .npl-nav--danger { min-height: 42px; }
 }
