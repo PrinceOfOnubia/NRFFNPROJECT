@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  Award, Bell, Building2, ChevronRight, Clock3, Copy, Crown, Download, GraduationCap,
+  Award, Bell, Building2, ChevronRight, Clock3, Copy, Crown, Download, Facebook, GraduationCap,
   Home, LayoutGrid, LogOut, MapPin, Menu, MessageCircle, Play, Plus, Search, Share2,
   ShieldCheck, Target, Trophy, Users, Wallet, X, Check, TrendingUp, Star, Lock, Plane, Gift,
   ArrowLeft, ArrowRight, FileCheck, PlayCircle, Eye
@@ -13,18 +13,20 @@ import {
   notifications, funnel, weeklyEarnings, certificates, lessonsFor, type Lead, type Course
 } from "../../lib/associate/data";
 import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
+import MembershipHub from "../membership/MembershipHub";
 import { propertySlug } from "../../lib/property-catalog";
 import { downloadCertificate } from "../../lib/pdf";
 
 type PageKey =
   | "Overview" | "Earnings" | "Referrals" | "CRM" | "Academy"
-  | "Incentives" | "Team" | "Properties" | "Notifications" | "Profile";
+  | "Membership" | "Incentives" | "Team" | "Properties" | "Notifications" | "Profile";
 
 const NAV: [PageKey, typeof Home, string][] = [
   ["Overview", Home, "MAIN"],
   ["CRM", Target, "MAIN"],
   ["Referrals", Share2, "GROWTH"],
   ["Team", Users, "GROWTH"],
+  ["Membership", Crown, "GROWTH"],
   ["Earnings", Wallet, "MONEY"],
   ["Incentives", Trophy, "MONEY"],
   ["Properties", Building2, "TOOLS"],
@@ -39,6 +41,7 @@ const SUBTITLE: Record<PageKey, string> = {
   Referrals: "Share, track & grow your network",
   CRM: "Lead pipeline & follow-ups",
   Academy: "Learn, certify & grow",
+  Membership: "Upgrade your membership",
   Incentives: "Ranks, rewards & recognition",
   Team: "Your downline & leadership",
   Properties: "Listings & sales tools",
@@ -53,6 +56,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
   const [activeLead, setActiveLead] = useState<Lead | null>(null);
   const [panel, setPanel] = useState<PortalPanel>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [membershipTier, setMembershipTier] = useState("Bronze");
   const [setupDismissed, setSetupDismissed] = useState(false);
 
   const go = (p: PageKey) => { setPage(p); setOpen(false); };
@@ -68,7 +72,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
         {/* SIDEBAR */}
         <aside className="npl-side">
           <div className="npl-side__brand">
-            <span className="chip"><img src="/assets/nrffn-logo-mark.png" alt="NRFFN" /></span>
+            <span className="chip"><img src="/assets/nrffn-logo-mark-white.png" alt="NRFFN" /></span>
             <div>
               <b style={{ color: "#fff", display: "block", fontSize: "1.05rem" }}>NRFFN</b>
               <span style={{ color: "rgba(255,255,255,.6)", fontSize: ".66rem", letterSpacing: ".12em" }}>REALTOR PORTAL</span>
@@ -127,6 +131,13 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
             {page === "Referrals" && <Referrals />}
             {page === "CRM" && <CRM onOpen={openLead} onAdd={() => setDrawer("addlead")} />}
             {page === "Academy" && <Academy />}
+            {page === "Membership" && (
+              <MembershipHub
+                currentTier={membershipTier}
+                roleLabel="Realtor membership"
+                onTierChange={setMembershipTier}
+              />
+            )}
             {page === "Incentives" && <Incentives />}
             {page === "Team" && <Team_ />}
             {page === "Properties" && <Properties />}
@@ -152,7 +163,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
       {drawer === "withdraw" && <WithdrawDrawer onClose={() => setDrawer(null)} />}
       {drawer === "lead" && activeLead && <LeadDrawer lead={activeLead} onClose={() => setDrawer(null)} />}
       {drawer === "addlead" && <AddLeadDrawer onClose={() => setDrawer(null)} />}
-      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={member.name} initials={member.initials} role="Realtor Member" avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} />
+      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={member.name} initials={member.initials} role="Realtor Member" avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} membershipTier={membershipTier} />
     </div>
   );
 }
@@ -227,8 +238,8 @@ function Overview({
           <p style={{ color: "rgba(255,255,255,.78)" }}>{naira(rankProgress.volume)} of {naira(rankProgress.target)} team volume · Rank: {member.rank}</p>
         </div>
         <div className="npl-hero-actions">
-          <button className="npl-btn npl-btn--primary" onClick={() => go("Referrals")}><Share2 size={16} /> Share link</button>
-          <button className="npl-btn npl-btn--ghost" onClick={onWithdraw}><Wallet size={16} /> Withdraw</button>
+          <button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => go("Referrals")}><Share2 size={16} /> Share link</button>
+          <button className="npl-btn npl-btn--ghost npl-btn--block" onClick={onWithdraw}><Wallet size={16} /> Withdraw</button>
         </div>
       </div>
 
@@ -293,7 +304,7 @@ function AccountSetupPrompt({ onDismiss, onAction }: { onDismiss: () => void; on
         <span className="npl-setup__dot" />
         <span>0 of 3</span>
       </div>
-      <button className="npl-btn npl-setup__cta" type="button" onClick={onAction}>
+      <button className="npl-btn npl-setup__cta npl-btn--block" type="button" onClick={onAction}>
         Finish setup <ArrowRight size={18} />
       </button>
     </div>
@@ -310,7 +321,7 @@ function Earnings({ onWithdraw }: { onWithdraw: () => void }) {
           <h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(wallet.total)}</h2>
           <p style={{ color: "rgba(255,255,255,.78)" }}>Lifetime earnings across all streams</p>
         </div>
-        <button className="npl-btn npl-btn--secondary" onClick={onWithdraw}><Wallet size={16} /> Withdraw funds</button>
+        <button className="npl-btn npl-btn--secondary npl-btn--block" onClick={onWithdraw}><Wallet size={16} /> Withdraw funds</button>
       </div>
 
       <div className="npl-grid cols-3">
@@ -400,12 +411,12 @@ function Referrals() {
           <div className="npl-refcard__share">
             <a href={wa} target="_blank" rel="noreferrer"><MessageCircle size={18} /><span>WhatsApp</span></a>
             <button><Share2 size={18} /><span>Share</span></button>
-            <button><Download size={18} /><span>QR</span></button>
-            <button><TrendingUp size={18} /><span>Grow</span></button>
+            <button><Facebook size={18} /><span>Facebook</span></button>
+            <button><Copy size={18} /><span>Copy</span></button>
           </div>
           <p className="npl-refcard__note">Your earnings are tied to successful referrals, so every valid sign-up matters.</p>
         </div>
-        <div className="npl-grid cols-2" style={{ gridTemplateColumns: "1fr 1fr" }}>
+          <div className="npl-grid cols-2 npl-refstats">
           <Metric icon={Target} label="Link clicks" value={referralStats.clicks.toLocaleString()} />
           <Metric icon={Users} label="Signups" value={String(referralStats.signups)} />
           <Metric icon={Check} label="Conversions" value={String(referralStats.conversions)} variant="gold" />
@@ -437,7 +448,7 @@ function Referrals() {
 function CRM({ onOpen, onAdd }: { onOpen: (l: Lead) => void; onAdd: () => void }) {
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Sales CRM" title="Lead management" sub="Track every prospect from first interest to closed sale." action={<button className="npl-btn npl-btn--primary" onClick={onAdd}><Plus size={16} /> Add lead</button>} /></div>
+      <div className="npl-card"><PageHead eyebrow="Sales CRM" title="Lead management" sub="Track every prospect from first interest to closed sale." action={<button className="npl-btn npl-btn--primary npl-btn--block" onClick={onAdd}><Plus size={16} /> Add lead</button>} /></div>
       <div className="npl-grid cols-4">
         <Metric icon={Target} label="Active leads" value={String(leads.length)} variant="royal" />
         <Metric icon={MessageCircle} label="Hot leads" value={String(leads.filter((l) => l.temp === "Hot").length)} variant="gold" />
@@ -830,7 +841,7 @@ function AddLeadDrawer({ onClose }: { onClose: () => void }) {
             </div>
             <div className="npl-field"><label>Source</label><select><option>WhatsApp</option><option>Referral</option><option>Instagram</option><option>Website</option><option>Walk-in</option></select></div>
             <div className="npl-field"><label>First note</label><textarea rows={2} placeholder="What does this prospect want?" /></div>
-            <button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => setSaved(true)}><Plus size={16} /> Add lead</button>
+          <button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => setSaved(true)}><Plus size={16} /> Add lead</button>
           </>
         )}
       </div>

@@ -41,7 +41,7 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
         {open && <div className="npl-overlay" onClick={() => setOpen(false)} />}
         <aside className="npl-side">
           <div className="npl-side__brand">
-            <span className="chip"><img src="/assets/nrffn-logo-mark.png" alt="NRFFN" /></span>
+            <span className="chip"><img src="/assets/nrffn-logo-mark-white.png" alt="NRFFN" /></span>
             <div>
               <b style={{ color: "#fff", display: "block", fontSize: "1.05rem" }}>NRFFN</b>
               <span style={{ color: "rgba(255,255,255,.6)", fontSize: ".62rem", letterSpacing: ".1em" }}>{role.toUpperCase()}</span>
@@ -150,7 +150,7 @@ function UsersView({ onAdd }: { onAdd: () => void }) {
   const items = f === "All" ? users : users.filter((u) => u.role === f);
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="User management" title="Members & roles" sub="Manage investors, realtors and access." action={<button className="npl-btn npl-btn--primary" onClick={onAdd}><Plus size={16} /> Add user</button>} /></div>
+      <div className="npl-card"><PageHead eyebrow="User management" title="Members & roles" sub="Manage investors, realtors and access." action={<button className="npl-btn npl-btn--primary npl-btn--block" onClick={onAdd}><Plus size={16} /> Add user</button>} /></div>
       <div className="npl-grid cols-4">
         <Metric icon={Users} label="Total" value={platformStats.members.toLocaleString()} variant="royal" />
         <Metric icon={Check} label="Active" value={platformStats.activeMembers.toLocaleString()} />
@@ -259,7 +259,7 @@ function Properties_() {
   const [adding, setAdding] = useState(false);
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Property management" title="Estate listings" sub="Add, review and publish properties." action={<button className="npl-btn npl-btn--primary" onClick={() => setAdding(true)}><Plus size={16} /> Add property</button>} /></div>
+      <div className="npl-card"><PageHead eyebrow="Property management" title="Estate listings" sub="Add, review and publish properties." action={<button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => setAdding(true)}><Plus size={16} /> Add property</button>} /></div>
       {adding && <AddPropertyDrawer onClose={() => setAdding(false)} />}
       <div className="npl-card">
         <div className="npl-table-wrap">

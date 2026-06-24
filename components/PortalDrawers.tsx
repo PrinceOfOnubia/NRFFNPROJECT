@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, Bell, Check, ShieldCheck, UserRound, X } from "lucide-react";
+import { Camera, Bell, Check, LogOut, ShieldCheck, UserRound, X } from "lucide-react";
 import { useRef, useState, type ChangeEvent } from "react";
 
 export type PortalPanel = "notifications" | "profile" | null;
@@ -13,6 +13,7 @@ export default function PortalDrawers({
   role,
   avatarUrl,
   onAvatarChange,
+  membershipTier,
 }: {
   panel: PortalPanel;
   onClose: () => void;
@@ -21,11 +22,12 @@ export default function PortalDrawers({
   role: string;
   avatarUrl?: string | null;
   onAvatarChange?: (next: string) => void;
+  membershipTier?: string;
 }) {
-  if (!panel) return null;
   const fileRef = useRef<HTMLInputElement>(null);
   const [localAvatar, setLocalAvatar] = useState<string | null>(null);
   const shownAvatar = avatarUrl ?? localAvatar;
+  if (!panel) return null;
 
   const pickAvatar = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -70,7 +72,14 @@ export default function PortalDrawers({
                 </button>
                 <input ref={fileRef} type="file" accept="image/*" hidden onChange={pickAvatar} />
               </div>
-              <div><h3>{name}</h3><p>{role}</p><span className="npl-badge ok"><ShieldCheck size={13} /> Verified</span></div>
+              <div>
+                <h3>{name}</h3>
+                <p>{role}</p>
+                <div className="npl-profile-summary__tags">
+                  <span className="npl-badge ok"><ShieldCheck size={13} /> Verified</span>
+                  {membershipTier && <span className="npl-badge blue">{membershipTier}</span>}
+                </div>
+              </div>
             </div>
             <div className="npl-grid npl-drawer__list">
               {["Email and phone", "Government ID", "Account security"].map((item) => (
@@ -81,9 +90,14 @@ export default function PortalDrawers({
                 </div>
               ))}
             </div>
-            <a className="npl-btn npl-btn--secondary" href={role.includes("Investor") ? "/client/profile" : role.includes("Realtor") ? "/associate/profile" : "#"}>
-              View full profile
-            </a>
+            <div className="npl-profile-actions">
+              <a className="npl-btn npl-btn--secondary npl-btn--block" href={role.includes("Investor") ? "/client/profile" : role.includes("Realtor") ? "/associate/profile" : "#"}>
+                View full profile
+              </a>
+              <a className="npl-btn npl-btn--ghost npl-btn--block npl-profile-actions__signout" href="/">
+                <LogOut size={16} /> Sign out
+              </a>
+            </div>
           </>
         )}
       </aside>

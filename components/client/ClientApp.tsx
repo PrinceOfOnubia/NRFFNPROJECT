@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import {
-  Bell, Building2, Check, ChevronRight, Clock3, Copy, Download, FileText, Home, LogOut,
+  Bell, Building2, Check, ChevronRight, Clock3, Copy, Crown, Download, Facebook, FileText, Home, LogOut,
   MapPin, Menu, Search, Share2, ShieldCheck, Store, TrendingUp, Users, Wallet, X, Landmark, MessageCircle,
   CreditCard, Smartphone, ArrowLeft, ArrowRight, Upload, Mail, Phone, UserPlus, Pencil, Camera
 } from "lucide-react";
@@ -11,18 +11,20 @@ import {
   documents, valueTrend, referral, clientNotifications, type Listing, type Holding
 } from "../../lib/client/data";
 import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
+import MembershipHub from "../membership/MembershipHub";
 import { propertySlug } from "../../lib/property-catalog";
 import { downloadReceipt, downloadDocument } from "../../lib/pdf";
 
 const docsForHolding = (h: Holding) =>
   documents.filter((d) => h.name.toLowerCase().startsWith(d.property.toLowerCase()));
 
-type PageKey = "Home" | "Wallet" | "Marketplace" | "Investments" | "Documents" | "Referral" | "Notifications" | "Profile";
+type PageKey = "Home" | "Wallet" | "Marketplace" | "Investments" | "Membership" | "Documents" | "Referral" | "Notifications" | "Profile";
 
 const NAV: [PageKey, typeof Home, string][] = [
   ["Home", Home, "MAIN"],
   ["Marketplace", Store, "INVEST"],
   ["Investments", Building2, "INVEST"],
+  ["Membership", Crown, "INVEST"],
   ["Wallet", Wallet, "MONEY"],
   ["Documents", FileText, "MONEY"],
   ["Referral", Share2, "MORE"],
@@ -34,6 +36,7 @@ const SUB: Record<PageKey, string> = {
   Wallet: "Balance, income & transactions",
   Marketplace: "Browse & invest in verified properties",
   Investments: "Your holdings & payment plans",
+  Membership: "Upgrade your status",
   Documents: "Receipts, allocations & certificates",
   Referral: "Invite & earn",
   Notifications: "Activity & updates",
@@ -46,6 +49,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
   const [buy, setBuy] = useState<Listing | null>(null);
   const [panel, setPanel] = useState<PortalPanel>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [membershipTier, setMembershipTier] = useState("Gold");
   const [setupDismissed, setSetupDismissed] = useState(false);
   const go = (p: PageKey) => { setPage(p); setOpen(false); };
   const unread = clientNotifications.filter((n) => n.unread).length;
@@ -56,7 +60,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
         {open && <div className="npl-overlay" onClick={() => setOpen(false)} />}
         <aside className="npl-side">
           <div className="npl-side__brand">
-            <span className="chip"><img src="/assets/nrffn-logo-mark.png" alt="NRFFN" /></span>
+            <span className="chip"><img src="/assets/nrffn-logo-mark-white.png" alt="NRFFN" /></span>
             <div>
               <b style={{ color: "#fff", display: "block", fontSize: "1.05rem" }}>NRFFN</b>
               <span style={{ color: "rgba(255,255,255,.6)", fontSize: ".66rem", letterSpacing: ".12em" }}>INVESTOR PORTAL</span>
@@ -99,6 +103,13 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
             )}
             {page === "Marketplace" && <Marketplace onBuy={setBuy} />}
             {page === "Investments" && <Investments />}
+            {page === "Membership" && (
+              <MembershipHub
+                currentTier={membershipTier}
+                roleLabel="Investor membership"
+                onTierChange={setMembershipTier}
+              />
+            )}
             {page === "Wallet" && <WalletView />}
             {page === "Documents" && <Documents_ />}
             {page === "Referral" && <Referral_ />}
@@ -116,7 +127,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
       </nav>
 
       {buy && <BuyDrawer listing={buy} onClose={() => setBuy(null)} />}
-      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={investor.name} initials={investor.initials} role="Investor Member" avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} />
+      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={investor.name} initials={investor.initials} role="Investor Member" avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} membershipTier={membershipTier} />
     </div>
   );
 }
@@ -166,7 +177,7 @@ function HomeView({
           <h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(portfolio.currentValue)}</h2>
           <p style={{ color: "rgba(255,255,255,.82)" }}><span className="npl-badge ok" style={{ marginRight: 6 }}>+{portfolio.roi}%</span> {naira(portfolio.gain)} total gain · {naira(portfolio.monthlyIncome)}/mo income</p>
         </div>
-        <button className="npl-btn npl-btn--primary" onClick={() => go("Marketplace")}><Store size={16} /> Invest more</button>
+        <button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => go("Marketplace")}><Store size={16} /> Invest more</button>
       </div>
 
       <div className="npl-grid cols-4">
@@ -353,7 +364,7 @@ function WalletView() {
     <>
       <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div><span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Available balance</span><h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(wallet.available)}</h2></div>
-        <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}><button className="npl-btn npl-btn--primary"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--secondary">Withdraw</button></div>
+        <div className="npl-stack-actions"><button className="npl-btn npl-btn--primary npl-btn--block"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--secondary npl-btn--block">Withdraw</button></div>
       </div>
       <div className="npl-grid cols-3">
         <Metric icon={Wallet} label="Available" value={naira(wallet.available)} variant="gold" />
@@ -443,12 +454,12 @@ function Referral_() {
           <div className="npl-refcard__share">
             <a href={`https://wa.me/?text=${encodeURIComponent(referral.link)}`} target="_blank" rel="noreferrer"><MessageCircle size={18} /><span>WhatsApp</span></a>
             <button><Share2 size={18} /><span>Share</span></button>
-            <button><Clock3 size={18} /><span>Track</span></button>
-            <button><Store size={18} /><span>Invest</span></button>
+            <button><Facebook size={18} /><span>Facebook</span></button>
+            <button><Copy size={18} /><span>Copy</span></button>
           </div>
           <p className="npl-refcard__note">You earn rewards from every verified purchase. Money lands in your wallet without waiting around.</p>
         </div>
-        <div className="npl-grid cols-2" style={{ gridTemplateColumns: "1fr 1fr" }}>
+        <div className="npl-grid cols-2 npl-refstats">
           <Metric icon={Users} label="People invited" value={String(referral.invited)} variant="royal" />
           <Metric icon={Wallet} label="Rewards earned" value={naira(referral.earned)} variant="gold" />
         </div>
@@ -485,7 +496,7 @@ function Profile() {
   return (
     <>
       <div className="npl-card"><PageHead eyebrow="Account" title="Your profile" sub="Personal details and verification."
-        action={pct < 100 && <button className="npl-btn npl-btn--primary" onClick={() => setVerifyOpen(true)}><ShieldCheck size={16} /> Complete verification</button>} /></div>
+        action={pct < 100 && <button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => setVerifyOpen(true)}><ShieldCheck size={16} /> Complete verification</button>} /></div>
 
       <div className="npl-grid cols-2">
         <div className="npl-card" style={{ display: "flex", gap: "1.1rem", alignItems: "center" }}>
@@ -511,7 +522,7 @@ function Profile() {
             <div className="npl-field"><label>Email</label><input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
             <div className="npl-field"><label>Phone</label><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
           </div>
-          <button className="npl-btn npl-btn--primary" style={{ alignSelf: "flex-start", marginTop: "1rem" }}><Pencil size={15} /> Save changes</button>
+          <button className="npl-btn npl-btn--primary npl-btn--block" style={{ marginTop: "1rem" }}><Pencil size={15} /> Save changes</button>
         </div>
       </div>
 

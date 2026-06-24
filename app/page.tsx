@@ -32,6 +32,7 @@ import {
   X
 } from "lucide-react";
 import { propertySlug } from "../lib/property-catalog";
+import { TIERS } from "../lib/membership";
 
 /* ---------------- content ---------------- */
 
@@ -81,63 +82,6 @@ const PILLARS: [typeof Award, string, string[]][] = [
   [Landmark, "Opportunities", ["Access to Properties", "Joint Venture Opportunities", "Investment Syndication", "Business Partnerships"]],
   [Target, "Technology", ["CRM Systems", "Lead Generation Tools", "Marketing Resources", "Mobile Applications"]],
   [Users, "Community", ["National Networking Events", "Mentorship Programs", "Accountability Groups", "Leadership Development"]]
-];
-
-type Tier = {
-  name: string;
-  price: string;
-  unit?: string;
-  desc: string;
-  features: string[];
-  featured?: boolean;
-  flag?: string;
-};
-
-const TIERS: Tier[] = [
-  {
-    name: "Associate",
-    price: "Free",
-    desc: "For beginners who want to learn real estate.",
-    features: ["Access to community", "Weekly training", "Newsletter", "Basic resources"]
-  },
-  {
-    name: "Bronze",
-    price: "₦20,000",
-    unit: "registration",
-    desc: "Start earning with certified membership.",
-    features: ["All Associate benefits", "Certificate of Membership", "Training materials", "Referral income participation"]
-  },
-  {
-    name: "Silver",
-    price: "₦100,000",
-    unit: "registration",
-    desc: "Advance into investment & leadership.",
-    features: ["All Bronze benefits", "Advanced trainings", "Investment opportunities", "Leadership development"]
-  },
-  {
-    name: "Gold",
-    price: "₦250,000",
-    unit: "registration",
-    desc: "Priority access and direct mentorship.",
-    features: ["All Silver benefits", "Priority events", "Mentorship access", "Premium resources"],
-    featured: true,
-    flag: "Most Popular"
-  },
-  {
-    name: "Platinum",
-    price: "₦1,500,000",
-    unit: "registration",
-    desc: "Executive wealth-building partnership.",
-    features: ["All Gold benefits", "Investment syndication", "Executive networking", "Wealth-building mentorship"]
-  },
-  {
-    name: "VIP",
-    price: "₦3,000,000",
-    unit: "registration",
-    desc: "The exclusive inner circle of NRFFN.",
-    features: ["All Platinum benefits", "Exclusive investment deals", "VIP events", "Direct access to leadership", "National recognition"],
-    flag: "Elite"
-  }
 ];
 
 const COURSES: [typeof Award, string, string][] = [
@@ -684,7 +628,7 @@ export default function LandingPage() {
           <div className="nlp-foot__rule" />
           <div className="nlp-foot__brand">
             <div className="nlp-foot__brandcopy">
-              <img className="nlp-foot__logo" src="/assets/nrffn-logo-mark.png" alt="NRFFN" />
+              <img className="nlp-foot__logo" src="/assets/nrffn-logo-mark-white.png" alt="NRFFN" />
               <p>
                 Nigerian Realtors Financial Freedom Network Ltd. Building wealth through real estate, technology,
                 education and networking. The company is registered with Nigeria&apos;s <strong>Corporate Affairs Commission (CAC)</strong> and operate in compliance with relevant laws and regulatory bodies, including <strong>LASRERA</strong>, <strong>REDAN</strong>, and the <strong>World Trade Center Nigeria</strong>.
