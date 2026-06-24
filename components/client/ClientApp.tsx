@@ -309,7 +309,7 @@ function Investments() {
         const docs = docsForHolding(h);
         return (
           <div className="npl-card" key={h.id}>
-            <div style={{ display: "flex", gap: "1.2rem", alignItems: "center", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "1.2rem", alignItems: "flex-start", flexWrap: "wrap" }}>
               <img src={h.img} alt={h.name} style={{ width: 120, height: 90, borderRadius: 14, objectFit: "cover" }} />
               <div style={{ flex: 1, minWidth: 200 }}>
                 <span className={`npl-badge ${modelBadge(h.model)}`}>{h.model}</span>
@@ -321,12 +321,12 @@ function Investments() {
                     <small style={{ fontSize: ".72rem", color: "var(--c-muted)", fontWeight: 700 }}>{h.progress}% paid · installment plan</small>
                   </div>
                 )}
+                <div style={{ marginTop: ".9rem" }}>
+                  <small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem" }}>Current value</small>
+                  <div style={{ fontWeight: 800, color: "var(--c-royal)", fontSize: "1.3rem" }}>{naira(h.value)}</div>
+                </div>
               </div>
-              <div style={{ textAlign: "right" }}>
-                <small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem" }}>Current value</small>
-                <div style={{ fontWeight: 800, color: "var(--c-royal)", fontSize: "1.3rem" }}>{naira(h.value)}</div>
-                <span className="npl-badge ok">+{Math.round(((h.value - h.invested) / h.invested) * 100)}%</span>
-              </div>
+              <span className="npl-badge ok" style={{ alignSelf: "center" }}>+{Math.round(((h.value - h.invested) / h.invested) * 100)}%</span>
             </div>
             {docs.length > 0 && (
               <div style={{ marginTop: "1rem", borderTop: "1px solid var(--c-line)", paddingTop: ".9rem" }}>
@@ -337,7 +337,7 @@ function Investments() {
                     return (
                       <div className="npl-tree__row npl-docrow" key={d.id}>
                         <span className="npl-lesson__ic" style={{ width: 30, height: 30 }}><Ic size={15} /></span>
-                        <div className="npl-docrow__body"><b>{d.name}</b><small>{d.type} · {d.date}</small></div>
+                        <div className="npl-docrow__body"><b>{d.name}</b><small>{h.name} · {d.type} · {d.date}</small></div>
                         <button className="npl-btn npl-btn--ghost npl-docrow__action" onClick={() => downloadDocument(d.name, [["Property", h.name], ["Type", d.type], ["Date", d.date], ["Member", investor.name]])}><Download size={14} /><span>Download</span></button>
                       </div>
                     );
@@ -499,10 +499,13 @@ function Documents_() {
         {documents.map((d) => {
           const Ic = docIcon[d.type] || FileText;
           return (
-            <div className="npl-notif" key={d.id}>
-              <span className="npl-notif__ic"><Ic size={19} /></span>
-              <div style={{ flex: 1 }}><b>{d.name}</b><p>{d.property} · {d.type} · {d.date}</p></div>
-              <button className="npl-btn npl-btn--ghost" style={{ padding: ".5rem .9rem" }} onClick={() => downloadDocument(d.name, [["Property", d.property], ["Type", d.type], ["Date", d.date], ["Member", investor.name]])}><Download size={15} /> Download</button>
+            <div className="npl-tree__row npl-docrow" key={d.id}>
+              <span className="npl-lesson__ic" style={{ width: 34, height: 34 }}><Ic size={17} /></span>
+              <div className="npl-docrow__body">
+                <b>{d.property}</b>
+                <small>{d.name} · {d.type} · {d.date}</small>
+              </div>
+              <button className="npl-btn npl-btn--ghost npl-docrow__action" onClick={() => downloadDocument(d.name, [["Property", d.property], ["Type", d.type], ["Date", d.date], ["Member", investor.name]])}><Download size={15} /><span>Download</span></button>
             </div>
           );
         })}

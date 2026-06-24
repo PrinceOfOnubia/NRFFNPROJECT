@@ -143,7 +143,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
               {docs.map((doc) => (
                 <div className="propertyDetail__doc" key={doc}>
                   <span className="propertyDetail__fact-ic"><FileText size={18} /></span>
-                <div><b>{doc}</b><p>Open the property file for more detail</p></div>
+                <div><b>{doc}</b><p>{property.name} · Open the property file for more detail</p></div>
                 <a href="/client/documents" aria-label={`Open ${doc}`}><ArrowRight size={16} /></a>
               </div>
             ))}

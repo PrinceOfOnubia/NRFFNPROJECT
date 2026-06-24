@@ -805,7 +805,7 @@ function WithdrawDrawer({ onClose }: { onClose: () => void }) {
         <div className="npl-field"><label>Amount (₦)</label><input type="number" placeholder="100,000" defaultValue={500000} /></div>
         <div className="npl-field"><label>Bank account</label><select><option>GTBank ••4821</option><option>Access Bank ••0934</option><option>+ Add new account</option></select></div>
         <div className="npl-note"><b>Processing time</b><br /><span>Payouts are verified and settled within 24 hours on business days.</span></div>
-        <button className="npl-btn npl-btn--primary" style={{ width: "100%" }} onClick={onClose}><ShieldCheck size={16} /> Request withdrawal</button>
+        <button className="npl-btn npl-btn--primary npl-btn--block" onClick={onClose}><ShieldCheck size={16} /> Request withdrawal</button>
       </div>
     </div>
   );
