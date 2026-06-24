@@ -124,7 +124,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
 
           <div className="propertyDetail__actions">
             <a href="#docs" className="npl-btn npl-btn--ghost"><FileText size={17} /> View documents</a>
-            <a href="/client/properties" className="npl-btn npl-btn--success"><Building2 size={17} /> Buy / Invest</a>
+            <a href="/login?role=Client&next=/client/properties" className="npl-btn npl-btn--success"><Building2 size={17} /> Buy / Invest</a>
           </div>
         </aside>
       </section>
@@ -139,12 +139,6 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
               This listing is presented as a polished investment offering with the same NRFFN brand language used
               across the rest of the platform, so buyers can review the view flow before they commit.
             </p>
-          </section>
-
-          <section className="propertyDetail__section" aria-label="Property gallery">
-            <span className="propertyDetail__eyebrow">Gallery</span>
-            <h2>Explore the property</h2>
-            <PropertyGallery images={[property.hero, ...property.gallery]} name={property.name} />
           </section>
 
           <section className="propertyDetail__section">

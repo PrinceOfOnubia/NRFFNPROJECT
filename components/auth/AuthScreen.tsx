@@ -22,11 +22,13 @@ const COPY: Record<Role, { label: string; tagline: string }> = {
 export default function AuthScreen({
   mode = "login",
   role: initialRole = "Associate",
-  allowRoleSwitch = false
+  allowRoleSwitch = false,
+  nextPath,
 }: {
   mode?: "login" | "register";
   role?: Role;
   allowRoleSwitch?: boolean;
+  nextPath?: string;
 }) {
   const [role, setRole] = useState<Role>(initialRole);
   const [show, setShow] = useState(false);
@@ -34,7 +36,7 @@ export default function AuthScreen({
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    window.location.assign(DASH[role]);
+    window.location.assign(nextPath || DASH[role]);
   };
 
   return (
