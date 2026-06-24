@@ -197,10 +197,13 @@ function HomeView({
           <div className="npl-card__head"><div><h3>Your holdings</h3><p>Current allocation</p></div><button className="npl-btn npl-btn--ghost" onClick={() => go("Investments")}>View all <ChevronRight size={15} /></button></div>
           <div className="npl-grid" style={{ gap: ".7rem" }}>
             {holdings.map((h) => (
-              <div className="npl-tree__row" key={h.id} style={{ gap: ".9rem" }}>
-                <img src={h.img} alt="" style={{ width: 44, height: 44, borderRadius: 10, objectFit: "cover" }} />
-                <div style={{ flex: 1, minWidth: 0 }}><b style={{ color: "var(--c-ink)", display: "block" }}>{h.name}</b><span style={{ fontSize: ".78rem", color: "var(--c-muted)" }}>{h.model}</span></div>
-                <div style={{ textAlign: "right" }}><b style={{ color: "var(--c-royal)" }}>{naira(h.value)}</b></div>
+              <div className="npl-tree__row npl-holdingrow" key={h.id}>
+                <img src={h.img} alt="" className="npl-holdingrow__img" />
+                <div className="npl-holdingrow__body">
+                  <b>{h.name}</b>
+                  <span>{h.model}</span>
+                </div>
+                <div className="npl-holdingrow__value"><b>{naira(h.value)}</b></div>
               </div>
             ))}
           </div>
@@ -280,7 +283,7 @@ function Marketplace({ onBuy }: { onBuy: (l: Listing) => void }) {
   return (
     <>
       <div className="npl-card"><PageHead eyebrow="Marketplace" title="Verified properties" sub="Every estate is vetted, mapped and documented before listing." /></div>
-      <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
+      <div className="npl-filterbar">
         {tabs.map((t) => (
           <button key={t} className={`npl-btn ${filter === t ? "npl-btn--primary" : "npl-btn--ghost"}`} style={{ padding: ".5rem 1.1rem", fontSize: ".84rem" }} onClick={() => setFilter(t)}>{t}</button>
         ))}
@@ -330,10 +333,10 @@ function Investments() {
                   {docs.map((d) => {
                     const Ic = docIcon[d.type] || FileText;
                     return (
-                      <div className="npl-tree__row" key={d.id} style={{ gap: ".7rem" }}>
+                      <div className="npl-tree__row npl-docrow" key={d.id}>
                         <span className="npl-lesson__ic" style={{ width: 30, height: 30 }}><Ic size={15} /></span>
-                        <div style={{ flex: 1, minWidth: 0 }}><b style={{ color: "var(--c-ink)", fontSize: ".85rem", display: "block" }}>{d.name}</b><small style={{ color: "var(--c-muted)", fontSize: ".74rem" }}>{d.type} · {d.date}</small></div>
-                        <button className="npl-btn npl-btn--ghost" style={{ padding: ".4rem .75rem", fontSize: ".8rem" }} onClick={() => downloadDocument(d.name, [["Property", h.name], ["Type", d.type], ["Date", d.date], ["Member", investor.name]])}><Download size={14} /></button>
+                        <div className="npl-docrow__body"><b>{d.name}</b><small>{d.type} · {d.date}</small></div>
+                        <button className="npl-btn npl-btn--ghost npl-docrow__action" onClick={() => downloadDocument(d.name, [["Property", h.name], ["Type", d.type], ["Date", d.date], ["Member", investor.name]])}><Download size={14} /><span>Download</span></button>
                       </div>
                     );
                   })}

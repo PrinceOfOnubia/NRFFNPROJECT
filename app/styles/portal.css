@@ -383,10 +383,10 @@
   .npl-table.responsive tr { border:1px solid var(--c-line); border-radius:var(--r-md); margin-bottom:.8rem; padding:.4rem .6rem; background:#fff; }
   .npl-table.responsive td { border:none; padding:.45rem .4rem; display:flex; justify-content:space-between; gap:1rem; }
   .npl-table.responsive td::before { content: attr(data-label); font-weight:800; color:var(--c-muted); font-size:.74rem; text-transform:uppercase; letter-spacing:.05em; }
-  .npl-btn--block { width: 100%; }
   .npl-refstats { gap: .7rem; }
   .npl-metric { min-height: 0; }
   .npl-setup { padding: .9rem; }
+  .npl-content { padding-top: 1.15rem; }
   .npl-membership-grid {
     display: flex;
     flex-direction: column;
@@ -396,6 +396,71 @@
   .npl-membership-drawer__summary,
   .npl-membership-drawer__actions { grid-template-columns: 1fr; }
   .npl-profile-actions { gap: .45rem; }
+  .npl-docrow {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: .6rem .75rem;
+  }
+  .npl-docrow__body {
+    flex: 1 1 calc(100% - 52px);
+    min-width: 0;
+  }
+  .npl-docrow__body b {
+    display: block;
+    color: var(--c-ink);
+    font-size: .86rem;
+    line-height: 1.25;
+  }
+  .npl-docrow__body small {
+    display: block;
+    color: var(--c-muted);
+    font-size: .72rem;
+    margin-top: .15rem;
+  }
+  .npl-docrow__action {
+    width: auto;
+    min-width: 44px;
+    padding: .45rem .7rem;
+    flex: 0 0 auto;
+  }
+  .npl-docrow__action span { display: none; }
+  .npl-holdingrow {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: .7rem .8rem;
+  }
+  .npl-holdingrow__img {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+  .npl-holdingrow__body {
+    flex: 1 1 calc(100% - 72px);
+    min-width: 0;
+  }
+  .npl-holdingrow__body b {
+    display: block;
+    color: var(--c-ink);
+    font-size: .92rem;
+    line-height: 1.25;
+  }
+  .npl-holdingrow__body span {
+    display: block;
+    color: var(--c-muted);
+    font-size: .74rem;
+    margin-top: .15rem;
+  }
+  .npl-holdingrow__value {
+    width: 100%;
+    text-align: left;
+    padding-left: 0;
+  }
+  .npl-holdingrow__value b {
+    color: var(--c-royal);
+    font-size: 1.05rem;
+  }
   .npl-refcard__share { gap: .5rem; }
   .npl-refcard__share a,
   .npl-refcard__share button {
@@ -564,6 +629,11 @@
   gap: .6rem;
 }
 .npl-propertycard__actions .npl-btn { width: 100%; }
+.npl-filterbar {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
 .npl-drawer-overlay { animation: npl-overlay-in .18s ease-out; }
 .npl-drawer { width: min(440px, 100%); padding: clamp(1.25rem, 1rem + 1vw, 1.75rem); animation: npl-drawer-in .24s ease-out; }
 .npl-drawer--compact { gap: 1.4rem; }
@@ -618,6 +688,17 @@
   .npl-propertycard__actions { grid-template-columns: 1fr; }
   .npl-btn { width: 100%; }
   .npl-card__head .npl-btn,.npl-share .npl-btn { width: auto; }
+  .npl-filterbar {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: .25rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .npl-filterbar .npl-btn {
+    width: auto;
+    justify-content: center;
+    white-space: nowrap;
+  }
   .npl-drawer { width: min(100%, 390px); padding-bottom: calc(1.4rem + env(safe-area-inset-bottom)); }
   .npl-notif { padding: .85rem; }
   .npl-mobnav { padding-bottom: calc(.5rem + env(safe-area-inset-bottom)); }
@@ -629,6 +710,33 @@
   .npl-hero-actions .npl-btn { width: auto; min-height: 38px; padding: .45rem .8rem; font-size: .78rem; }
   .npl-refcard__share a,
   .npl-refcard__share button { width: 72px; height: 72px; border-radius: 18px; }
+  .npl-docrow {
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  .npl-docrow__body {
+    flex: 1 1 auto;
+  }
+  .npl-docrow__action {
+    width: auto !important;
+    min-width: 44px;
+    flex: 0 0 auto;
+    justify-content: center;
+    padding-inline: .85rem;
+  }
+  .npl-docrow__action span { display: none; }
+  .npl-holdingrow {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .npl-holdingrow__body {
+    flex: 1 1 auto;
+  }
+  .npl-holdingrow__value {
+    width: auto;
+    text-align: right;
+    padding-left: .4rem;
+  }
 }
 
 /* =========================================================
@@ -1001,9 +1109,6 @@
   .npl-refcard__share a,
   .npl-refcard__share button { width: 62px; height: 62px; border-radius: 16px; }
   .npl-side__foot .npl-nav--danger { min-height: 42px; }
-  .npl-membership-grid {
-    grid-auto-columns: minmax(88%, 1fr);
-  }
   .npl-pill-user {
     border-radius: 50%;
   }
