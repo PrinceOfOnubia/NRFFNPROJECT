@@ -444,9 +444,9 @@
   .npl-profile-summary__avatar .npl-avatar,
   .npl-profile-summary__avatar img { width: 62px; height: 62px; }
   .npl-hero-actions { width: 100%; }
-  .npl-hero-actions .npl-btn { width: auto; min-height: 42px; padding: .55rem .9rem; font-size: .82rem; }
+  .npl-hero-actions .npl-btn { width: auto; min-height: 38px; padding: .45rem .8rem; font-size: .78rem; }
   .npl-refcard__share a,
-  .npl-refcard__share button { width: 78px; height: 78px; border-radius: 20px; }
+  .npl-refcard__share button { width: 72px; height: 72px; border-radius: 18px; }
 }
 
 /* =========================================================
@@ -679,5 +679,5 @@
   }
   .npl-setup__cta { min-height: 52px; font-size: .94rem; }
   .npl-refcard__share a,
-  .npl-refcard__share button { width: 78px; height: 78px; border-radius: 20px; }
+  .npl-refcard__share button { width: 72px; height: 72px; border-radius: 18px; }
 }

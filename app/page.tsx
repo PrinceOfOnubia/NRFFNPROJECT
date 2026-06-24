@@ -683,12 +683,14 @@ export default function LandingPage() {
           </div>
           <div className="nlp-foot__rule" />
           <div className="nlp-foot__brand">
-            <img className="nlp-foot__logo" src="/assets/nrffn-logo-mark.png" alt="NRFFN" />
-            <p>
-              Nigerian Realtors Financial Freedom Network Ltd. Building wealth through real estate, technology,
-              education and networking. The company is registered with Nigeria&apos;s <strong>Corporate Affairs Commission (CAC)</strong> and operate in compliance with relevant laws and regulatory bodies, including <strong>LASRERA</strong>, <strong>REDAN</strong>, and the <strong>World Trade Center Nigeria</strong>.
-            </p>
-            <a className="nlp-foot__certlink" href="/documents/nrffn-ltd-certificate.pdf" target="_blank" rel="noreferrer">View NRFFN Certificate <ArrowRight size={16} /></a>
+            <div className="nlp-foot__brandcopy">
+              <img className="nlp-foot__logo" src="/assets/nrffn-logo-mark.png" alt="NRFFN" />
+              <p>
+                Nigerian Realtors Financial Freedom Network Ltd. Building wealth through real estate, technology,
+                education and networking. The company is registered with Nigeria&apos;s <strong>Corporate Affairs Commission (CAC)</strong> and operate in compliance with relevant laws and regulatory bodies, including <strong>LASRERA</strong>, <strong>REDAN</strong>, and the <strong>World Trade Center Nigeria</strong>.
+              </p>
+              <a className="nlp-foot__certlink" href="/documents/nrffn-ltd-certificate.pdf" target="_blank" rel="noreferrer">View NRFFN Certificate <ArrowRight size={16} /></a>
+            </div>
           </div>
           <div className="nlp-foot__bottom">
             <span>© {new Date().getFullYear()} NRFFN Ltd. All rights reserved.</span>
