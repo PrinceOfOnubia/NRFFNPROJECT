@@ -1,6 +1,7 @@
 "use client";
 
-import { Bell, Check, ShieldCheck, UserRound, X } from "lucide-react";
+import { Camera, Bell, Check, ShieldCheck, UserRound, X } from "lucide-react";
+import { useRef, useState, type ChangeEvent } from "react";
 
 export type PortalPanel = "notifications" | "profile" | null;
 
@@ -10,14 +11,29 @@ export default function PortalDrawers({
   name,
   initials,
   role,
+  avatarUrl,
+  onAvatarChange,
 }: {
   panel: PortalPanel;
   onClose: () => void;
   name: string;
   initials: string;
   role: string;
+  avatarUrl?: string | null;
+  onAvatarChange?: (next: string) => void;
 }) {
   if (!panel) return null;
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [localAvatar, setLocalAvatar] = useState<string | null>(null);
+  const shownAvatar = avatarUrl ?? localAvatar;
+
+  const pickAvatar = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setLocalAvatar(url);
+    onAvatarChange?.(url);
+  };
 
   return (
     <div className="npl-drawer-overlay" onClick={onClose} role="presentation">
@@ -47,7 +63,13 @@ export default function PortalDrawers({
         ) : (
           <>
             <div className="npl-profile-summary">
-              <span className="npl-avatar npl-avatar--large">{initials}</span>
+              <div className="npl-profile-summary__avatar">
+                {shownAvatar ? <img src={shownAvatar} alt={`${name} profile`} /> : <span className="npl-avatar npl-avatar--large">{initials}</span>}
+                <button className="npl-avatar-edit__btn" type="button" onClick={() => fileRef.current?.click()} aria-label="Change profile photo">
+                  <Camera size={15} />
+                </button>
+                <input ref={fileRef} type="file" accept="image/*" hidden onChange={pickAvatar} />
+              </div>
               <div><h3>{name}</h3><p>{role}</p><span className="npl-badge ok"><ShieldCheck size={13} /> Verified</span></div>
             </div>
             <div className="npl-grid npl-drawer__list">

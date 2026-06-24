@@ -31,7 +31,9 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
   const [page, setPage] = useState<PageKey>(pages.includes(initialPage) ? initialPage : "Dashboard");
   const [open, setOpen] = useState(false);
   const [panel, setPanel] = useState<PortalPanel>(null);
+  const [addingUser, setAddingUser] = useState(false);
   const go = (p: PageKey) => { setPage(p); setOpen(false); };
+  const unread = 3;
 
   return (
     <div className="npl">
@@ -54,7 +56,7 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
               </button>
             );
           })}
-          <div className="npl-side__foot"><a href="/" className="npl-nav"><LogOut size={19} /> <span>Exit portal</span></a></div>
+          <div className="npl-side__foot"><a href="/" className="npl-nav npl-nav--danger"><LogOut size={19} /> <span>Exit portal</span></a></div>
         </aside>
 
         <div className="npl-main">
@@ -62,13 +64,13 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
             <button className="npl-icnbtn npl-mtop" onClick={() => setOpen(true)} aria-label="Menu"><Menu size={20} /></button>
             <div><h1>{page === "Audit" ? "Audit Logs" : page}</h1><div className="npl-top__sub">{role} control panel</div></div>
             <label className="npl-top__search"><Search size={16} /><input placeholder="Search users, properties, payouts" /></label>
-            <button className="npl-icnbtn" aria-label="Notifications" onClick={() => setPanel("notifications")}><Bell size={19} /><span className="dot" /></button>
+            <button className="npl-icnbtn" aria-label="Notifications" onClick={() => setPanel("notifications")}><Bell size={19} />{unread > 0 && <span className="npl-badgecount">{unread}</span>}</button>
             <button className="npl-pill-user" onClick={() => setPanel("profile")}><span className="npl-avatar">{role === "Super Admin" ? "SA" : "AD"}</span><span style={{ fontSize: ".85rem" }}>{role === "Super Admin" ? "Super" : "Admin"}</span></button>
           </header>
 
           <main className="npl-content">
             {page === "Dashboard" && <Dashboard role={role} go={go} />}
-            {page === "Users" && <UsersView />}
+            {page === "Users" && <UsersView onAdd={() => setAddingUser(true)} />}
             {page === "Memberships" && <Memberships />}
             {page === "Properties" && <Properties_ />}
             {page === "Commissions" && <Commissions_ />}
@@ -86,6 +88,7 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
       <nav className="npl-mobnav">
         {pages.slice(0, 5).map((p) => { const Icon = NAV[p]; return <button key={p} className={page === p ? "active" : ""} onClick={() => go(p)}><Icon size={20} /><span>{p}</span></button>; })}
       </nav>
+      {addingUser && <AddUserDrawer onClose={() => setAddingUser(false)} />}
       <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={role === "Super Admin" ? "Super Admin" : "NRFFN Admin"} initials={role === "Super Admin" ? "SA" : "AD"} role={role} />
     </div>
   );
@@ -142,12 +145,12 @@ function Dashboard({ role, go }: { role: Role; go: (p: PageKey) => void }) {
 }
 
 /* ===== USERS ===== */
-function UsersView() {
+function UsersView({ onAdd }: { onAdd: () => void }) {
   const [f, setF] = useState("All");
   const items = f === "All" ? users : users.filter((u) => u.role === f);
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="User management" title="Members & roles" sub="Manage investors, realtors and access." action={<button className="npl-btn npl-btn--primary">+ Add user</button>} /></div>
+      <div className="npl-card"><PageHead eyebrow="User management" title="Members & roles" sub="Manage investors, realtors and access." action={<button className="npl-btn npl-btn--primary" onClick={onAdd}><Plus size={16} /> Add user</button>} /></div>
       <div className="npl-grid cols-4">
         <Metric icon={Users} label="Total" value={platformStats.members.toLocaleString()} variant="royal" />
         <Metric icon={Check} label="Active" value={platformStats.activeMembers.toLocaleString()} />
@@ -177,6 +180,34 @@ function UsersView() {
         </div>
       </div>
     </>
+  );
+}
+
+function AddUserDrawer({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="npl-drawer-overlay" onClick={onClose} role="presentation">
+      <aside className="npl-drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="npl-drawer__head">
+          <div><h3>Add a user</h3><p>Create access for a new member or staff account</p></div>
+          <button className="npl-icnbtn" onClick={onClose}><X size={18} /></button>
+        </div>
+        <div className="npl-field"><label>Full name</label><input placeholder="e.g. Adaeze Nwankwo" /></div>
+        <div className="npl-fieldrow">
+          <div className="npl-field"><label>Email address</label><input type="email" placeholder="name@mail.com" /></div>
+          <div className="npl-field"><label>Phone number</label><input placeholder="+234 800 000 0000" /></div>
+        </div>
+        <div className="npl-fieldrow">
+          <div className="npl-field"><label>Role</label><select><option>Investor</option><option>Realtor</option><option>Admin</option><option>Support</option></select></div>
+          <div className="npl-field"><label>Tier</label><select><option>Associate</option><option>Bronze</option><option>Silver</option><option>Gold</option><option>Platinum</option><option>VIP</option></select></div>
+        </div>
+        <div className="npl-field"><label>Initial status</label><select><option>Pending</option><option>Active</option><option>Suspended</option></select></div>
+        <div className="npl-field"><label>Notes</label><textarea rows={3} placeholder="Access notes, placement details or approvals..." /></div>
+        <div style={{ display: "flex", gap: ".6rem" }}>
+          <button className="npl-btn npl-btn--ghost" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}>Cancel</button>
+          <button className="npl-btn npl-btn--primary" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}><Check size={16} /> Create user</button>
+        </div>
+      </aside>
+    </div>
   );
 }
 
@@ -387,30 +418,78 @@ function Investments_() {
 /* ===== COMMISSIONS ===== */
 function CommissionTable({ limit }: { limit?: number }) {
   const [rows, setRows] = useState<Commission[]>(commissions);
+  const [approval, setApproval] = useState<Commission | null>(null);
   const items = limit ? rows.slice(0, limit) : rows;
   const setStatus = (id: string, status: Commission["status"]) =>
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, status } : r)));
   return (
-    <div className="npl-table-wrap">
-      <table className="npl-table responsive">
-        <thead><tr><th>Realtor</th><th>Source</th><th>Type</th><th>Amount</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-          {items.map((c) => (
-            <tr key={c.id}>
-              <td data-label="Realtor"><b>{c.realtor}</b></td>
-              <td data-label="Source">{c.property}</td>
-              <td data-label="Type"><span className="npl-badge blue">{c.type}</span></td>
-              <td data-label="Amount"><b>{naira(c.amount)}</b></td>
-              <td data-label="Status"><span className={`npl-badge ${c.status === "Paid" ? "ok" : c.status === "Approved" ? "blue" : "warn"}`}>{c.status}</span></td>
-              <td data-label="">
-                {c.status === "Pending" && <button className="npl-btn npl-btn--primary" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }} onClick={() => setStatus(c.id, "Approved")}><Check size={14} /> Approve</button>}
-                {c.status === "Approved" && <button className="npl-btn npl-btn--primary" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }} onClick={() => setStatus(c.id, "Paid")}>Mark paid</button>}
-                {c.status === "Paid" && <span style={{ color: "var(--c-muted)", fontSize: ".8rem", fontWeight: 700 }}>Released</span>}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <>
+      <div className="npl-table-wrap">
+        <table className="npl-table responsive">
+          <thead><tr><th>Realtor</th><th>Source</th><th>Type</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            {items.map((c) => (
+              <tr key={c.id}>
+                <td data-label="Realtor"><b>{c.realtor}</b></td>
+                <td data-label="Source">{c.property}</td>
+                <td data-label="Type"><span className="npl-badge blue">{c.type}</span></td>
+                <td data-label="Amount"><b>{naira(c.amount)}</b></td>
+                <td data-label="Status"><span className={`npl-badge ${c.status === "Paid" ? "ok" : c.status === "Approved" ? "blue" : "warn"}`}>{c.status}</span></td>
+                <td data-label="">
+                  {c.status === "Pending" && <button className="npl-btn npl-btn--primary" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }} onClick={() => setApproval(c)}><Check size={14} /> Approve commission</button>}
+                  {c.status === "Approved" && <button className="npl-btn npl-btn--primary" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }} onClick={() => setStatus(c.id, "Paid")}>Mark paid</button>}
+                  {c.status === "Paid" && <span style={{ color: "var(--c-muted)", fontSize: ".8rem", fontWeight: 700 }}>Released</span>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {approval && (
+        <CommissionApproveDrawer
+          item={approval}
+          onClose={() => setApproval(null)}
+          onApprove={() => { setStatus(approval.id, "Approved"); setApproval(null); }}
+        />
+      )}
+    </>
+  );
+}
+
+function CommissionApproveDrawer({
+  item,
+  onClose,
+  onApprove,
+}: {
+  item: Commission;
+  onClose: () => void;
+  onApprove: () => void;
+}) {
+  return (
+    <div className="npl-drawer-overlay" onClick={onClose} role="presentation">
+      <aside className="npl-drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="npl-drawer__head">
+          <div>
+            <h3>Approve commission</h3>
+            <p>Review the payout before releasing funds</p>
+          </div>
+          <button className="npl-icnbtn" onClick={onClose}><X size={18} /></button>
+        </div>
+        <div className="npl-grid" style={{ gap: ".7rem" }}>
+          <div className="npl-note"><b>Realtor</b><br /><span>{item.realtor}</span></div>
+          <div className="npl-note"><b>Source property</b><br /><span>{item.property}</span></div>
+          <div className="npl-note"><b>Commission type</b><br /><span>{item.type}</span></div>
+          <div className="npl-note"><b>Amount</b><br /><span>{naira(item.amount)}</span></div>
+        </div>
+        <div className="npl-note">
+          <b>Approval note</b><br />
+          <span>This mock approval will move the commission to the approved state immediately.</span>
+        </div>
+        <div style={{ display: "flex", gap: ".6rem" }}>
+          <button className="npl-btn npl-btn--ghost" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}>Cancel</button>
+          <button className="npl-btn npl-btn--primary" style={{ flex: 1, justifyContent: "center" }} onClick={onApprove}><Check size={16} /> Approve now</button>
+        </div>
+      </aside>
     </div>
   );
 }

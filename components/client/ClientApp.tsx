@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import {
   Bell, Building2, Check, ChevronRight, Clock3, Copy, Download, FileText, Home, LogOut,
   MapPin, Menu, Search, Share2, ShieldCheck, Store, TrendingUp, Users, Wallet, X, Landmark, MessageCircle,
-  CreditCard, Smartphone, ArrowLeft, ArrowRight, Camera, Upload, Mail, Phone, UserPlus, Pencil
+  CreditCard, Smartphone, ArrowLeft, ArrowRight, Upload, Mail, Phone, UserPlus, Pencil, Camera
 } from "lucide-react";
 import {
   naira, investor, portfolio, wallet, holdings, marketplace, transactions, installments,
@@ -45,7 +45,10 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
   const [open, setOpen] = useState(false);
   const [buy, setBuy] = useState<Listing | null>(null);
   const [panel, setPanel] = useState<PortalPanel>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [setupDismissed, setSetupDismissed] = useState(false);
   const go = (p: PageKey) => { setPage(p); setOpen(false); };
+  const unread = clientNotifications.filter((n) => n.unread).length;
 
   return (
     <div className="npl">
@@ -69,7 +72,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
               ))}
             </div>
           ))}
-          <div className="npl-side__foot"><a href="/" className="npl-nav"><LogOut size={19} /> <span>Exit portal</span></a></div>
+          <div className="npl-side__foot"><a href="/" className="npl-nav npl-nav--danger"><LogOut size={19} /> <span>Sign out</span></a></div>
         </aside>
 
         <div className="npl-main">
@@ -78,12 +81,22 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
             <div><h1>{page}</h1><div className="npl-top__sub">{SUB[page]}</div></div>
             <label className="npl-top__search"><Search size={16} /><input placeholder="Search properties, documents" /></label>
             <button className="npl-top__wallet" onClick={() => go("Wallet")}><Wallet size={16} /> {naira(wallet.available)}</button>
-            <button className="npl-icnbtn" aria-label="Notifications" onClick={() => setPanel("notifications")}><Bell size={19} /><span className="dot" /></button>
-            <button className="npl-pill-user" onClick={() => setPanel("profile")}><span className="npl-avatar">{investor.initials}</span><span style={{ fontSize: ".85rem" }}>{investor.name.split(" ")[0]}</span></button>
+            <button className="npl-icnbtn" aria-label="Notifications" onClick={() => setPanel("notifications")}><Bell size={19} />{unread > 0 && <span className="npl-badgecount">{unread}</span>}</button>
+            <button className="npl-pill-user" onClick={() => setPanel("profile")}>
+              {avatarUrl ? <img className="npl-avatar" src={avatarUrl} alt="" /> : <span className="npl-avatar">{investor.initials}</span>}
+              <span style={{ fontSize: ".85rem" }}>{investor.name.split(" ")[0]}</span>
+            </button>
           </header>
 
           <main className="npl-content">
-            {page === "Home" && <HomeView go={go} onBuy={setBuy} />}
+            {page === "Home" && (
+              <HomeView
+                go={go}
+                onBuy={setBuy}
+                setupDismissed={setupDismissed}
+                onDismissSetup={() => setSetupDismissed(true)}
+              />
+            )}
             {page === "Marketplace" && <Marketplace onBuy={setBuy} />}
             {page === "Investments" && <Investments />}
             {page === "Wallet" && <WalletView />}
@@ -103,7 +116,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
       </nav>
 
       {buy && <BuyDrawer listing={buy} onClose={() => setBuy(null)} />}
-      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={investor.name} initials={investor.initials} role="Investor Member" />
+      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={investor.name} initials={investor.initials} role="Investor Member" avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} />
     </div>
   );
 }
@@ -126,17 +139,34 @@ function Metric({ icon: Icon, label, value, note, variant }: { icon: typeof Home
 const modelBadge = (m: string) => (m === "Land Banking" ? "ok" : m === "Co-Ownership" ? "blue" : m === "Flex" ? "warn" : "blue");
 
 /* ===================== HOME ===================== */
-function HomeView({ go, onBuy }: { go: (p: PageKey) => void; onBuy: (l: Listing) => void }) {
+function HomeView({
+  go,
+  onBuy,
+  setupDismissed,
+  onDismissSetup,
+}: {
+  go: (p: PageKey) => void;
+  onBuy: (l: Listing) => void;
+  setupDismissed: boolean;
+  onDismissSetup: () => void;
+}) {
   const max = Math.max(...valueTrend);
   return (
     <>
+      {!setupDismissed && (
+        <AccountSetupPrompt
+          onDismiss={onDismissSetup}
+          onAction={() => go("Profile")}
+        />
+      )}
+
       <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#0a3476 55%,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
         <div>
           <span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Portfolio value</span>
           <h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(portfolio.currentValue)}</h2>
           <p style={{ color: "rgba(255,255,255,.82)" }}><span className="npl-badge ok" style={{ marginRight: 6 }}>+{portfolio.roi}%</span> {naira(portfolio.gain)} total gain · {naira(portfolio.monthlyIncome)}/mo income</p>
         </div>
-        <button className="npl-btn npl-btn--success" onClick={() => go("Marketplace")}><Store size={16} /> Invest more</button>
+        <button className="npl-btn npl-btn--primary" onClick={() => go("Marketplace")}><Store size={16} /> Invest more</button>
       </div>
 
       <div className="npl-grid cols-4">
@@ -171,6 +201,34 @@ function HomeView({ go, onBuy }: { go: (p: PageKey) => void; onBuy: (l: Listing)
         <div className="npl-grid cols-3">{marketplace.slice(0, 3).map((l) => <ListingCard key={l.id} l={l} onBuy={onBuy} />)}</div>
       </div>
     </>
+  );
+}
+
+function AccountSetupPrompt({ onDismiss, onAction }: { onDismiss: () => void; onAction: () => void }) {
+  return (
+    <div className="npl-setup">
+      <div className="npl-setup__head">
+        <div className="npl-setup__title">
+          <span className="npl-setup__ic"><ShieldCheck size={18} /></span>
+          <div>
+            <h3>Finish setting up your account</h3>
+            <p>You can use NRFFN now. To start putting money into property, finish your profile and KYC.</p>
+          </div>
+        </div>
+        <button className="npl-setup__close" type="button" onClick={onDismiss} aria-label="Dismiss setup prompt">
+          <X size={18} />
+        </button>
+      </div>
+      <div className="npl-setup__dots" aria-label="Account setup progress">
+        <span className="npl-setup__dot is-on" />
+        <span className="npl-setup__dot" />
+        <span className="npl-setup__dot" />
+        <span>0 of 3</span>
+      </div>
+      <button className="npl-btn npl-setup__cta" type="button" onClick={onAction}>
+        Finish setup <ArrowRight size={18} />
+      </button>
+    </div>
   );
 }
 
@@ -360,21 +418,30 @@ function Notifications_() {
 /* ===================== REFERRAL ===================== */
 function Referral_() {
   const [copied, setCopied] = useState(false);
-  const qr = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&color=071f44&data=${encodeURIComponent(referral.link)}`;
   const copy = () => { navigator.clipboard?.writeText(referral.link); setCopied(true); setTimeout(() => setCopied(false), 1500); };
   return (
     <>
       <div className="npl-card"><PageHead eyebrow="Invite & earn" title="Refer fellow investors" sub="Share your link and earn rewards on every successful referral." /></div>
       <div className="npl-grid cols-2">
-        <div className="npl-card">
-          <div className="npl-refbox">
-            <div className="npl-qr"><img src={qr} alt="Referral QR" /></div>
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <h3 style={{ marginBottom: ".6rem" }}>Your referral link</h3>
-              <div className="npl-linkfield"><input readOnly value={referral.link} /><button className="npl-btn npl-btn--primary" onClick={copy}>{copied ? <Check size={15} /> : <Copy size={15} />} {copied ? "Copied" : "Copy"}</button></div>
-              <div className="npl-share" style={{ marginTop: ".8rem" }}><a href={`https://wa.me/?text=${encodeURIComponent(referral.link)}`} target="_blank" rel="noreferrer"><MessageCircle size={15} /> WhatsApp</a><button><Share2 size={15} /> Share</button></div>
+        <div className="npl-card npl-refcard">
+          <div>
+            <h3 style={{ marginBottom: ".35rem" }}>Share your link</h3>
+            <p style={{ color: "var(--c-muted)", fontSize: ".95rem" }}>Your commission lands in your wallet straight away once someone invests through your link.</p>
+          </div>
+          <div className="npl-refcard__linkbox">
+            <div className="npl-refcard__label">Your sign-up link</div>
+            <div className="npl-refcard__input">
+              <input readOnly value={referral.link} />
+              <button className="npl-btn npl-btn--primary npl-refcard__copy" onClick={copy}>{copied ? <Check size={15} /> : <Copy size={15} />} {copied ? "Copied" : "Copy"}</button>
             </div>
           </div>
+          <div className="npl-refcard__share">
+            <a href={`https://wa.me/?text=${encodeURIComponent(referral.link)}`} target="_blank" rel="noreferrer"><MessageCircle size={18} /><span>WhatsApp</span></a>
+            <button><Share2 size={18} /><span>Share</span></button>
+            <button><Clock3 size={18} /><span>Track</span></button>
+            <button><Store size={18} /><span>Invest</span></button>
+          </div>
+          <p className="npl-refcard__note">You earn rewards from every verified purchase. Money lands in your wallet without waiting around.</p>
         </div>
         <div className="npl-grid cols-2" style={{ gridTemplateColumns: "1fr 1fr" }}>
           <Metric icon={Users} label="People invited" value={String(referral.invited)} variant="royal" />

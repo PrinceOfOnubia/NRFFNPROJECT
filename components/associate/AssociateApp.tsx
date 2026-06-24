@@ -52,6 +52,8 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
   const [drawer, setDrawer] = useState<null | "withdraw" | "lead" | "addlead">(null);
   const [activeLead, setActiveLead] = useState<Lead | null>(null);
   const [panel, setPanel] = useState<PortalPanel>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [setupDismissed, setSetupDismissed] = useState(false);
 
   const go = (p: PageKey) => { setPage(p); setOpen(false); };
   const unread = notifications.filter((n) => n.unread).length;
@@ -84,7 +86,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
             </div>
           ))}
           <div className="npl-side__foot">
-            <a href="/" className="npl-nav"><LogOut size={19} /> <span>Exit portal</span></a>
+            <a href="/" className="npl-nav npl-nav--danger"><LogOut size={19} /> <span>Sign out</span></a>
           </div>
         </aside>
 
@@ -104,16 +106,23 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
               <Wallet size={16} /> {naira(wallet.available)}
             </button>
             <button className="npl-icnbtn" onClick={() => setPanel("notifications")} aria-label="Notifications">
-              <Bell size={19} />{unread > 0 && <span className="dot" />}
+              <Bell size={19} />{unread > 0 && <span className="npl-badgecount">{unread}</span>}
             </button>
             <button className="npl-pill-user" onClick={() => setPanel("profile")}>
-              <span className="npl-avatar">{member.initials}</span>
+              {avatarUrl ? <img className="npl-avatar" src={avatarUrl} alt="" /> : <span className="npl-avatar">{member.initials}</span>}
               <span style={{ fontSize: ".85rem" }}>{member.name.split(" ")[0]}</span>
             </button>
           </header>
 
           <main className="npl-content">
-            {page === "Overview" && <Overview go={go} onWithdraw={() => setDrawer("withdraw")} />}
+            {page === "Overview" && (
+              <Overview
+                go={go}
+                onWithdraw={() => setDrawer("withdraw")}
+                setupDismissed={setupDismissed}
+                onDismissSetup={() => setSetupDismissed(true)}
+              />
+            )}
             {page === "Earnings" && <Earnings onWithdraw={() => setDrawer("withdraw")} />}
             {page === "Referrals" && <Referrals />}
             {page === "CRM" && <CRM onOpen={openLead} onAdd={() => setDrawer("addlead")} />}
@@ -143,7 +152,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
       {drawer === "withdraw" && <WithdrawDrawer onClose={() => setDrawer(null)} />}
       {drawer === "lead" && activeLead && <LeadDrawer lead={activeLead} onClose={() => setDrawer(null)} />}
       {drawer === "addlead" && <AddLeadDrawer onClose={() => setDrawer(null)} />}
-      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={member.name} initials={member.initials} role="Realtor Member" />
+      <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={member.name} initials={member.initials} role="Realtor Member" avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} />
     </div>
   );
 }
@@ -191,16 +200,33 @@ function Bars({ data, labels }: { data: number[]; labels: string[] }) {
 const tempClass = (t: string) => (t === "Hot" ? "hot" : t === "Warm" ? "warn" : "cold");
 
 /* ============================== OVERVIEW ============================== */
-function Overview({ go, onWithdraw }: { go: (p: PageKey) => void; onWithdraw: () => void }) {
+function Overview({
+  go,
+  onWithdraw,
+  setupDismissed,
+  onDismissSetup,
+}: {
+  go: (p: PageKey) => void;
+  onWithdraw: () => void;
+  setupDismissed: boolean;
+  onDismissSetup: () => void;
+}) {
   return (
     <>
+      {!setupDismissed && (
+        <AccountSetupPrompt
+          onDismiss={onDismissSetup}
+          onAction={() => go("Profile")}
+        />
+      )}
+
       <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#0a3476 55%,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
         <div>
           <span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Good morning, {member.name.split(" ")[0]}</span>
           <h2 style={{ color: "#fff", fontSize: "1.7rem", margin: ".4rem 0" }}>You&apos;re {Math.round((rankProgress.volume / rankProgress.target) * 100)}% to {rankProgress.next}</h2>
           <p style={{ color: "rgba(255,255,255,.78)" }}>{naira(rankProgress.volume)} of {naira(rankProgress.target)} team volume · Rank: {member.rank}</p>
         </div>
-        <div style={{ display: "flex", gap: ".7rem", flexWrap: "wrap" }}>
+        <div className="npl-hero-actions">
           <button className="npl-btn npl-btn--primary" onClick={() => go("Referrals")}><Share2 size={16} /> Share link</button>
           <button className="npl-btn npl-btn--ghost" onClick={onWithdraw}><Wallet size={16} /> Withdraw</button>
         </div>
@@ -243,6 +269,34 @@ function Overview({ go, onWithdraw }: { go: (p: PageKey) => void; onWithdraw: ()
         </div>
       </div>
     </>
+  );
+}
+
+function AccountSetupPrompt({ onDismiss, onAction }: { onDismiss: () => void; onAction: () => void }) {
+  return (
+    <div className="npl-setup">
+      <div className="npl-setup__head">
+        <div className="npl-setup__title">
+          <span className="npl-setup__ic"><ShieldCheck size={18} /></span>
+          <div>
+            <h3>Finish setting up your account</h3>
+            <p>You can use NRFFN now. To unlock referrals and withdrawals, finish your profile and KYC.</p>
+          </div>
+        </div>
+        <button className="npl-setup__close" type="button" onClick={onDismiss} aria-label="Dismiss setup prompt">
+          <X size={18} />
+        </button>
+      </div>
+      <div className="npl-setup__dots">
+        <span className="npl-setup__dot is-on" />
+        <span className="npl-setup__dot" />
+        <span className="npl-setup__dot" />
+        <span>0 of 3</span>
+      </div>
+      <button className="npl-btn npl-setup__cta" type="button" onClick={onAction}>
+        Finish setup <ArrowRight size={18} />
+      </button>
+    </div>
   );
 }
 
@@ -324,7 +378,6 @@ function BreakRow({ label, value, ic: Ic }: { label: string; value: number; ic: 
 /* ============================== REFERRALS ============================== */
 function Referrals() {
   const [copied, setCopied] = useState(false);
-  const qr = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&color=071f44&data=${encodeURIComponent(member.referralLink)}`;
   const copy = () => { navigator.clipboard?.writeText(member.referralLink); setCopied(true); setTimeout(() => setCopied(false), 1500); };
   const wa = `https://wa.me/?text=${encodeURIComponent("Join me on NRFFN — Nigeria's largest real estate wealth network: " + member.referralLink)}`;
   return (
@@ -332,22 +385,25 @@ function Referrals() {
       <div className="npl-card"><PageHead eyebrow="Referral engine" title="Share & grow your network" sub="Your unique link, QR code, and 5-level genealogy." /></div>
 
       <div className="npl-grid cols-2">
-        <div className="npl-card">
-          <div className="npl-refbox">
-            <div className="npl-qr"><img src={qr} alt="Referral QR code" /></div>
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <h3 style={{ marginBottom: ".6rem" }}>Your referral link</h3>
-              <div className="npl-linkfield">
-                <input readOnly value={member.referralLink} />
-                <button className="npl-btn npl-btn--primary" onClick={copy}>{copied ? <Check size={15} /> : <Copy size={15} />} {copied ? "Copied" : "Copy"}</button>
-              </div>
-              <div className="npl-share" style={{ marginTop: ".8rem" }}>
-                <a href={wa} target="_blank" rel="noreferrer"><MessageCircle size={15} /> WhatsApp</a>
-                <button><Share2 size={15} /> Social</button>
-                <button><Download size={15} /> Save QR</button>
-              </div>
+        <div className="npl-card npl-refcard">
+          <div>
+            <h3 style={{ marginBottom: ".35rem" }}>Share your link</h3>
+            <p style={{ color: "var(--c-muted)", fontSize: ".95rem" }}>Invite investors through your link and keep track of the money that lands in your wallet.</p>
+          </div>
+          <div className="npl-refcard__linkbox">
+            <div className="npl-refcard__label">Your sign-up link</div>
+            <div className="npl-refcard__input">
+              <input readOnly value={member.referralLink} />
+              <button className="npl-btn npl-btn--primary npl-refcard__copy" onClick={copy}>{copied ? <Check size={15} /> : <Copy size={15} />} {copied ? "Copied" : "Copy"}</button>
             </div>
           </div>
+          <div className="npl-refcard__share">
+            <a href={wa} target="_blank" rel="noreferrer"><MessageCircle size={18} /><span>WhatsApp</span></a>
+            <button><Share2 size={18} /><span>Share</span></button>
+            <button><Download size={18} /><span>QR</span></button>
+            <button><TrendingUp size={18} /><span>Grow</span></button>
+          </div>
+          <p className="npl-refcard__note">Your earnings are tied to successful referrals, so every valid sign-up matters.</p>
         </div>
         <div className="npl-grid cols-2" style={{ gridTemplateColumns: "1fr 1fr" }}>
           <Metric icon={Target} label="Link clicks" value={referralStats.clicks.toLocaleString()} />

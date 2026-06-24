@@ -267,8 +267,8 @@ export default function LandingPage() {
           <a href="#why" onClick={() => setOpen(false)}>Why Join</a>
           <a href="#membership" onClick={() => setOpen(false)}>Membership</a>
           <a href="#academy" onClick={() => setOpen(false)}>Academy</a>
-          <a href="/login" onClick={() => setOpen(false)}>Login</a>
-          <a href="/associate/register" className="nlp-btn nlp-btn--primary">Join Free Today</a>
+          <a href="/login" className="nlp-btn nlp-btn--ghost nlp-mobilemenu__login" onClick={() => setOpen(false)}>Member Login</a>
+          <a href="/associate/register" className="nlp-btn nlp-btn--primary" onClick={() => setOpen(false)}>Join Free Today</a>
         </div>
       </nav>
 
@@ -659,16 +659,6 @@ export default function LandingPage() {
       <footer className="nlp-foot">
         <div className="nlp__wrap">
           <div className="nlp-foot__grid">
-            <div className="nlp-foot__brand">
-              <p>
-                Nigerian Realtors Financial Freedom Network Ltd. Building wealth through real estate, technology,
-                education and networking. The company is registered with Nigeria&apos;s <strong>Corporate Affairs Commission (CAC)</strong> and operate in compliance with relevant laws and regulatory bodies, including <strong>LASRERA</strong>, <strong>REDAN</strong>, and the <strong>World Trade Center Nigeria</strong>.
-              </p>
-              <div className="nlp-foot__certificate">
-                <a className="nlp-btn nlp-btn--ghost" href="/documents/nrffn-ltd-certificate.pdf" target="_blank" rel="noreferrer">View NRFFN Certificate</a>
-                <a className="nlp-btn nlp-btn--primary" href="/documents/nrffn-ltd-certificate.pdf" download>Download Certificate</a>
-              </div>
-            </div>
             <div className="nlp-foot__col">
               <h4>Platform</h4>
               <a href="#about">About NRFFN</a>
@@ -690,6 +680,15 @@ export default function LandingPage() {
               <a href="#about">Core Values</a>
               <a href="#membership">Become a Member</a>
             </div>
+          </div>
+          <div className="nlp-foot__rule" />
+          <div className="nlp-foot__brand">
+            <img className="nlp-foot__logo" src="/assets/nrffn-logo-mark.png" alt="NRFFN" />
+            <p>
+              Nigerian Realtors Financial Freedom Network Ltd. Building wealth through real estate, technology,
+              education and networking. The company is registered with Nigeria&apos;s <strong>Corporate Affairs Commission (CAC)</strong> and operate in compliance with relevant laws and regulatory bodies, including <strong>LASRERA</strong>, <strong>REDAN</strong>, and the <strong>World Trade Center Nigeria</strong>.
+            </p>
+            <a className="nlp-foot__certlink" href="/documents/nrffn-ltd-certificate.pdf" target="_blank" rel="noreferrer">View NRFFN Certificate <ArrowRight size={16} /></a>
           </div>
           <div className="nlp-foot__bottom">
             <span>© {new Date().getFullYear()} NRFFN Ltd. All rights reserved.</span>
