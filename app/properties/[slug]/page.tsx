@@ -1,6 +1,7 @@
 import { ArrowLeft, Building2, Calendar, Check, MapPin, ShieldCheck, TrendingUp } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getProperty, propertyCatalog } from "../../../lib/property-catalog";
+import PropertyGallery from "../../../components/property/PropertyGallery";
 
 export function generateStaticParams() {
   return propertyCatalog.map(({ slug }) => ({ slug }));
@@ -42,8 +43,10 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
             <p>{property.description}</p>
           </section>
 
-          <section className="propertyDetail__gallery" aria-label="Property gallery">
-            {property.gallery.map((image, index) => <img src={image} alt={`${property.name} view ${index + 1}`} key={image} />)}
+          <section className="propertyDetail__section" aria-label="Property gallery">
+            <span className="propertyDetail__eyebrow">Gallery</span>
+            <h2>Explore the property</h2>
+            <PropertyGallery images={[property.hero, ...property.gallery]} name={property.name} />
           </section>
 
           <section className="propertyDetail__section">

@@ -1,16 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
-  Bell, Building2, Calendar, Check, ChevronRight, Clock3, Copy, Download, FileText, Home, Info,
-  LogOut, MapPin, Menu, Search, Share2, ShieldCheck, Store, TrendingUp, Users, Wallet, X, Landmark, MessageCircle
+  Bell, Building2, Check, ChevronRight, Clock3, Copy, Download, FileText, Home, LogOut,
+  MapPin, Menu, Search, Share2, ShieldCheck, Store, TrendingUp, Users, Wallet, X, Landmark, MessageCircle,
+  CreditCard, Smartphone, ArrowLeft, ArrowRight, Camera, Upload, Mail, Phone, UserPlus, Pencil
 } from "lucide-react";
 import {
   naira, investor, portfolio, wallet, holdings, marketplace, transactions, installments,
-  documents, valueTrend, referral, clientNotifications, type Listing
+  documents, valueTrend, referral, clientNotifications, type Listing, type Holding
 } from "../../lib/client/data";
 import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
 import { propertySlug } from "../../lib/property-catalog";
+import { downloadReceipt, downloadDocument } from "../../lib/pdf";
+
+const docsForHolding = (h: Holding) =>
+  documents.filter((d) => h.name.toLowerCase().startsWith(d.property.toLowerCase()));
 
 type PageKey = "Home" | "Wallet" | "Marketplace" | "Investments" | "Documents" | "Referral" | "Notifications" | "Profile";
 
@@ -64,7 +69,7 @@ export default function ClientApp({ initialPage = "Home" }: { initialPage?: Page
               ))}
             </div>
           ))}
-          <div className="npl-side__foot"><a href="/" className="npl-nav"><LogOut size={19} /> <span>Sign out</span></a></div>
+          <div className="npl-side__foot"><a href="/" className="npl-nav"><LogOut size={19} /> <span>Exit portal</span></a></div>
         </aside>
 
         <div className="npl-main">
@@ -221,27 +226,49 @@ function Investments() {
         <Metric icon={Building2} label="Current value" value={naira(portfolio.currentValue)} variant="gold" />
         <Metric icon={Check} label="Total ROI" value={`+${portfolio.roi}%`} note={<span className="npl-up">{naira(portfolio.gain)} gain</span>} />
       </div>
-      {holdings.map((h) => (
-        <div className="npl-card" key={h.id} style={{ display: "flex", gap: "1.2rem", alignItems: "center", flexWrap: "wrap" }}>
-          <img src={h.img} alt={h.name} style={{ width: 120, height: 90, borderRadius: 14, objectFit: "cover" }} />
-          <div style={{ flex: 1, minWidth: 200 }}>
-            <span className={`npl-badge ${modelBadge(h.model)}`}>{h.model}</span>
-            <h3 style={{ margin: ".4rem 0 .2rem" }}>{h.name}</h3>
-            <p style={{ color: "var(--c-muted)", fontSize: ".85rem", display: "flex", alignItems: "center", gap: 4 }}><MapPin size={13} /> {h.location}</p>
-            {h.progress < 100 && (
-              <div style={{ marginTop: ".6rem", maxWidth: 280 }}>
-                <div className="npl-progress"><i style={{ width: `${h.progress}%` }} /></div>
-                <small style={{ fontSize: ".72rem", color: "var(--c-muted)", fontWeight: 700 }}>{h.progress}% paid · installment plan</small>
+      {holdings.map((h) => {
+        const docs = docsForHolding(h);
+        return (
+          <div className="npl-card" key={h.id}>
+            <div style={{ display: "flex", gap: "1.2rem", alignItems: "center", flexWrap: "wrap" }}>
+              <img src={h.img} alt={h.name} style={{ width: 120, height: 90, borderRadius: 14, objectFit: "cover" }} />
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <span className={`npl-badge ${modelBadge(h.model)}`}>{h.model}</span>
+                <h3 style={{ margin: ".4rem 0 .2rem" }}>{h.name}</h3>
+                <p style={{ color: "var(--c-muted)", fontSize: ".85rem", display: "flex", alignItems: "center", gap: 4 }}><MapPin size={13} /> {h.location}</p>
+                {h.progress < 100 && (
+                  <div style={{ marginTop: ".6rem", maxWidth: 280 }}>
+                    <div className="npl-progress"><i style={{ width: `${h.progress}%` }} /></div>
+                    <small style={{ fontSize: ".72rem", color: "var(--c-muted)", fontWeight: 700 }}>{h.progress}% paid · installment plan</small>
+                  </div>
+                )}
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem" }}>Current value</small>
+                <div style={{ fontWeight: 800, color: "var(--c-royal)", fontSize: "1.3rem" }}>{naira(h.value)}</div>
+                <span className="npl-badge ok">+{Math.round(((h.value - h.invested) / h.invested) * 100)}%</span>
+              </div>
+            </div>
+            {docs.length > 0 && (
+              <div style={{ marginTop: "1rem", borderTop: "1px solid var(--c-line)", paddingTop: ".9rem" }}>
+                <small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem", textTransform: "uppercase", letterSpacing: ".06em" }}>Property documents</small>
+                <div className="npl-grid" style={{ gap: ".5rem", marginTop: ".55rem" }}>
+                  {docs.map((d) => {
+                    const Ic = docIcon[d.type] || FileText;
+                    return (
+                      <div className="npl-tree__row" key={d.id} style={{ gap: ".7rem" }}>
+                        <span className="npl-lesson__ic" style={{ width: 30, height: 30 }}><Ic size={15} /></span>
+                        <div style={{ flex: 1, minWidth: 0 }}><b style={{ color: "var(--c-ink)", fontSize: ".85rem", display: "block" }}>{d.name}</b><small style={{ color: "var(--c-muted)", fontSize: ".74rem" }}>{d.type} · {d.date}</small></div>
+                        <button className="npl-btn npl-btn--ghost" style={{ padding: ".4rem .75rem", fontSize: ".8rem" }} onClick={() => downloadDocument(d.name, [["Property", h.name], ["Type", d.type], ["Date", d.date], ["Member", investor.name]])}><Download size={14} /></button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
-          <div style={{ textAlign: "right" }}>
-            <small style={{ color: "var(--c-muted)", fontWeight: 700, fontSize: ".72rem" }}>Current value</small>
-            <div style={{ fontWeight: 800, color: "var(--c-royal)", fontSize: "1.3rem" }}>{naira(h.value)}</div>
-            <span className="npl-badge ok">+{Math.round(((h.value - h.invested) / h.invested) * 100)}%</span>
-          </div>
-        </div>
-      ))}
+        );
+      })}
       <div className="npl-card">
         <div className="npl-card__head"><div><h3>Greenfield Plots — payment plan</h3><p>Installment schedule</p></div></div>
         <div className="npl-grid auto">
@@ -263,7 +290,7 @@ function WalletView() {
     <>
       <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div><span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Available balance</span><h2 style={{ color: "#fff", fontSize: "2.2rem", margin: ".3rem 0" }}>{naira(wallet.available)}</h2></div>
-        <div className="npl-wallet-actions"><button className="npl-btn npl-btn--primary"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--secondary">Withdraw</button></div>
+        <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }}><button className="npl-btn npl-btn--primary"><Wallet size={16} /> Fund wallet</button><button className="npl-btn npl-btn--secondary">Withdraw</button></div>
       </div>
       <div className="npl-grid cols-3">
         <Metric icon={Wallet} label="Available" value={naira(wallet.available)} variant="gold" />
@@ -293,42 +320,20 @@ function WalletView() {
 }
 
 /* ===================== DOCUMENTS ===================== */
-const docIcon: Record<string, typeof Home> = { Allocation: Landmark, Receipt: FileText, Contract: FileText, Certificate: ShieldCheck, Survey: MapPin, Schedule: Calendar };
+const docIcon: Record<string, typeof Home> = { Allocation: Landmark, Receipt: FileText, Contract: FileText, Certificate: ShieldCheck, Survey: MapPin };
 function Documents_() {
-  const groups = documents.reduce<Record<string, typeof documents>>((acc, doc) => {
-    const key = `${doc.property}-${doc.reference}`;
-    acc[key] = acc[key] ? [...acc[key], doc] : [doc];
-    return acc;
-  }, {});
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Document center" title="Property documents" sub="Receipts, schedules and allocation letters grouped by each property purchase." /></div>
-      <div className="npl-docgroups">
-        {Object.values(groups).map((docs) => {
-          const first = docs[0];
+      <div className="npl-card"><PageHead eyebrow="Document center" title="Your documents" sub="Receipts, allocation letters, contracts and certificates." /></div>
+      <div className="npl-grid" style={{ gap: ".8rem" }}>
+        {documents.map((d) => {
+          const Ic = docIcon[d.type] || FileText;
           return (
-            <section className="npl-docgroup" key={first.reference}>
-              <header>
-                <div>
-                  <span>{first.ownership}</span>
-                  <h3>{first.property}</h3>
-                  <p>{first.unit} · {first.reference}</p>
-                </div>
-                <i className={first.investmentStatus === "Successful" ? "ok" : "warn"}>{first.investmentStatus}</i>
-              </header>
-              <div className="npl-doccards">
-                {docs.map((d) => {
-                  const Ic = docIcon[d.type] || FileText;
-                  return (
-                    <button className={`npl-doccard${d.locked ? " locked" : ""}`} key={d.id}>
-                      <span><Ic size={18} /></span>
-                      <div><b>{d.name}</b><small>{d.availability}</small></div>
-                      {d.locked ? <Info size={17} /> : <Download size={17} />}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
+            <div className="npl-notif" key={d.id}>
+              <span className="npl-notif__ic"><Ic size={19} /></span>
+              <div style={{ flex: 1 }}><b>{d.name}</b><p>{d.property} · {d.type} · {d.date}</p></div>
+              <button className="npl-btn npl-btn--ghost" style={{ padding: ".5rem .9rem" }} onClick={() => downloadDocument(d.name, [["Property", d.property], ["Type", d.type], ["Date", d.date], ["Member", investor.name]])}><Download size={15} /> Download</button>
+            </div>
           );
         })}
       </div>
@@ -381,53 +386,287 @@ function Referral_() {
 }
 
 /* ===================== PROFILE ===================== */
+type KycKey = "email" | "phone" | "bvn" | "id" | "kin";
+const KYC_STEPS: { key: KycKey; label: string; icon: typeof Home }[] = [
+  { key: "email", label: "Email verification", icon: Mail },
+  { key: "phone", label: "Phone verification", icon: Phone },
+  { key: "bvn", label: "BVN verification", icon: Landmark },
+  { key: "id", label: "Government ID", icon: FileText },
+  { key: "kin", label: "Next of kin", icon: UserPlus }
+];
+
 function Profile() {
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [done, setDone] = useState<Record<KycKey, boolean>>({ email: true, phone: true, bvn: true, id: true, kin: false });
+  const [verifyOpen, setVerifyOpen] = useState(false);
+  const [form, setForm] = useState({ name: investor.name, email: "adaeze@mail.com", phone: "+234 803 000 1122" });
+
+  const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (f) setAvatar(URL.createObjectURL(f));
+  };
+  const completed = KYC_STEPS.filter((s) => done[s.key]).length;
+  const pct = Math.round((completed / KYC_STEPS.length) * 100);
+  const firstPending = KYC_STEPS.find((s) => !done[s.key])?.key ?? "email";
+
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Account" title="Your profile" sub="Personal details and verification." /></div>
+      <div className="npl-card"><PageHead eyebrow="Account" title="Your profile" sub="Personal details and verification."
+        action={pct < 100 && <button className="npl-btn npl-btn--primary" onClick={() => setVerifyOpen(true)}><ShieldCheck size={16} /> Complete verification</button>} /></div>
+
       <div className="npl-grid cols-2">
-        <div className="npl-card" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <span className="npl-avatar" style={{ width: 64, height: 64, fontSize: "1.4rem" }}>{investor.initials}</span>
+        <div className="npl-card" style={{ display: "flex", gap: "1.1rem", alignItems: "center" }}>
+          <div className="npl-avatar-edit">
+            {avatar ? <img src={avatar} alt="Your avatar" /> : <span className="npl-avatar">{investor.initials}</span>}
+            <button className="npl-avatar-edit__btn" onClick={() => fileRef.current?.click()} aria-label="Change photo"><Camera size={15} /></button>
+            <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPick} />
+          </div>
           <div>
-            <h3>{investor.name}</h3>
+            <h3>{form.name}</h3>
             <p style={{ color: "var(--c-muted)" }}>{investor.tier} · Since {investor.joined}</p>
-            <div style={{ marginTop: ".5rem", display: "flex", gap: ".4rem", flexWrap: "wrap" }}><span className="npl-badge blue">{investor.tier}</span><span className="npl-badge ok"><ShieldCheck size={12} /> Verified</span></div>
+            <div style={{ marginTop: ".5rem", display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
+              <span className="npl-badge blue">{investor.tier}</span>
+              <span className={`npl-badge ${pct === 100 ? "ok" : "warn"}`}>{pct === 100 ? <><ShieldCheck size={12} /> Verified</> : `${pct}% verified`}</span>
+            </div>
           </div>
         </div>
+
         <div className="npl-card">
-          <div className="npl-card__head"><div><h3>Verification & KYC</h3><p>Required for investments & payouts</p></div></div>
-          <div className="npl-grid" style={{ gap: ".6rem" }}>
-            {[["Email & phone", true], ["BVN verification", true], ["Government ID", true], ["Next of kin", false]].map(([l, done]) => (
-              <div className="npl-tree__row" key={l as string} style={{ justifyContent: "space-between" }}>
-                <span style={{ fontWeight: 700, color: "var(--c-ink)" }}>{l}</span>
-                <span className={`npl-badge ${done ? "ok" : "warn"}`}>{done ? <><Check size={12} /> Done</> : "Pending"}</span>
-              </div>
-            ))}
+          <div className="npl-card__head"><div><h3>Personal details</h3><p>Edit your account information</p></div></div>
+          <div className="npl-field"><label>Full name</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
+          <div className="npl-fieldrow">
+            <div className="npl-field"><label>Email</label><input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
+            <div className="npl-field"><label>Phone</label><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
           </div>
+          <button className="npl-btn npl-btn--primary" style={{ alignSelf: "flex-start" }}><Pencil size={15} /> Save changes</button>
         </div>
       </div>
+
+      <div className="npl-card">
+        <div className="npl-card__head"><div><h3>Verification & KYC</h3><p>Required for investments & payouts</p></div></div>
+        <div className="npl-progress" style={{ marginBottom: ".9rem" }}><i style={{ width: `${pct}%` }} /></div>
+        <div className="npl-grid" style={{ gap: ".6rem" }}>
+          {KYC_STEPS.map((s) => (
+            <div className="npl-tree__row" key={s.key} style={{ justifyContent: "space-between" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: ".6rem", fontWeight: 700, color: "var(--c-ink)" }}><span className="npl-lesson__ic" style={{ width: 30, height: 30 }}><s.icon size={15} /></span> {s.label}</span>
+              {done[s.key]
+                ? <span className="npl-badge ok"><Check size={12} /> Done</span>
+                : <button className="npl-btn npl-btn--ghost" style={{ padding: ".35rem .8rem", fontSize: ".8rem" }} onClick={() => setVerifyOpen(true)}>Verify</button>}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {verifyOpen && (
+        <VerificationDrawer
+          initialStep={firstPending}
+          done={done}
+          onClose={() => setVerifyOpen(false)}
+          onComplete={(key) => setDone((d) => ({ ...d, [key]: true }))}
+        />
+      )}
     </>
   );
 }
 
-/* ===================== BUY DRAWER ===================== */
-function BuyDrawer({ listing, onClose }: { listing: Listing; onClose: () => void }) {
-  const [plan, setPlan] = useState("Outright");
+/* ===================== VERIFICATION DRAWER ===================== */
+function VerificationDrawer({ initialStep, done, onClose, onComplete }: {
+  initialStep: KycKey; done: Record<KycKey, boolean>; onClose: () => void; onComplete: (k: KycKey) => void;
+}) {
+  const [active, setActive] = useState<KycKey>(initialStep);
+  const idx = KYC_STEPS.findIndex((s) => s.key === active);
+  const step = KYC_STEPS[idx];
+  const [idFile, setIdFile] = useState<string | null>(null);
+  const idRef = useRef<HTMLInputElement>(null);
+
+  const next = () => {
+    onComplete(active);
+    const remaining = KYC_STEPS.find((s, i) => i > idx && !done[s.key] && s.key !== active) ?? KYC_STEPS.find((s) => !done[s.key] && s.key !== active);
+    if (remaining) setActive(remaining.key);
+    else onClose();
+  };
+
   return (
     <div className="npl-drawer-overlay" onClick={onClose}>
       <div className="npl-drawer" onClick={(e) => e.stopPropagation()}>
-        <div className="npl-drawer__head"><div><h3>Invest — {listing.name}</h3><p>{listing.location}</p></div><button className="npl-icnbtn" onClick={onClose}><X size={18} /></button></div>
-        <img src={listing.img} alt={listing.name} style={{ width: "100%", height: 170, objectFit: "cover", borderRadius: 14 }} />
-        <div className="npl-grid cols-2" style={{ gap: ".7rem" }}>
-          <div className="npl-note"><span>Price from</span><br /><b>{naira(listing.price)}</b></div>
-          <div className="npl-note"><span>Expected return</span><br /><b>{listing.roi}</b></div>
-          <div className="npl-note"><span>Model</span><br /><b>{listing.model}</b></div>
-          <div className="npl-note"><span>Status</span><br /><b>{listing.status}</b></div>
+        <div className="npl-drawer__head"><div><h3>Verify {step.label.toLowerCase()}</h3><p>Step {idx + 1} of {KYC_STEPS.length} · KYC</p></div><button className="npl-icnbtn" onClick={onClose}><X size={18} /></button></div>
+
+        <div className="npl-steps">
+          {KYC_STEPS.map((s, i) => (
+            <div key={s.key} className={`npl-steps__item${i === idx ? " active" : ""}${done[s.key] ? " done" : ""}`}>
+              <span className="npl-steps__dot">{done[s.key] ? <Check size={14} /> : i + 1}</span>
+              {i < KYC_STEPS.length - 1 && <span className="npl-steps__line" />}
+            </div>
+          ))}
         </div>
-        <div className="npl-field"><label>Payment plan</label><select value={plan} onChange={(e) => setPlan(e.target.value)}><option>Outright</option><option>Installment (12 months)</option><option>Flex</option></select></div>
-        <div className="npl-field"><label>Units</label><input type="number" defaultValue={1} min={1} /></div>
-        <div className="npl-note"><b>Verified asset</b><br /><span>Title documents, location data and inspection media reviewed by NRFFN.</span></div>
-        <button className="npl-btn npl-btn--success" style={{ width: "100%" }} onClick={onClose}><ShieldCheck size={16} /> Proceed to checkout</button>
+
+        {active === "email" && (
+          <>
+            <div className="npl-field"><label>Email address</label><input type="email" defaultValue="adaeze@mail.com" /></div>
+            <div className="npl-field"><label>Email verification code</label><input placeholder="000000" inputMode="numeric" style={{ letterSpacing: ".35em", textAlign: "center" }} /></div>
+            <small style={{ color: "var(--c-muted)" }}>Didn&apos;t get it? <b style={{ color: "var(--c-royal)" }}>Resend code</b></small>
+          </>
+        )}
+        {active === "phone" && (
+          <>
+            <div className="npl-field"><label>Phone number</label><input defaultValue="+234 803 000 1122" /></div>
+            <div className="npl-field"><label>SMS verification code</label><input placeholder="000000" inputMode="numeric" style={{ letterSpacing: ".35em", textAlign: "center" }} /></div>
+            <small style={{ color: "var(--c-muted)" }}>Use a phone number that can receive payout and allocation alerts.</small>
+          </>
+        )}
+        {active === "bvn" && (
+          <>
+            <div className="npl-field"><label>Bank Verification Number (BVN)</label><input placeholder="22XXXXXXXXX" maxLength={11} /></div>
+            <div className="npl-field"><label>Date of birth</label><input type="date" /></div>
+            <div className="npl-note"><b>Why we ask</b><br /><span>Your BVN confirms your identity with your bank. We never store your banking PIN.</span></div>
+          </>
+        )}
+        {active === "id" && (
+          <>
+            <div className="npl-field"><label>ID type</label><select><option>National ID (NIN)</option><option>International passport</option><option>Driver&apos;s licence</option><option>Voter&apos;s card</option></select></div>
+            <div className="npl-field"><label>ID number</label><input placeholder="Enter ID number" /></div>
+            <label className={`npl-upload${idFile ? " has-file" : ""}`} onClick={() => idRef.current?.click()}>
+              {idFile ? <><Check size={22} /><b>{idFile}</b><small>Tap to replace</small></> : <><Upload size={22} /><b>Upload a photo of your ID</b><small>JPG or PNG, up to 5MB</small></>}
+              <input ref={idRef} type="file" accept="image/*" hidden onChange={(e) => setIdFile(e.target.files?.[0]?.name ?? null)} />
+            </label>
+          </>
+        )}
+        {active === "kin" && (
+          <>
+            <div className="npl-field"><label>Next of kin full name</label><input placeholder="Full name" /></div>
+            <div className="npl-fieldrow">
+              <div className="npl-field"><label>Relationship</label><select><option>Spouse</option><option>Parent</option><option>Sibling</option><option>Child</option><option>Other</option></select></div>
+              <div className="npl-field"><label>Phone</label><input placeholder="+234..." /></div>
+            </div>
+            <div className="npl-field"><label>Address</label><textarea rows={2} placeholder="Residential address" /></div>
+          </>
+        )}
+
+        <button className="npl-btn npl-btn--primary npl-btn--block" onClick={next}>
+          <Check size={16} /> {KYC_STEPS.filter((s) => !done[s.key] && s.key !== active).length ? "Verify & continue" : "Finish verification"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ===================== CHECKOUT DRAWER ===================== */
+const PAY_METHODS: { id: string; label: string; sub: string; icon: typeof Home }[] = [
+  { id: "Card", label: "Debit / Credit card", sub: "Pay instantly with your card", icon: CreditCard },
+  { id: "Bank transfer", label: "Bank transfer", sub: "Transfer to a one-time account", icon: Landmark },
+  { id: "Wallet", label: "NRFFN wallet", sub: `Balance ${naira(wallet.available)}`, icon: Wallet },
+  { id: "USSD", label: "USSD", sub: "Pay from any phone, *737#", icon: Smartphone }
+];
+
+const STEP_LABELS = ["Details", "Payment", "Receipt"];
+function Stepper({ step }: { step: number }) {
+  return (
+    <div className="npl-steps">
+      {STEP_LABELS.map((label, i) => (
+        <div key={label} className={`npl-steps__item${i === step ? " active" : ""}${i < step ? " done" : ""}`}>
+          <span className="npl-steps__dot">{i < step ? <Check size={14} /> : i + 1}</span>
+          <span className="npl-steps__label">{label}</span>
+          {i < STEP_LABELS.length - 1 && <span className="npl-steps__line" />}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BuyDrawer({ listing, onClose }: { listing: Listing; onClose: () => void }) {
+  const [step, setStep] = useState(0);
+  const [plan, setPlan] = useState("Outright");
+  const [units, setUnits] = useState(1);
+  const [method, setMethod] = useState("Card");
+  const reference = useRef("NRF-" + Math.random().toString(36).slice(2, 8).toUpperCase()).current;
+
+  const dueNow = plan === "Outright" ? listing.price * units : Math.round(listing.price * units * 0.3);
+  const planNote = plan === "Outright" ? "Full payment" : plan === "Flex" ? "Flexible monthly" : "30% deposit, balance over 12 months";
+  const receipt = {
+    reference, date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+    investorName: investor.name, property: listing.name, location: listing.location,
+    model: listing.model, plan, paymentMethod: method, units, amount: dueNow
+  };
+
+  return (
+    <div className="npl-drawer-overlay" onClick={onClose}>
+      <div className="npl-drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="npl-drawer__head">
+          <div><h3>{step === 2 ? "Payment confirmed" : `Invest — ${listing.name}`}</h3><p>{listing.location}</p></div>
+          <button className="npl-icnbtn" onClick={onClose}><X size={18} /></button>
+        </div>
+
+        {step < 2 && <Stepper step={step} />}
+
+        {step === 0 && (
+          <>
+            <img src={listing.img} alt={listing.name} style={{ width: "100%", height: 160, objectFit: "cover", borderRadius: 14 }} />
+            <div className="npl-grid cols-2" style={{ gap: ".7rem" }}>
+              <div className="npl-note"><span>Price per unit</span><br /><b>{naira(listing.price)}</b></div>
+              <div className="npl-note"><span>Expected return</span><br /><b>{listing.roi}</b></div>
+            </div>
+            <div className="npl-field"><label>Payment plan</label>
+              <select value={plan} onChange={(e) => setPlan(e.target.value)}>
+                <option>Outright</option><option>Installment (12 months)</option><option>Flex</option>
+              </select>
+            </div>
+            <div className="npl-field"><label>Units</label>
+              <input type="number" value={units} min={1} onChange={(e) => setUnits(Math.max(1, Number(e.target.value) || 1))} />
+            </div>
+            <div className="npl-summary">
+              <div className="npl-summary__row"><span>Total value</span><b>{naira(listing.price * units)}</b></div>
+              <div className="npl-summary__row"><span>Plan</span><b>{planNote}</b></div>
+              <div className="npl-summary__row"><span>Due now</span><b style={{ color: "var(--c-royal)" }}>{naira(dueNow)}</b></div>
+            </div>
+            <button className="npl-btn npl-btn--success npl-btn--block" onClick={() => setStep(1)}>Continue to payment <ArrowRight size={16} /></button>
+          </>
+        )}
+
+        {step === 1 && (
+          <>
+            <div className="npl-summary">
+              <div className="npl-summary__row"><span>{listing.name} × {units}</span><b>{naira(listing.price * units)}</b></div>
+              <div className="npl-summary__row"><span>Due now ({plan})</span><b style={{ color: "var(--c-royal)" }}>{naira(dueNow)}</b></div>
+            </div>
+            <div className="npl-field" style={{ gap: ".55rem" }}>
+              <label>Choose a payment method</label>
+              <div className="npl-optgrid">
+                {PAY_METHODS.map((m) => (
+                  <button key={m.id} className={`npl-opttile${method === m.id ? " active" : ""}`} onClick={() => setMethod(m.id)}>
+                    <span className="npl-opttile__ic"><m.icon size={19} /></span>
+                    <span><b>{m.label}</b><small>{m.sub}</small></span>
+                    {method === m.id && <Check size={18} className="npl-opttile__check" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="npl-note"><b>Secure mock checkout</b><br /><span>No real charge is made. This demonstrates the NRFFN payment flow.</span></div>
+            <div style={{ display: "flex", gap: ".6rem" }}>
+              <button className="npl-btn npl-btn--ghost" onClick={() => setStep(0)}><ArrowLeft size={16} /> Back</button>
+              <button className="npl-btn npl-btn--success" style={{ flex: 1, justifyContent: "center" }} onClick={() => setStep(2)}><ShieldCheck size={16} /> Pay {naira(dueNow)}</button>
+            </div>
+          </>
+        )}
+
+        {step === 2 && (
+          <>
+            <div className="npl-success">
+              <span className="npl-success__badge"><Check size={36} /></span>
+              <h3>Investment confirmed</h3>
+              <p>Your payment of {naira(dueNow)} via {method} was successful.</p>
+            </div>
+            <div className="npl-summary">
+              <div className="npl-summary__row"><span>Reference</span><b>{reference}</b></div>
+              <div className="npl-summary__row"><span>Property</span><b>{listing.name}</b></div>
+              <div className="npl-summary__row"><span>Units</span><b>{units}</b></div>
+              <div className="npl-summary__row"><span>Amount paid</span><b>{naira(dueNow)}</b></div>
+              <div className="npl-summary__row"><span>Method</span><b>{method}</b></div>
+            </div>
+            <button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => downloadReceipt(receipt)}><Download size={16} /> Download receipt (PDF)</button>
+            <button className="npl-btn npl-btn--ghost npl-btn--block" onClick={onClose}>Done</button>
+          </>
+        )}
       </div>
     </div>
   );

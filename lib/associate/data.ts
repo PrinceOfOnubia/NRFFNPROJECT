@@ -171,6 +171,28 @@ export const courses: Course[] = [
 
 export const academyStats = { completed: 1, inProgress: 2, certificates: 1, hours: 12 };
 
+/* Lessons are generated per course from its lesson count (mock outline) */
+const LESSON_TITLES = [
+  "Introduction & overview", "Core principles", "Market fundamentals", "Working with clients",
+  "Practical frameworks", "Tools & templates", "Case study walkthrough", "Negotiation tactics",
+  "Closing the deal", "Compliance & documentation", "Scaling your pipeline", "Final review"
+];
+export type Lesson = { n: number; title: string; duration: string; done: boolean };
+export function lessonsFor(course: Course): Lesson[] {
+  const completedCount = Math.round((course.progress / 100) * course.lessons);
+  return Array.from({ length: course.lessons }, (_, i) => ({
+    n: i + 1,
+    title: LESSON_TITLES[i % LESSON_TITLES.length],
+    duration: `${8 + ((i * 3) % 14)}m`,
+    done: i < completedCount
+  }));
+}
+
+export type Certificate = { id: string; course: string; issued: string; credentialId: string };
+export const certificates: Certificate[] = [
+  { id: "cert1", course: "Real Estate Sales Mastery", issued: "12 Jun 2026", credentialId: "NRFFN-RSM-204815" }
+];
+
 export const quiz = {
   course: "Real Estate Sales Mastery",
   question: "What is the most important step before closing a property sale?",

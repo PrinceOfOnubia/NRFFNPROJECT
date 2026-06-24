@@ -93,26 +93,13 @@ export const installments: Installment[] = [
   { n: 9, due: "Due 12 Aug", amount: 250_000, paid: false }
 ];
 
-export type Doc = {
-  id: string;
-  name: string;
-  type: string;
-  date: string;
-  property: string;
-  ownership: string;
-  unit: string;
-  reference: string;
-  investmentStatus: "Successful" | "Pending";
-  availability: string;
-  locked?: boolean;
-};
+export type Doc = { id: string; name: string; type: string; date: string; property: string };
 export const documents: Doc[] = [
-  { id: "d1", name: "Payment receipt", type: "Receipt", date: "20 Mar 2026", property: "Emerald Heights", ownership: "Full Ownership", unit: "600sqm · 1 unit", reference: "NRF-2026-5962508", investmentStatus: "Successful", availability: "Available now" },
-  { id: "d2", name: "Payment schedule", type: "Schedule", date: "20 Mar 2026", property: "Emerald Heights", ownership: "Full Ownership", unit: "600sqm · 1 unit", reference: "NRF-2026-5962508", investmentStatus: "Successful", availability: "3 payment records" },
-  { id: "d3", name: "Allocation letter", type: "Allocation", date: "20 Mar 2026", property: "Emerald Heights", ownership: "Full Ownership", unit: "600sqm · 1 unit", reference: "NRF-2026-5962508", investmentStatus: "Successful", availability: "Available after allocation", locked: true },
-  { id: "d4", name: "Payment receipt", type: "Receipt", date: "08 Feb 2026", property: "Sterling Apartments", ownership: "Co-Ownership", unit: "6 shares", reference: "NRF-2026-5931875", investmentStatus: "Pending", availability: "Available now" },
-  { id: "d5", name: "Payment schedule", type: "Schedule", date: "08 Feb 2026", property: "Sterling Apartments", ownership: "Co-Ownership", unit: "6 shares", reference: "NRF-2026-5931875", investmentStatus: "Pending", availability: "1 payment records" },
-  { id: "d6", name: "Allocation letter", type: "Allocation", date: "08 Feb 2026", property: "Sterling Apartments", ownership: "Co-Ownership", unit: "6 shares", reference: "NRF-2026-5931875", investmentStatus: "Pending", availability: "Available after allocation", locked: true }
+  { id: "d1", name: "Allocation Letter — Emerald 14B", type: "Allocation", date: "20 Mar 2026", property: "Emerald Heights" },
+  { id: "d2", name: "Payment Receipt — ₦28,000,000", type: "Receipt", date: "20 Mar 2026", property: "Emerald Heights" },
+  { id: "d3", name: "Co-Ownership Agreement", type: "Contract", date: "08 Feb 2026", property: "Sterling Apartments" },
+  { id: "d4", name: "Certificate of Ownership", type: "Certificate", date: "22 Mar 2026", property: "Emerald Heights" },
+  { id: "d5", name: "Survey Plan — Greenfield", type: "Survey", date: "15 Jan 2026", property: "Greenfield Plots" }
 ];
 
 export const clientNotifications = [

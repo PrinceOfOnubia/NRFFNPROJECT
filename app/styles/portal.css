@@ -378,9 +378,25 @@
 @media (max-width: 920px) {
   .npl-side { width: min(var(--side-w), calc(100vw - 3rem)); visibility: hidden; }
   .npl-shell.open .npl-side { visibility: visible; }
-  .npl-top { gap: .65rem; padding: .8rem 1rem; }
+  .npl-top {
+    grid-template-columns: 48px minmax(0, 1fr) 46px 46px;
+    min-height: 88px;
+    gap: .65rem;
+    padding: .8rem 1rem;
+  }
   .npl-top__wallet,.npl-pill-user span:not(.npl-avatar) { display: none; }
   .npl-pill-user { padding: .25rem; border: 0; background: transparent; }
+  .npl-top .npl-icnbtn,
+  .npl-top .npl-pill-user {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+  }
+  .npl-top .npl-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: .9rem;
+  }
 }
 @media (max-width: 720px) {
   .npl-content { gap: 1rem; padding: 1rem 1rem calc(92px + env(safe-area-inset-bottom)); }
@@ -396,241 +412,98 @@
   .npl-mobnav { padding-bottom: calc(.5rem + env(safe-area-inset-bottom)); }
 }
 
-/* ---------- Screenshot QA refinement pass ---------- */
-.npl-top {
-  min-height: 84px;
-  gap: .9rem;
-}
-.npl-top > div:first-of-type { min-width: 0; }
-.npl-top h1,
-.npl-top__sub {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.npl-icnbtn {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-}
-.npl-avatar {
-  width: 38px;
-  height: 38px;
-  font-size: .9rem;
-}
-.npl-wallet-actions {
-  display: flex;
-  gap: .6rem;
-  flex-wrap: wrap;
-}
-.npl-docgroups {
-  display: grid;
-  gap: 1rem;
-}
-.npl-docgroup {
-  background: #fff;
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-lg);
-  padding: 1.2rem;
-  box-shadow: var(--shadow-sm);
-}
-.npl-docgroup > header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-.npl-docgroup header span {
-  display: block;
-  margin-bottom: .2rem;
-  color: var(--c-muted);
-  font-size: .72rem;
-  font-weight: 900;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-.npl-docgroup h3 {
-  font-size: 1.15rem;
-}
-.npl-docgroup header p {
-  color: var(--c-muted);
-  font-size: .88rem;
-  margin-top: .2rem;
-}
-.npl-docgroup header i {
-  flex: 0 0 auto;
-  font-style: normal;
-  border-radius: var(--r-pill);
-  padding: .32rem .72rem;
-  font-size: .76rem;
-  font-weight: 900;
-}
-.npl-docgroup header i.ok {
-  background: var(--ok-soft);
-  color: var(--ok);
-}
-.npl-docgroup header i.warn {
-  background: var(--warn-soft);
-  color: var(--warn);
-}
-.npl-doccards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: .75rem;
-}
-.npl-doccard {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: .75rem;
-  width: 100%;
-  min-height: 76px;
-  padding: .8rem;
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-md);
-  background: #fff;
-  color: var(--c-ink);
-  text-align: left;
-}
-.npl-doccard > span {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  background: var(--c-cream);
-  color: var(--c-royal);
-}
-.npl-doccard b {
-  display: block;
-  color: var(--c-ink);
-  font-size: .95rem;
-}
-.npl-doccard small {
-  display: block;
-  color: var(--c-muted);
-  font-size: .78rem;
-  margin-top: .1rem;
-}
-.npl-doccard.locked {
-  opacity: .72;
-}
+/* =========================================================
+   NRFFN — added components (gallery, checkout, verification,
+   profile editing, academy, admin forms)
+   ========================================================= */
 
-@media (max-width: 920px) {
-  .npl-side {
-    height: 100dvh;
-    max-height: 100dvh;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding-bottom: calc(1.4rem + env(safe-area-inset-bottom));
-  }
-  .npl-side__foot {
-    margin-top: 1rem;
-    padding-top: .7rem;
-  }
-  .npl-top {
-    display: grid;
-    grid-template-columns: 48px minmax(0, 1fr) 46px 46px;
-    min-height: 88px;
-    gap: .7rem;
-    align-items: center;
-    padding: .85rem 1rem;
-  }
-  .npl-top > div:first-of-type {
-    grid-column: 2;
-  }
-  .npl-top h1 { font-size: 1.45rem; }
-  .npl-top__sub { font-size: .9rem; }
-  .npl-top .npl-icnbtn,
-  .npl-top .npl-pill-user {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-  }
-  .npl-top .npl-pill-user {
-    display: grid;
-    place-items: center;
-    padding: 0;
-    border: 0;
-    background: transparent;
-  }
-  .npl-top .npl-avatar {
-    width: 44px;
-    height: 44px;
-    font-size: .9rem;
-  }
-  .npl-side .npl-nav[data-page="Academy"] {
-    display: none;
-  }
-}
+/* ---- Property image carousel ---- */
+.npl-gallery { display: flex; flex-direction: column; gap: .7rem; margin-top: 1rem; }
+.npl-gallery__stage { position: relative; border-radius: 14px; overflow: hidden; background: #071f44; aspect-ratio: 16/9; }
+.npl-gallery__stage > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.npl-gallery__arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 999px; border: 0; background: rgba(255,255,255,.92); color: #071f44; display: grid; place-items: center; cursor: pointer; box-shadow: 0 4px 14px rgba(7,31,68,.25); transition: background .15s, transform .15s; }
+.npl-gallery__arrow:hover { background: #fff; }
+.npl-gallery__arrow.left { left: .8rem; } .npl-gallery__arrow.right { right: .8rem; }
+.npl-gallery__zoom { position: absolute; top: .8rem; right: .8rem; width: 36px; height: 36px; border-radius: 10px; border: 0; background: rgba(7,31,68,.55); color: #fff; display: grid; place-items: center; cursor: pointer; }
+.npl-gallery__count { position: absolute; bottom: .8rem; right: .9rem; background: rgba(7,31,68,.62); color: #fff; font-size: .75rem; font-weight: 700; padding: .25rem .6rem; border-radius: 999px; }
+.npl-gallery__dots { position: absolute; bottom: .85rem; left: 50%; transform: translateX(-50%); display: flex; gap: .4rem; }
+.npl-gallery__dots button { width: 8px; height: 8px; border-radius: 999px; border: 0; background: rgba(255,255,255,.5); cursor: pointer; padding: 0; }
+.npl-gallery__dots button.active { background: #e6c158; width: 22px; }
+.npl-gallery__thumbs { display: flex; gap: .55rem; overflow-x: auto; padding-bottom: .2rem; }
+.npl-gallery__thumb { flex: 0 0 92px; height: 64px; border-radius: 10px; overflow: hidden; border: 2px solid transparent; cursor: pointer; padding: 0; background: none; }
+.npl-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.npl-gallery__thumb.active { border-color: #1046a3; }
+.npl-gallery__lightbox { position: fixed; inset: 0; z-index: 120; background: rgba(7,31,68,.92); display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; }
+.npl-gallery__lightbox img { max-width: 86vw; max-height: 84vh; object-fit: contain; border-radius: 10px; }
+.npl-gallery__close { position: absolute; top: 1.2rem; right: 1.2rem; width: 44px; height: 44px; border-radius: 999px; border: 0; background: rgba(255,255,255,.15); color: #fff; cursor: pointer; display: grid; place-items: center; }
 
-@media (max-width: 720px) {
-  .npl-wallet-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-  }
-  .npl-card > .npl-btn,
-  .npl-card__head .npl-btn,
-  .npl-property-actions .npl-btn,
-  .npl-wallet-actions .npl-btn {
-    width: 100%;
-  }
-  .npl-refbox {
-    display: grid;
-    grid-template-columns: minmax(118px, 36%) minmax(0, 1fr);
-    align-items: center;
-    justify-items: stretch;
-    gap: 1rem;
-  }
-  .npl-qr {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
-    justify-self: start;
-  }
-  .npl-linkfield {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(98px, .42fr);
-    padding: .55rem;
-    border-radius: 999px;
-  }
-  .npl-linkfield input {
-    width: 100%;
-    padding: .25rem .45rem;
-    text-align: left;
-  }
-  .npl-share {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .npl-share a,
-  .npl-share button {
-    width: 100%;
-    justify-content: center;
-    padding-inline: .45rem;
-    min-height: 42px;
-  }
-  .npl-docgroup {
-    padding: 1rem;
-  }
-  .npl-docgroup > header {
-    align-items: flex-start;
-  }
-  .npl-doccards {
-    grid-template-columns: 1fr;
-  }
-  .npl-doccard {
-    min-height: 72px;
-  }
-}
+/* ---- Stepper (checkout / verification) ---- */
+.npl-steps { display: flex; align-items: center; gap: .4rem; margin: .2rem 0 .4rem; }
+.npl-steps__item { display: flex; align-items: center; gap: .45rem; flex: 1; }
+.npl-steps__dot { width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center; font-size: .78rem; font-weight: 800; background: var(--c-cream-2); color: var(--c-muted); flex: 0 0 auto; }
+.npl-steps__item.active .npl-steps__dot { background: var(--c-royal); color: #fff; }
+.npl-steps__item.done .npl-steps__dot { background: var(--c-green); color: #fff; }
+.npl-steps__label { font-size: .74rem; font-weight: 700; color: var(--c-muted); white-space: nowrap; }
+.npl-steps__item.active .npl-steps__label { color: var(--c-ink); }
+.npl-steps__line { flex: 1; height: 2px; background: var(--c-line); }
+
+/* ---- Selectable option tiles (payment methods / plans) ---- */
+.npl-optgrid { display: grid; gap: .6rem; }
+.npl-opttile { display: flex; align-items: center; gap: .8rem; padding: .9rem 1rem; border: 1.5px solid var(--c-line); border-radius: var(--r-md); background: #fff; cursor: pointer; text-align: left; width: 100%; font-family: inherit; transition: border-color .15s, background .15s; }
+.npl-opttile:hover { border-color: var(--c-royal); }
+.npl-opttile.active { border-color: var(--c-royal); background: #eef4ff; }
+.npl-opttile__ic { width: 40px; height: 40px; border-radius: 10px; background: var(--c-cream-2); color: var(--c-royal); display: grid; place-items: center; flex: 0 0 auto; }
+.npl-opttile.active .npl-opttile__ic { background: var(--c-royal); color: #fff; }
+.npl-opttile b { display: block; color: var(--c-ink); font-size: .92rem; }
+.npl-opttile small { color: var(--c-muted); font-size: .78rem; }
+.npl-opttile__check { margin-left: auto; color: var(--c-royal); }
+
+/* ---- Success / confirmation panel ---- */
+.npl-success { text-align: center; padding: 1rem 0; }
+.npl-success__badge { width: 72px; height: 72px; border-radius: 999px; background: var(--c-green-soft); color: var(--c-green); display: grid; place-items: center; margin: 0 auto 1rem; }
+.npl-success h3 { font-size: 1.3rem; margin-bottom: .35rem; }
+.npl-success p { color: var(--c-muted); }
+.npl-summary { border: 1px solid var(--c-line); border-radius: var(--r-md); overflow: hidden; }
+.npl-summary__row { display: flex; justify-content: space-between; padding: .7rem .9rem; font-size: .88rem; }
+.npl-summary__row:not(:last-child) { border-bottom: 1px solid var(--c-line); }
+.npl-summary__row span { color: var(--c-muted); } .npl-summary__row b { color: var(--c-ink); }
+
+/* ---- Avatar editing ---- */
+.npl-avatar-edit { position: relative; width: 86px; height: 86px; flex: 0 0 auto; }
+.npl-avatar-edit .npl-avatar, .npl-avatar-edit img { width: 86px; height: 86px; font-size: 1.7rem; border-radius: 999px; object-fit: cover; }
+.npl-avatar-edit__btn { position: absolute; bottom: -2px; right: -2px; width: 30px; height: 30px; border-radius: 999px; border: 2px solid #fff; background: var(--c-royal); color: #fff; display: grid; place-items: center; cursor: pointer; }
+
+/* ---- File upload dropzone ---- */
+.npl-upload { border: 1.5px dashed var(--c-line); border-radius: var(--r-md); padding: 1.1rem; text-align: center; color: var(--c-muted); cursor: pointer; display: block; transition: border-color .15s, background .15s; }
+.npl-upload:hover { border-color: var(--c-royal); background: var(--c-cream); }
+.npl-upload b { display: block; color: var(--c-ink); margin-top: .4rem; font-size: .9rem; }
+.npl-upload small { font-size: .76rem; }
+.npl-upload.has-file { border-style: solid; border-color: var(--c-green); background: var(--c-green-soft); color: var(--c-green); }
+
+/* ---- Certificate card ---- */
+.npl-cert { border: 1px solid var(--c-line); border-radius: var(--r-md); overflow: hidden; background: #fff; }
+.npl-cert__top { background: linear-gradient(150deg,#071f44,#1046a3); color: #fff; padding: 1.2rem; position: relative; }
+.npl-cert__top span.eyebrow { color: #e6c158; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 800; }
+.npl-cert__top h3 { color: #fff; margin: .35rem 0; font-size: 1.05rem; }
+.npl-cert__seal { position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; border-radius: 999px; background: rgba(230,193,88,.2); color: #e6c158; display: grid; place-items: center; }
+.npl-cert__body { padding: 1rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+.npl-cert__body small { color: var(--c-muted); }
+
+/* ---- Course detail lessons ---- */
+.npl-lesson { display: flex; align-items: center; gap: .8rem; padding: .8rem .9rem; border: 1px solid var(--c-line); border-radius: var(--r-sm); background: #fff; }
+.npl-lesson__ic { width: 34px; height: 34px; border-radius: 8px; background: var(--c-cream-2); color: var(--c-royal); display: grid; place-items: center; flex: 0 0 auto; }
+.npl-lesson.done .npl-lesson__ic { background: var(--c-green-soft); color: var(--c-green); }
+.npl-lesson b { color: var(--c-ink); font-size: .9rem; display: block; }
+.npl-lesson small { color: var(--c-muted); font-size: .76rem; }
+.npl-lesson__time { margin-left: auto; color: var(--c-muted); font-size: .8rem; font-weight: 700; }
+
+.npl-btn--block { width: 100%; justify-content: center; }
+.npl-fieldrow { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+@media (max-width: 520px) { .npl-fieldrow { grid-template-columns: 1fr; } }
 
 @media (max-width: 430px) {
   .npl-top {
     grid-template-columns: 46px minmax(0, 1fr) 44px 44px;
-    gap: .55rem;
-    padding-inline: .8rem;
   }
   .npl-top .npl-icnbtn,
   .npl-top .npl-pill-user {
@@ -640,31 +513,5 @@
   .npl-top .npl-avatar {
     width: 42px;
     height: 42px;
-  }
-  .npl-top h1 { font-size: 1.25rem; }
-  .npl-top__sub { font-size: .78rem; }
-  .npl-share { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 720px) {
-  .npl-overview-hero {
-    padding: 1.2rem !important;
-  }
-  .npl-overview-hero h2 {
-    font-size: clamp(1.85rem, 8vw, 2.55rem) !important;
-    line-height: 1.06 !important;
-  }
-  .npl-overview-hero p {
-    font-size: 1.05rem !important;
-    line-height: 1.45 !important;
-  }
-  .npl-hero-actions {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    width: 100%;
-  }
-  .npl-hero-actions .npl-btn {
-    width: 100%;
-    min-height: 58px;
   }
 }

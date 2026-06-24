@@ -4,15 +4,17 @@ import { useState } from "react";
 import {
   Award, Bell, Building2, ChevronRight, Clock3, Copy, Crown, Download, GraduationCap,
   Home, LayoutGrid, LogOut, MapPin, Menu, MessageCircle, Play, Plus, Search, Share2,
-  ShieldCheck, Target, Trophy, Users, Wallet, X, Check, TrendingUp, Star, Lock, Plane, Gift
+  ShieldCheck, Target, Trophy, Users, Wallet, X, Check, TrendingUp, Star, Lock, Plane, Gift,
+  ArrowLeft, ArrowRight, FileCheck, PlayCircle, Eye
 } from "lucide-react";
 import {
   naira, member, ranks, rankProgress, commissionLevels, earningsBreakdown, wallet,
   transactions, leads, leadStages, team, referralStats, courses, academyStats, quiz,
-  notifications, funnel, weeklyEarnings, type Lead
+  notifications, funnel, weeklyEarnings, certificates, lessonsFor, type Lead, type Course
 } from "../../lib/associate/data";
 import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
 import { propertySlug } from "../../lib/property-catalog";
+import { downloadCertificate } from "../../lib/pdf";
 
 type PageKey =
   | "Overview" | "Earnings" | "Referrals" | "CRM" | "Academy"
@@ -47,7 +49,7 @@ const SUBTITLE: Record<PageKey, string> = {
 export default function AssociateApp({ initialPage = "Overview" }: { initialPage?: PageKey }) {
   const [page, setPage] = useState<PageKey>(initialPage);
   const [open, setOpen] = useState(false);
-  const [drawer, setDrawer] = useState<null | "withdraw" | "lead">(null);
+  const [drawer, setDrawer] = useState<null | "withdraw" | "lead" | "addlead">(null);
   const [activeLead, setActiveLead] = useState<Lead | null>(null);
   const [panel, setPanel] = useState<PortalPanel>(null);
 
@@ -74,7 +76,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
             <div key={grp.label}>
               <div className="npl-side__group">{grp.label}</div>
               {grp.items.map(([label, Icon]) => (
-                <button key={label} data-page={label} className={`npl-nav${page === label ? " active" : ""}`} onClick={() => go(label)}>
+                <button key={label} className={`npl-nav${page === label ? " active" : ""}`} onClick={() => go(label)}>
                   <Icon size={19} /> <span>{label}</span>
                   {label === "Notifications" && unread > 0 && <span className="npl-nav__badge">{unread}</span>}
                 </button>
@@ -82,7 +84,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
             </div>
           ))}
           <div className="npl-side__foot">
-            <a href="/" className="npl-nav"><LogOut size={19} /> <span>Sign out</span></a>
+            <a href="/" className="npl-nav"><LogOut size={19} /> <span>Exit portal</span></a>
           </div>
         </aside>
 
@@ -114,7 +116,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
             {page === "Overview" && <Overview go={go} onWithdraw={() => setDrawer("withdraw")} />}
             {page === "Earnings" && <Earnings onWithdraw={() => setDrawer("withdraw")} />}
             {page === "Referrals" && <Referrals />}
-            {page === "CRM" && <CRM onOpen={openLead} />}
+            {page === "CRM" && <CRM onOpen={openLead} onAdd={() => setDrawer("addlead")} />}
             {page === "Academy" && <Academy />}
             {page === "Incentives" && <Incentives />}
             {page === "Team" && <Team_ />}
@@ -127,7 +129,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
 
       {/* MOBILE BOTTOM NAV */}
       <nav className="npl-mobnav">
-        {(["Overview", "CRM", "Earnings", "Referrals", "Profile"] as PageKey[]).map((p) => {
+        {(["Overview", "CRM", "Earnings", "Referrals", "Academy"] as PageKey[]).map((p) => {
           const Icon = NAV.find((n) => n[0] === p)![1];
           return (
             <button key={p} className={page === p ? "active" : ""} onClick={() => go(p)}>
@@ -140,6 +142,7 @@ export default function AssociateApp({ initialPage = "Overview" }: { initialPage
       {/* DRAWERS */}
       {drawer === "withdraw" && <WithdrawDrawer onClose={() => setDrawer(null)} />}
       {drawer === "lead" && activeLead && <LeadDrawer lead={activeLead} onClose={() => setDrawer(null)} />}
+      {drawer === "addlead" && <AddLeadDrawer onClose={() => setDrawer(null)} />}
       <PortalDrawers panel={panel} onClose={() => setPanel(null)} name={member.name} initials={member.initials} role="Realtor Member" />
     </div>
   );
@@ -191,13 +194,13 @@ const tempClass = (t: string) => (t === "Hot" ? "hot" : t === "Warm" ? "warn" : 
 function Overview({ go, onWithdraw }: { go: (p: PageKey) => void; onWithdraw: () => void }) {
   return (
     <>
-      <div className="npl-card npl-overview-hero" style={{ background: "linear-gradient(150deg,#071f44,#0a3476 55%,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
+      <div className="npl-card" style={{ background: "linear-gradient(150deg,#071f44,#0a3476 55%,#1046a3)", color: "#fff", border: "none", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
         <div>
           <span style={{ fontSize: ".74rem", letterSpacing: ".12em", textTransform: "uppercase", color: "#e6c158", fontWeight: 800 }}>Good morning, {member.name.split(" ")[0]}</span>
           <h2 style={{ color: "#fff", fontSize: "1.7rem", margin: ".4rem 0" }}>You&apos;re {Math.round((rankProgress.volume / rankProgress.target) * 100)}% to {rankProgress.next}</h2>
           <p style={{ color: "rgba(255,255,255,.78)" }}>{naira(rankProgress.volume)} of {naira(rankProgress.target)} team volume · Rank: {member.rank}</p>
         </div>
-        <div className="npl-hero-actions" style={{ display: "flex", gap: ".7rem", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: ".7rem", flexWrap: "wrap" }}>
           <button className="npl-btn npl-btn--primary" onClick={() => go("Referrals")}><Share2 size={16} /> Share link</button>
           <button className="npl-btn npl-btn--ghost" onClick={onWithdraw}><Wallet size={16} /> Withdraw</button>
         </div>
@@ -375,10 +378,10 @@ function Referrals() {
 }
 
 /* ============================== CRM ============================== */
-function CRM({ onOpen }: { onOpen: (l: Lead) => void }) {
+function CRM({ onOpen, onAdd }: { onOpen: (l: Lead) => void; onAdd: () => void }) {
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Sales CRM" title="Lead management" sub="Track every prospect from first interest to closed sale." action={<button className="npl-btn npl-btn--primary"><Plus size={16} /> Add lead</button>} /></div>
+      <div className="npl-card"><PageHead eyebrow="Sales CRM" title="Lead management" sub="Track every prospect from first interest to closed sale." action={<button className="npl-btn npl-btn--primary" onClick={onAdd}><Plus size={16} /> Add lead</button>} /></div>
       <div className="npl-grid cols-4">
         <Metric icon={Target} label="Active leads" value={String(leads.length)} variant="royal" />
         <Metric icon={MessageCircle} label="Hot leads" value={String(leads.filter((l) => l.temp === "Hot").length)} variant="gold" />
@@ -407,49 +410,159 @@ function CRM({ onOpen }: { onOpen: (l: Lead) => void }) {
 }
 
 /* ============================== ACADEMY ============================== */
+type AcademyView = { kind: "list" } | { kind: "course"; course: Course } | { kind: "certs" };
+
 function Academy() {
-  const [picked, setPicked] = useState<number | null>(null);
+  const [view, setView] = useState<AcademyView>({ kind: "list" });
+
+  if (view.kind === "course") return <CourseDetail course={view.course} onBack={() => setView({ kind: "list" })} onCertificates={() => setView({ kind: "certs" })} />;
+  if (view.kind === "certs") return <Certificates onBack={() => setView({ kind: "list" })} />;
+
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="NRFFN Academy" title="Learn · Earn · Grow" sub="Video courses, certification and progress tracking." /></div>
+      <div className="npl-card"><PageHead eyebrow="NRFFN Academy" title="Learn · Earn · Grow" sub="Video courses, certification and progress tracking."
+        action={<button className="npl-btn npl-btn--secondary" onClick={() => setView({ kind: "certs" })}><Award size={16} /> My certificates</button>} /></div>
       <div className="npl-grid cols-4">
         <Metric icon={Check} label="Completed" value={String(academyStats.completed)} variant="gold" />
         <Metric icon={Play} label="In progress" value={String(academyStats.inProgress)} />
-        <Metric icon={Award} label="Certificates" value={String(academyStats.certificates)} variant="royal" />
+        <Metric icon={Award} label="Certificates" value={String(certificates.length)} variant="royal" />
         <Metric icon={Clock3} label="Hours learned" value={`${academyStats.hours}h`} />
       </div>
       <div className="npl-grid cols-4">
-        {courses.map((c) => (
-          <div className="npl-course" key={c.id}>
-            <div className="npl-course__media">
-              <img src={c.img} alt={c.title} />
-              <span className={`npl-badge ${c.certified ? "ok" : "blue"} npl-course__cat`}>{c.certified ? "Certified" : c.category}</span>
-              <div className="npl-course__play"><Play size={34} /></div>
-            </div>
-            <div className="npl-course__body">
-              <h3>{c.title}</h3>
-              <div className="npl-course__meta"><span>{c.lessons} lessons</span><span>{c.duration}</span></div>
-              <div className="npl-progress" style={{ marginTop: "auto" }}><i style={{ width: `${c.progress}%` }} /></div>
-              <small style={{ fontSize: ".74rem", color: "var(--c-muted)", fontWeight: 700 }}>{c.progress}% complete</small>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="npl-card">
-        <div className="npl-card__head"><div><h3>Quick quiz — {quiz.course}</h3><p>Test your knowledge to unlock your certificate</p></div></div>
-        <p style={{ fontWeight: 700, color: "var(--c-ink)", marginBottom: "1rem" }}>{quiz.question}</p>
-        <div className="npl-grid" style={{ gap: ".7rem" }}>
-          {quiz.options.map((o, i) => {
-            const cls = picked === null ? "" : i === quiz.correct ? "correct" : picked === i ? "wrong" : "";
-            return (
-              <button key={i} className={`npl-quizopt ${cls}`} onClick={() => setPicked(i)}>
-                <span className="k">{String.fromCharCode(65 + i)}</span> {o}
-                {picked !== null && i === quiz.correct && <Check size={18} style={{ marginLeft: "auto" }} />}
+        {courses.map((c) => {
+          const cta = c.progress === 0 ? "Start course" : c.progress === 100 ? "Review" : "Continue";
+          const CtaIcon = c.progress === 100 ? Eye : PlayCircle;
+          return (
+            <div className="npl-course" key={c.id}>
+              <button className="npl-course__media" onClick={() => setView({ kind: "course", course: c })} style={{ border: 0, padding: 0, cursor: "pointer", width: "100%" }}>
+                <img src={c.img} alt={c.title} />
+                <span className={`npl-badge ${c.certified ? "ok" : "blue"} npl-course__cat`}>{c.certified ? "Certified" : c.category}</span>
+                <div className="npl-course__play"><Play size={34} /></div>
               </button>
-            );
-          })}
+              <div className="npl-course__body">
+                <h3>{c.title}</h3>
+                <div className="npl-course__meta"><span>{c.lessons} lessons</span><span>{c.duration}</span></div>
+                <div className="npl-progress"><i style={{ width: `${c.progress}%` }} /></div>
+                <small style={{ fontSize: ".74rem", color: "var(--c-muted)", fontWeight: 700 }}>{c.progress}% complete</small>
+                <div style={{ display: "grid", gridTemplateColumns: c.progress === 100 ? "1fr" : "1fr auto", gap: ".5rem", marginTop: ".6rem" }}>
+                  <button className="npl-btn npl-btn--primary" style={{ padding: ".55rem .8rem", fontSize: ".82rem" }} onClick={() => setView({ kind: "course", course: c })}><CtaIcon size={15} /> {cta}</button>
+                  {c.progress !== 100 && <button className="npl-btn npl-btn--ghost" style={{ padding: ".55rem .8rem", fontSize: ".82rem" }} onClick={() => setView({ kind: "course", course: c })}>Take quiz</button>}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+function CourseDetail({ course, onBack, onCertificates }: { course: Course; onBack: () => void; onCertificates: () => void }) {
+  const lessons = lessonsFor(course);
+  const [tab, setTab] = useState<"lessons" | "quiz">("lessons");
+  const [picked, setPicked] = useState<number | null>(null);
+  const [passed, setPassed] = useState(course.certified);
+
+  return (
+    <>
+      <div className="npl-card">
+        <button className="npl-btn npl-btn--ghost" style={{ alignSelf: "flex-start", marginBottom: ".4rem" }} onClick={onBack}><ArrowLeft size={16} /> Back to Academy</button>
+        <div style={{ display: "flex", gap: "1.2rem", flexWrap: "wrap", alignItems: "center" }}>
+          <img src={course.img} alt={course.title} style={{ width: 200, height: 130, objectFit: "cover", borderRadius: 14 }} />
+          <div style={{ flex: 1, minWidth: 220 }}>
+            <span className="npl-badge blue">{course.category}</span>
+            <h2 style={{ margin: ".4rem 0 .3rem" }}>{course.title}</h2>
+            <p style={{ color: "var(--c-muted)", fontSize: ".88rem" }}>{course.lessons} lessons · {course.duration}</p>
+            <div className="npl-progress" style={{ marginTop: ".7rem", maxWidth: 320 }}><i style={{ width: `${course.progress}%` }} /></div>
+            <small style={{ fontSize: ".74rem", color: "var(--c-muted)", fontWeight: 700 }}>{course.progress}% complete</small>
+          </div>
         </div>
       </div>
+
+      <div style={{ display: "flex", gap: ".5rem" }}>
+        <button className={`npl-btn ${tab === "lessons" ? "npl-btn--primary" : "npl-btn--ghost"}`} onClick={() => setTab("lessons")}>Lessons</button>
+        <button className={`npl-btn ${tab === "quiz" ? "npl-btn--primary" : "npl-btn--ghost"}`} onClick={() => setTab("quiz")}>Quiz & certificate</button>
+      </div>
+
+      {tab === "lessons" && (
+        <div className="npl-card">
+          <div className="npl-card__head"><div><h3>Course content</h3><p>{lessons.filter((l) => l.done).length} of {lessons.length} lessons done</p></div>
+            <button className="npl-btn npl-btn--primary"><PlayCircle size={16} /> {course.progress === 0 ? "Start" : "Continue"} learning</button></div>
+          <div className="npl-grid" style={{ gap: ".5rem" }}>
+            {lessons.map((l) => (
+              <div className={`npl-lesson${l.done ? " done" : ""}`} key={l.n}>
+                <span className="npl-lesson__ic">{l.done ? <Check size={16} /> : <Play size={15} />}</span>
+                <div><b>{l.n}. {l.title}</b><small>{l.done ? "Completed" : "Not started"}</small></div>
+                <span className="npl-lesson__time">{l.duration}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === "quiz" && (
+        <div className="npl-card">
+          <div className="npl-card__head"><div><h3>Knowledge check</h3><p>Pass the quiz to unlock your certificate</p></div></div>
+          <p style={{ fontWeight: 700, color: "var(--c-ink)", marginBottom: "1rem" }}>{quiz.question}</p>
+          <div className="npl-grid" style={{ gap: ".7rem" }}>
+            {quiz.options.map((o, i) => {
+              const cls = picked === null ? "" : i === quiz.correct ? "correct" : picked === i ? "wrong" : "";
+              return (
+                <button key={i} className={`npl-quizopt ${cls}`} onClick={() => { setPicked(i); if (i === quiz.correct) setPassed(true); }}>
+                  <span className="k">{String.fromCharCode(65 + i)}</span> {o}
+                  {picked !== null && i === quiz.correct && <Check size={18} style={{ marginLeft: "auto" }} />}
+                </button>
+              );
+            })}
+          </div>
+          {passed && (
+            <div className="npl-note" style={{ marginTop: "1rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: ".8rem", flexWrap: "wrap" }}>
+              <div><b style={{ color: "var(--c-green)" }}>Certificate unlocked!</b><br /><span>You&apos;ve passed {course.title}.</span></div>
+              <div style={{ display: "flex", gap: ".5rem" }}>
+                <button className="npl-btn npl-btn--primary" onClick={() => downloadCertificate({ recipient: member.name, course: course.title, date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }), certificateId: "NRFFN-" + course.title.split(" ").map((w) => w[0]).join("").toUpperCase() + "-204815" })}><Download size={15} /> Download</button>
+                <button className="npl-btn npl-btn--ghost" onClick={onCertificates}>View all</button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+function Certificates({ onBack }: { onBack: () => void }) {
+  return (
+    <>
+      <div className="npl-card">
+        <button className="npl-btn npl-btn--ghost" style={{ alignSelf: "flex-start", marginBottom: ".4rem" }} onClick={onBack}><ArrowLeft size={16} /> Back to Academy</button>
+        <PageHead eyebrow="NRFFN Academy" title="Your certificates" sub="View and download credentials you've earned." />
+      </div>
+      {certificates.length === 0 ? (
+        <div className="npl-card" style={{ textAlign: "center", padding: "2.5rem" }}>
+          <span className="npl-success__badge" style={{ margin: "0 auto 1rem" }}><Award size={32} /></span>
+          <h3>No certificates yet</h3>
+          <p style={{ color: "var(--c-muted)" }}>Complete a course and pass its quiz to earn your first certificate.</p>
+        </div>
+      ) : (
+        <div className="npl-grid cols-3">
+          {certificates.map((c) => (
+            <div className="npl-cert" key={c.id}>
+              <div className="npl-cert__top">
+                <span className="eyebrow">Certificate of completion</span>
+                <h3>{c.course}</h3>
+                <span className="npl-cert__seal"><Award size={20} /></span>
+              </div>
+              <div className="npl-cert__body">
+                <div><small>Issued {c.issued}</small><br /><small>ID: {c.credentialId}</small></div>
+                <div style={{ display: "flex", gap: ".4rem" }}>
+                  <button className="npl-btn npl-btn--primary" style={{ padding: ".45rem .8rem", fontSize: ".82rem" }}
+                    onClick={() => downloadCertificate({ recipient: member.name, course: c.course, date: c.issued, certificateId: c.credentialId })}><Download size={14} /> PDF</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
@@ -630,6 +743,45 @@ function WithdrawDrawer({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
+function AddLeadDrawer({ onClose }: { onClose: () => void }) {
+  const [saved, setSaved] = useState(false);
+  return (
+    <div className="npl-drawer-overlay" onClick={onClose}>
+      <div className="npl-drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="npl-drawer__head"><div><h3>{saved ? "Lead added" : "Add a new lead"}</h3><p>{saved ? "Your pipeline has been updated" : "Capture a prospect into your pipeline"}</p></div><button className="npl-icnbtn" onClick={onClose}><X size={18} /></button></div>
+        {saved ? (
+          <>
+            <div className="npl-success">
+              <span className="npl-success__badge"><Check size={36} /></span>
+              <h3>Lead saved</h3>
+              <p>The lead now appears in your CRM board under “New”.</p>
+            </div>
+            <button className="npl-btn npl-btn--primary npl-btn--block" onClick={onClose}>Done</button>
+          </>
+        ) : (
+          <>
+            <div className="npl-field"><label>Full name</label><input placeholder="Prospect name" /></div>
+            <div className="npl-fieldrow">
+              <div className="npl-field"><label>Phone</label><input placeholder="+234..." /></div>
+              <div className="npl-field"><label>Email</label><input type="email" placeholder="name@mail.com" /></div>
+            </div>
+            <div className="npl-field"><label>Interested property</label>
+              <select>{portfolioProps.map((p) => <option key={p.name}>{p.name}</option>)}</select>
+            </div>
+            <div className="npl-fieldrow">
+              <div className="npl-field"><label>Budget (₦)</label><input type="number" placeholder="10,000,000" /></div>
+              <div className="npl-field"><label>Temperature</label><select><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
+            </div>
+            <div className="npl-field"><label>Source</label><select><option>WhatsApp</option><option>Referral</option><option>Instagram</option><option>Website</option><option>Walk-in</option></select></div>
+            <div className="npl-field"><label>First note</label><textarea rows={2} placeholder="What does this prospect want?" /></div>
+            <button className="npl-btn npl-btn--primary npl-btn--block" onClick={() => setSaved(true)}><Plus size={16} /> Add lead</button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function LeadDrawer({ lead, onClose }: { lead: Lead; onClose: () => void }) {
   const wa = `https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}`;
   return (

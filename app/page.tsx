@@ -36,7 +36,7 @@ import { propertySlug } from "../lib/property-catalog";
 /* ---------------- content ---------------- */
 
 const STATS = [
-  ["12k+", "Verified members"],
+  ["12k+", "Members targeted"],
   ["36", "States coverage"],
   ["6", "Membership tiers"],
   ["₦3M", "Top tier value"]
@@ -668,6 +668,13 @@ export default function LandingPage() {
                 <a className="nlp-btn nlp-btn--ghost" href="/documents/nrffn-ltd-certificate.pdf" target="_blank" rel="noreferrer">View NRFFN Certificate</a>
                 <a className="nlp-btn nlp-btn--primary" href="/documents/nrffn-ltd-certificate.pdf" download>Download Certificate</a>
               </div>
+            </div>
+            <div className="nlp-foot__col">
+              <h4>Platform</h4>
+              <a href="#about">About NRFFN</a>
+              <a href="#membership">Membership</a>
+              <a href="#academy">Academy</a>
+              <a href="#why">Why Join</a>
             </div>
             <div className="nlp-foot__col">
               <h4>Portals</h4>

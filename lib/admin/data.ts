@@ -97,6 +97,40 @@ export const roles = [
   { name: "Support", users: 9, perms: "Read-only + CRM", color: "cold" }
 ];
 
+export type KycRequest = {
+  id: string;
+  name: string;
+  email: string;
+  type: "BVN" | "Government ID" | "Next of kin" | "Address" | "Full KYC";
+  submitted: string;
+  status: "Pending" | "Approved" | "Rejected";
+  tier: string;
+};
+
+export const kycRequests: KycRequest[] = [
+  { id: "k1", name: "Chidi Okeke", email: "chidi@mail.com", type: "Government ID", submitted: "20 Jun 2026", status: "Pending", tier: "Bronze" },
+  { id: "k2", name: "Aisha Bello", email: "aisha@mail.com", type: "BVN", submitted: "19 Jun 2026", status: "Pending", tier: "Silver" },
+  { id: "k3", name: "Tunde Cole", email: "tunde@mail.com", type: "Full KYC", submitted: "18 Jun 2026", status: "Pending", tier: "Associate" },
+  { id: "k4", name: "Grace Udo", email: "grace@mail.com", type: "Next of kin", submitted: "16 Jun 2026", status: "Approved", tier: "Gold" },
+  { id: "k5", name: "Adaeze Nwankwo", email: "adaeze@mail.com", type: "Government ID", submitted: "12 Jan 2026", status: "Approved", tier: "Gold" },
+  { id: "k6", name: "Femi Alabi", email: "femi@mail.com", type: "Address", submitted: "10 Jun 2026", status: "Rejected", tier: "Bronze" }
+];
+
+export type ManualInvestment = {
+  id: string;
+  user: string;
+  property: string;
+  units: number;
+  amount: number;
+  date: string;
+  by: string;
+};
+
+export const manualInvestments: ManualInvestment[] = [
+  { id: "mi1", user: "Tunde Adeyemi", property: "Cedar Court Villas", units: 1, amount: 145_000_000, date: "17 Jun 2026", by: "admin@nrffn.ng" },
+  { id: "mi2", user: "Mariam Bello", property: "The Sterling Apartments", units: 4, amount: 50_000_000, date: "11 Jun 2026", by: "admin@nrffn.ng" }
+];
+
 export const systemHealth = [
   { name: "API", status: "Operational", uptime: "99.98%", ok: true },
   { name: "Database", status: "Operational", uptime: "99.99%", ok: true },

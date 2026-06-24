@@ -3,26 +3,28 @@
 import { useState } from "react";
 import {
   Activity, BadgeCheck, Bell, Building2, Check, Cog, Database, DollarSign, FileText,
-  Home, LayoutGrid, LogOut, Menu, Search, Shield, TrendingUp, Users, Wallet
+  Home, LayoutGrid, LogOut, Menu, Search, Shield, TrendingUp, Users, Wallet,
+  X, Plus, ShieldCheck, ClipboardCheck, MapPin, Ban, UserCog
 } from "lucide-react";
 import {
   naira, platformStats, revenueTrend, membershipTiers, users, properties, commissions,
-  auditLogs, roles, systemHealth
+  auditLogs, roles, systemHealth, kycRequests, manualInvestments,
+  type KycRequest, type Commission, type ManualInvestment
 } from "../../lib/admin/data";
 import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
 
 type Role = "Admin" | "Super Admin";
 type PageKey =
   | "Dashboard" | "Users" | "Memberships" | "Properties" | "Commissions" | "Analytics"
-  | "Revenue" | "Audit" | "Roles" | "Health" | "Settings";
+  | "Revenue" | "Audit" | "Roles" | "Health" | "Settings" | "KYC" | "Investments";
 
 const NAV: Record<PageKey, typeof Home> = {
   Dashboard: LayoutGrid, Users: Users, Memberships: BadgeCheck, Properties: Building2,
   Commissions: Wallet, Analytics: TrendingUp, Revenue: DollarSign, Audit: FileText,
-  Roles: Shield, Health: Activity, Settings: Cog
+  Roles: Shield, Health: Activity, Settings: Cog, KYC: ClipboardCheck, Investments: TrendingUp
 };
-const ADMIN_PAGES: PageKey[] = ["Dashboard", "Users", "Memberships", "Properties", "Commissions", "Analytics"];
-const SUPER_PAGES: PageKey[] = ["Dashboard", "Users", "Revenue", "Commissions", "Audit", "Roles", "Health", "Settings"];
+const ADMIN_PAGES: PageKey[] = ["Dashboard", "Users", "Roles", "Memberships", "Properties", "Commissions", "KYC", "Investments", "Analytics"];
+const SUPER_PAGES: PageKey[] = ["Dashboard", "Users", "Roles", "Revenue", "Commissions", "KYC", "Investments", "Audit", "Health", "Settings"];
 
 export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: { role?: Role; initialPage?: PageKey }) {
   const pages = role === "Super Admin" ? SUPER_PAGES : ADMIN_PAGES;
@@ -52,7 +54,7 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
               </button>
             );
           })}
-          <div className="npl-side__foot"><a href="/" className="npl-nav"><LogOut size={19} /> <span>Sign out</span></a></div>
+          <div className="npl-side__foot"><a href="/" className="npl-nav"><LogOut size={19} /> <span>Exit portal</span></a></div>
         </aside>
 
         <div className="npl-main">
@@ -71,6 +73,8 @@ export default function AdminApp({ role = "Admin", initialPage = "Dashboard" }: 
             {page === "Properties" && <Properties_ />}
             {page === "Commissions" && <Commissions_ />}
             {page === "Analytics" && <Analytics />}
+            {page === "KYC" && <Kyc />}
+            {page === "Investments" && <Investments_ />}
             {page === "Revenue" && <Revenue />}
             {page === "Audit" && <Audit />}
             {page === "Roles" && <Roles_ />}
@@ -177,7 +181,9 @@ function UsersView() {
 }
 
 /* ===== MEMBERSHIPS ===== */
+type Tier = (typeof membershipTiers)[number];
 function Memberships() {
+  const [editing, setEditing] = useState<Tier | null>(null);
   return (
     <>
       <div className="npl-card"><PageHead eyebrow="Membership control" title="Tiers & pricing" sub="Manage the 6 membership categories." /></div>
@@ -187,19 +193,43 @@ function Memberships() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><h3>{t.tier}</h3><span className={`npl-badge ${t.color}`}>{t.members.toLocaleString()} members</span></div>
             <b style={{ fontSize: "1.5rem", color: "var(--c-royal)" }}>{t.price === 0 ? "Free" : naira(t.price)}</b>
             <span style={{ fontSize: ".8rem", color: "var(--c-muted)" }}>Registration fee</span>
-            <button className="npl-btn npl-btn--ghost" style={{ marginTop: ".4rem" }}>Edit tier</button>
+            <button className="npl-btn npl-btn--ghost" style={{ marginTop: ".4rem" }} onClick={() => setEditing(t)}>Edit tier</button>
           </div>
         ))}
       </div>
+      {editing && <EditTierDrawer tier={editing} onClose={() => setEditing(null)} />}
     </>
+  );
+}
+
+function EditTierDrawer({ tier, onClose }: { tier: Tier; onClose: () => void }) {
+  return (
+    <div className="npl-drawer-overlay" onClick={onClose} role="presentation">
+      <aside className="npl-drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="npl-drawer__head"><div><h3>Edit {tier.tier} tier</h3><p>{tier.members.toLocaleString()} members on this tier</p></div><button className="npl-icnbtn" onClick={onClose}><X size={18} /></button></div>
+        <div className="npl-field"><label>Tier name</label><input defaultValue={tier.tier} /></div>
+        <div className="npl-fieldrow">
+          <div className="npl-field"><label>Registration fee (₦)</label><input type="number" defaultValue={tier.price} /></div>
+          <div className="npl-field"><label>Badge colour</label><select defaultValue={tier.color}><option value="cold">Neutral</option><option value="warn">Bronze</option><option value="blue">Blue</option><option value="ok">Green</option></select></div>
+        </div>
+        <div className="npl-field"><label>Member benefits</label><textarea rows={3} defaultValue={"Priority allocations\nReduced commission split\nDedicated adviser"} /></div>
+        <div className="npl-field"><label>Status</label><select><option>Active</option><option>Hidden</option></select></div>
+        <div style={{ display: "flex", gap: ".6rem" }}>
+          <button className="npl-btn npl-btn--ghost" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}>Cancel</button>
+          <button className="npl-btn npl-btn--primary" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}><Check size={16} /> Save tier</button>
+        </div>
+      </aside>
+    </div>
   );
 }
 
 /* ===== PROPERTIES ===== */
 function Properties_() {
+  const [adding, setAdding] = useState(false);
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Property management" title="Estate listings" sub="Add, review and publish properties." action={<button className="npl-btn npl-btn--primary">+ Add property</button>} /></div>
+      <div className="npl-card"><PageHead eyebrow="Property management" title="Estate listings" sub="Add, review and publish properties." action={<button className="npl-btn npl-btn--primary" onClick={() => setAdding(true)}><Plus size={16} /> Add property</button>} /></div>
+      {adding && <AddPropertyDrawer onClose={() => setAdding(false)} />}
       <div className="npl-card">
         <div className="npl-table-wrap">
           <table className="npl-table responsive">
@@ -224,9 +254,142 @@ function Properties_() {
   );
 }
 
+function AddPropertyDrawer({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="npl-drawer-overlay" onClick={onClose} role="presentation">
+      <aside className="npl-drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="npl-drawer__head"><div><h3>Add a property</h3><p>List a new estate on the marketplace</p></div><button className="npl-icnbtn" onClick={onClose}><X size={18} /></button></div>
+        <div className="npl-field"><label>Property name</label><input placeholder="e.g. Emerald Heights Residence" /></div>
+        <div className="npl-fieldrow">
+          <div className="npl-field"><label>Location</label><input placeholder="Lekki Phase 1, Lagos" /></div>
+          <div className="npl-field"><label>Model</label><select><option>Full Ownership</option><option>Co-Ownership</option><option>Land Banking</option><option>Flex</option></select></div>
+        </div>
+        <div className="npl-fieldrow">
+          <div className="npl-field"><label>Price per unit (₦)</label><input type="number" placeholder="95,000,000" /></div>
+          <div className="npl-field"><label>Total units</label><input type="number" placeholder="24" /></div>
+        </div>
+        <div className="npl-field"><label>Expected return</label><input placeholder="18% projected annual return" /></div>
+        <label className="npl-upload"><Plus size={20} /><b>Upload property images</b><small>Cover photo + gallery — JPG or PNG</small><input type="file" accept="image/*" multiple hidden /></label>
+        <div className="npl-field"><label>Description</label><textarea rows={3} placeholder="Describe the property..." /></div>
+        <div className="npl-field"><label>Status</label><select><option>Draft</option><option>Active</option></select></div>
+        <div style={{ display: "flex", gap: ".6rem" }}>
+          <button className="npl-btn npl-btn--ghost" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}>Cancel</button>
+          <button className="npl-btn npl-btn--primary" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}><Check size={16} /> Publish property</button>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+/* ===== KYC MANAGEMENT ===== */
+function Kyc() {
+  const [rows, setRows] = useState<KycRequest[]>(kycRequests);
+  const setStatus = (id: string, status: KycRequest["status"]) =>
+    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, status } : r)));
+  const pending = rows.filter((r) => r.status === "Pending").length;
+  const badge = (s: KycRequest["status"]) => (s === "Approved" ? "ok" : s === "Rejected" ? "hot" : "warn");
+  return (
+    <>
+      <div className="npl-card"><PageHead eyebrow="Compliance" title="KYC management" sub="Monitor, approve or revoke member verification." /></div>
+      <div className="npl-grid cols-4">
+        <Metric icon={ClipboardCheck} label="Pending review" value={String(pending)} variant="gold" />
+        <Metric icon={Check} label="Approved" value={String(rows.filter((r) => r.status === "Approved").length)} variant="royal" />
+        <Metric icon={Ban} label="Rejected" value={String(rows.filter((r) => r.status === "Rejected").length)} />
+        <Metric icon={ShieldCheck} label="Verification rate" value="86%" />
+      </div>
+      <div className="npl-card">
+        <div className="npl-table-wrap">
+          <table className="npl-table responsive">
+            <thead><tr><th>Member</th><th>Submission</th><th>Tier</th><th>Submitted</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id}>
+                  <td data-label="Member"><b>{r.name}</b><div style={{ fontSize: ".78rem", color: "var(--c-muted)" }}>{r.email}</div></td>
+                  <td data-label="Submission"><span className="npl-badge blue">{r.type}</span></td>
+                  <td data-label="Tier">{r.tier}</td>
+                  <td data-label="Submitted">{r.submitted}</td>
+                  <td data-label="Status"><span className={`npl-badge ${badge(r.status)}`}>{r.status}</span></td>
+                  <td data-label="Action">
+                    <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
+                      {r.status !== "Approved" && <button className="npl-btn npl-btn--primary" style={{ padding: ".4rem .7rem", fontSize: ".78rem" }} onClick={() => setStatus(r.id, "Approved")}><Check size={13} /> Approve</button>}
+                      {r.status !== "Rejected" && <button className="npl-btn npl-btn--ghost" style={{ padding: ".4rem .7rem", fontSize: ".78rem" }} onClick={() => setStatus(r.id, r.status === "Approved" ? "Pending" : "Rejected")}>{r.status === "Approved" ? "Revoke" : "Reject"}</button>}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ===== INVESTMENT MANAGEMENT ===== */
+function Investments_() {
+  const [rows, setRows] = useState<ManualInvestment[]>(manualInvestments);
+  const [form, setForm] = useState({ user: users[0].name, property: properties[0].name, units: 1, amount: properties[0].price });
+  const add = () => {
+    setRows((rs) => [
+      { id: "mi" + Date.now(), user: form.user, property: form.property, units: form.units, amount: form.amount, date: new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }), by: "admin@nrffn.ng" },
+      ...rs
+    ]);
+  };
+  return (
+    <>
+      <div className="npl-card"><PageHead eyebrow="Operations" title="Investment management" sub="Manually record an investment when an investor pays offline." /></div>
+      <div className="npl-grid cols-2">
+        <div className="npl-card">
+          <div className="npl-card__head"><div><h3>Add investment</h3><p>Select user, property and amount</p></div></div>
+          <div className="npl-field"><label>Investor</label>
+            <select value={form.user} onChange={(e) => setForm({ ...form, user: e.target.value })}>
+              {users.filter((u) => u.role === "Investor").map((u) => <option key={u.id}>{u.name}</option>)}
+            </select>
+          </div>
+          <div className="npl-field"><label>Property</label>
+            <select value={form.property} onChange={(e) => { const p = properties.find((x) => x.name === e.target.value)!; setForm({ ...form, property: e.target.value, amount: p.price * form.units }); }}>
+              {properties.map((p) => <option key={p.id}>{p.name}</option>)}
+            </select>
+          </div>
+          <div className="npl-fieldrow">
+            <div className="npl-field"><label>Units</label>
+              <input type="number" min={1} value={form.units} onChange={(e) => { const units = Math.max(1, Number(e.target.value) || 1); const p = properties.find((x) => x.name === form.property)!; setForm({ ...form, units, amount: p.price * units }); }} />
+            </div>
+            <div className="npl-field"><label>Amount (₦)</label><input type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: Number(e.target.value) || 0 })} /></div>
+          </div>
+          <div className="npl-note"><b>Manual entry</b><br /><span>Use this only for verified offline / bank-transfer payments. The investor&apos;s portfolio updates immediately.</span></div>
+          <button className="npl-btn npl-btn--success npl-btn--block" onClick={add}><Plus size={16} /> Add investment</button>
+        </div>
+        <div className="npl-card">
+          <div className="npl-card__head"><div><h3>Recent manual entries</h3><p>Logged investments</p></div></div>
+          <div className="npl-table-wrap">
+            <table className="npl-table responsive">
+              <thead><tr><th>Investor</th><th>Property</th><th>Units</th><th>Amount</th><th>Date</th></tr></thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr key={r.id}>
+                    <td data-label="Investor"><b>{r.user}</b></td>
+                    <td data-label="Property">{r.property}</td>
+                    <td data-label="Units">{r.units}</td>
+                    <td data-label="Amount"><b>{naira(r.amount)}</b></td>
+                    <td data-label="Date">{r.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 /* ===== COMMISSIONS ===== */
 function CommissionTable({ limit }: { limit?: number }) {
-  const items = limit ? commissions.slice(0, limit) : commissions;
+  const [rows, setRows] = useState<Commission[]>(commissions);
+  const items = limit ? rows.slice(0, limit) : rows;
+  const setStatus = (id: string, status: Commission["status"]) =>
+    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, status } : r)));
   return (
     <div className="npl-table-wrap">
       <table className="npl-table responsive">
@@ -239,7 +402,11 @@ function CommissionTable({ limit }: { limit?: number }) {
               <td data-label="Type"><span className="npl-badge blue">{c.type}</span></td>
               <td data-label="Amount"><b>{naira(c.amount)}</b></td>
               <td data-label="Status"><span className={`npl-badge ${c.status === "Paid" ? "ok" : c.status === "Approved" ? "blue" : "warn"}`}>{c.status}</span></td>
-              <td data-label="">{c.status === "Pending" && <button className="npl-btn npl-btn--success" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }}>Approve</button>}</td>
+              <td data-label="">
+                {c.status === "Pending" && <button className="npl-btn npl-btn--primary" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }} onClick={() => setStatus(c.id, "Approved")}><Check size={14} /> Approve</button>}
+                {c.status === "Approved" && <button className="npl-btn npl-btn--primary" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }} onClick={() => setStatus(c.id, "Paid")}>Mark paid</button>}
+                {c.status === "Paid" && <span style={{ color: "var(--c-muted)", fontSize: ".8rem", fontWeight: 700 }}>Released</span>}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -321,19 +488,54 @@ function Audit() {
 }
 
 /* ===== ROLES ===== */
+const ALL_PERMS = ["Manage users", "Manage properties", "Approve commissions", "Manage KYC", "Add investments", "View revenue", "Edit settings", "View analytics"];
 function Roles_() {
+  const [drawer, setDrawer] = useState<null | { mode: "new" } | { mode: "edit"; name: string; perms: string }>(null);
   return (
     <>
-      <div className="npl-card"><PageHead eyebrow="Role permissions" title="Access control" sub="Define what each role can do." action={<button className="npl-btn npl-btn--primary">+ New role</button>} /></div>
+      <div className="npl-card"><PageHead eyebrow="Role permissions" title="User roles & access control" sub="Define what each role can do." action={<button className="npl-btn npl-btn--primary" onClick={() => setDrawer({ mode: "new" })}><Plus size={16} /> New role</button>} /></div>
       <div className="npl-grid cols-2">
         {roles.map((r) => (
-          <div className="npl-card" key={r.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div className="npl-card" key={r.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
             <div><div style={{ display: "flex", gap: ".5rem", alignItems: "center" }}><span className="npl-metric__ic" style={{ width: 38, height: 38 }}><Shield size={18} /></span><h3>{r.name}</h3></div><p style={{ color: "var(--c-muted)", fontSize: ".85rem", marginTop: ".5rem" }}>{r.perms}</p></div>
-            <div style={{ textAlign: "right" }}><span className={`npl-badge ${r.color}`}>{r.users} users</span></div>
+            <div style={{ textAlign: "right", display: "flex", flexDirection: "column", gap: ".5rem", alignItems: "flex-end" }}>
+              <span className={`npl-badge ${r.color}`}>{r.users} users</span>
+              <button className="npl-btn npl-btn--ghost" style={{ padding: ".4rem .8rem", fontSize: ".8rem" }} onClick={() => setDrawer({ mode: "edit", name: r.name, perms: r.perms })}><UserCog size={14} /> Edit</button>
+            </div>
           </div>
         ))}
       </div>
+      {drawer && <RoleDrawer data={drawer} onClose={() => setDrawer(null)} />}
     </>
+  );
+}
+
+function RoleDrawer({ data, onClose }: { data: { mode: "new" } | { mode: "edit"; name: string; perms: string }; onClose: () => void }) {
+  const isEdit = data.mode === "edit";
+  const defaultChecked = (p: string) => isEdit && data.perms.toLowerCase().includes(p.split(" ")[1] ?? p.toLowerCase());
+  return (
+    <div className="npl-drawer-overlay" onClick={onClose} role="presentation">
+      <aside className="npl-drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="npl-drawer__head"><div><h3>{isEdit ? `Edit ${data.name}` : "Create a new role"}</h3><p>Set the name and permissions for this role</p></div><button className="npl-icnbtn" onClick={onClose}><X size={18} /></button></div>
+        <div className="npl-field"><label>Role name</label><input defaultValue={isEdit ? data.name : ""} placeholder="e.g. Operations" /></div>
+        <div className="npl-field"><label>Description</label><input defaultValue={isEdit ? data.perms : ""} placeholder="What can this role do?" /></div>
+        <div className="npl-field" style={{ gap: ".55rem" }}>
+          <label>Permissions</label>
+          <div className="npl-grid cols-2" style={{ gap: ".5rem" }}>
+            {ALL_PERMS.map((p) => (
+              <label key={p} className="npl-tree__row" style={{ gap: ".55rem", cursor: "pointer" }}>
+                <input type="checkbox" defaultChecked={defaultChecked(p)} style={{ width: 16, height: 16 }} />
+                <span style={{ fontWeight: 600, color: "var(--c-ink)", fontSize: ".85rem" }}>{p}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: ".6rem" }}>
+          <button className="npl-btn npl-btn--ghost" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}>Cancel</button>
+          <button className="npl-btn npl-btn--primary" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}><Check size={16} /> {isEdit ? "Save role" : "Create role"}</button>
+        </div>
+      </aside>
+    </div>
   );
 }
 
