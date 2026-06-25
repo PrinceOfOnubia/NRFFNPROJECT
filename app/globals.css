@@ -64,6 +64,7 @@
   min-height: 100vh;
   background: #f7f9fd;
   padding-bottom: 5rem;
+  overflow-x: clip;
 }
 .propertyDetail__nav {
   max-width: 1280px;
@@ -90,6 +91,14 @@
   grid-template-columns: minmax(0, 1.35fr) minmax(330px, .9fr);
   gap: 1.25rem;
   align-items: start;
+}
+.propertyDetail__heroGrid > *,
+.propertyDetail__layout > *,
+.propertyDetail__mediaStack,
+.propertyDetail__offer,
+.propertyDetail__main,
+.propertyDetail__aside {
+  min-width: 0;
 }
 .propertyDetail__mediaStack {
   display: flex;
@@ -254,10 +263,18 @@
   margin: .35rem 0 .8rem;
   font-size: clamp(1.25rem, 1.5vw, 1.65rem);
 }
+.propertyDetail__section,
+.propertyDetail__panel,
+.propertyDetail__docs,
+.propertyDetail__facts,
+.propertyDetail__related-grid {
+  min-width: 0;
+}
 .propertyDetail__section p,
 .propertyDetail__panel p {
   color: #6b7793;
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 .propertyDetail__inspectionInline {
   width: 100%;
@@ -327,9 +344,13 @@
   border-radius: 16px;
   border: 1px solid #e6ecf5;
   background: #fff;
+  min-width: 0;
 }
 .propertyDetail__doc b { color: #0c1a33; }
-.propertyDetail__doc p { margin-top: .15rem; }
+.propertyDetail__doc p {
+  margin-top: .15rem;
+  overflow-wrap: anywhere;
+}
 .propertyDetail__doc a {
   width: 38px;
   height: 38px;
@@ -409,6 +430,7 @@
 .propertyDetail__related-card span { color: #1046a3; font-size: .72rem; font-weight: 800; text-transform: uppercase; }
 .propertyDetail__related-card h3 { margin: .35rem 0; font-size: 1.05rem; }
 .propertyDetail__related-card p { color: #6b7793; font-size: .84rem; }
+.propertyDetail__related-card p { overflow-wrap: anywhere; }
 .propertyDetail__related-card a {
   display: inline-flex;
   align-items: center;

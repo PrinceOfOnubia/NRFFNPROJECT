@@ -14,6 +14,7 @@ import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
 import MembershipHub from "../membership/MembershipHub";
 import { propertySlug } from "../../lib/property-catalog";
 import { downloadReceipt, downloadDocument } from "../../lib/pdf";
+import { membershipBadgeClass } from "../../lib/membership";
 
 const docsForHolding = (h: Holding) =>
   documents.filter((d) => h.name.toLowerCase().startsWith(d.property.toLowerCase()));
@@ -608,7 +609,7 @@ function Profile() {
             <h3>{form.name}</h3>
             <p style={{ color: "var(--c-muted)" }}>{investor.tier} · Since {investor.joined}</p>
             <div style={{ marginTop: ".5rem", display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
-              <span className="npl-badge blue">{investor.tier}</span>
+              <span className={`npl-badge ${membershipBadgeClass(investor.tier)}`}>{investor.tier}</span>
               <span className={`npl-badge ${pct === 100 ? "ok" : "warn"}`}>{pct === 100 ? <><ShieldCheck size={12} /> Verified</> : `${pct}% verified`}</span>
             </div>
           </div>

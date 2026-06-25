@@ -54,3 +54,13 @@ export const TIERS: MembershipTier[] = [
     flag: "Elite"
   }
 ];
+
+export function membershipBadgeClass(tier: string) {
+  const key = tier.trim().toLowerCase();
+  if (key.includes("vip") || key.includes("platinum")) return "tier-platinum";
+  if (key.includes("gold")) return "tier-gold";
+  if (key.includes("silver")) return "tier-silver";
+  if (key.includes("bronze")) return "tier-bronze";
+  if (key.includes("associate")) return "tier-associate";
+  return "tier-default";
+}

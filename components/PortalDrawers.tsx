@@ -2,6 +2,7 @@
 
 import { Camera, Bell, Check, LogOut, ShieldCheck, UserRound, X } from "lucide-react";
 import { useRef, useState, type ChangeEvent } from "react";
+import { membershipBadgeClass } from "../lib/membership";
 
 export type PortalPanel = "notifications" | "profile" | null;
 
@@ -77,7 +78,7 @@ export default function PortalDrawers({
                 <p>{role}</p>
                 <div className="npl-profile-summary__tags">
                   <span className="npl-badge ok"><ShieldCheck size={13} /> Verified</span>
-                  {membershipTier && <span className="npl-badge blue">{membershipTier}</span>}
+                  {membershipTier && <span className={`npl-badge ${membershipBadgeClass(membershipTier)}`}>{membershipTier}</span>}
                 </div>
               </div>
             </div>
@@ -94,7 +95,7 @@ export default function PortalDrawers({
               <a className="npl-btn npl-btn--secondary npl-btn--block" href={role.includes("Investor") ? "/client/profile" : role.includes("Realtor") ? "/associate/profile" : "#"}>
                 View full profile
               </a>
-              <a className="npl-btn npl-btn--ghost npl-btn--block npl-profile-actions__signout" href="/">
+              <a className="npl-nav npl-nav--danger npl-profile-actions__signout" href="/">
                 <LogOut size={16} /> Sign out
               </a>
             </div>

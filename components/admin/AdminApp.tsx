@@ -12,6 +12,7 @@ import {
   type KycRequest, type Commission, type ManualInvestment
 } from "../../lib/admin/data";
 import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
+import { membershipBadgeClass } from "../../lib/membership";
 
 type Role = "Admin" | "Super Admin";
 type PageKey =
@@ -169,7 +170,7 @@ function UsersView({ onAdd }: { onAdd: () => void }) {
                 <tr key={u.id}>
                   <td data-label="Member"><b>{u.name}</b><div style={{ fontSize: ".78rem", color: "var(--c-muted)" }}>{u.email}</div></td>
                   <td data-label="Role"><span className="npl-badge blue">{u.role}</span></td>
-                  <td data-label="Tier">{u.tier}</td>
+                  <td data-label="Tier"><span className={`npl-badge ${membershipBadgeClass(u.tier)}`}>{u.tier}</span></td>
                   <td data-label="Volume"><b>{naira(u.volume)}</b></td>
                   <td data-label="Joined">{u.joined}</td>
                   <td data-label="Status"><span className={`npl-badge ${u.status === "Active" ? "ok" : u.status === "Pending" ? "warn" : "hot"}`}>{u.status}</span></td>
@@ -221,7 +222,7 @@ function Memberships() {
       <div className="npl-grid cols-3">
         {membershipTiers.map((t) => (
           <div className="npl-card" key={t.tier} style={{ display: "flex", flexDirection: "column", gap: ".5rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><h3>{t.tier}</h3><span className={`npl-badge ${t.color}`}>{t.members.toLocaleString()} members</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><h3>{t.tier}</h3><span className={`npl-badge ${membershipBadgeClass(t.tier)}`}>{t.members.toLocaleString()} members</span></div>
             <b style={{ fontSize: "1.5rem", color: "var(--c-royal)" }}>{t.price === 0 ? "Free" : naira(t.price)}</b>
             <span style={{ fontSize: ".8rem", color: "var(--c-muted)" }}>Registration fee</span>
             <button className="npl-btn npl-btn--ghost" style={{ marginTop: ".4rem" }} onClick={() => setEditing(t)}>Edit tier</button>

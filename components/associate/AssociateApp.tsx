@@ -16,6 +16,7 @@ import PortalDrawers, { type PortalPanel } from "../PortalDrawers";
 import MembershipHub from "../membership/MembershipHub";
 import { propertySlug } from "../../lib/property-catalog";
 import { downloadCertificate } from "../../lib/pdf";
+import { membershipBadgeClass } from "../../lib/membership";
 
 type PageKey =
   | "Overview" | "Earnings" | "Referrals" | "CRM" | "Academy"
@@ -695,7 +696,7 @@ function Team_() {
               {team.map((m) => (
                 <tr key={m.id}>
                   <td data-label="Member"><b>{m.name}</b></td>
-                  <td data-label="Rank"><span className="npl-badge blue">{m.rank}</span></td>
+                  <td data-label="Rank"><span className={`npl-badge ${membershipBadgeClass(m.rank)}`}>{m.rank}</span></td>
                   <td data-label="Level">L{m.level}</td>
                   <td data-label="Referrals">{m.referrals}</td>
                   <td data-label="Volume"><b>{naira(m.volume)}</b></td>
@@ -775,7 +776,7 @@ function Profile() {
             <h3>{member.name}</h3>
             <p style={{ color: "var(--c-muted)" }}>{member.rank} · Member since {member.joined}</p>
             <div style={{ marginTop: ".5rem", display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
-              <span className="npl-badge blue"><Crown size={12} /> {member.rank}</span>
+              <span className={`npl-badge ${membershipBadgeClass(member.rank)}`}><Crown size={12} /> {member.rank}</span>
               <span className="npl-badge ok"><ShieldCheck size={12} /> Verified</span>
             </div>
           </div>
