@@ -143,10 +143,12 @@ function PageHead({ eyebrow, title, sub, action }: { eyebrow: string; title: str
     </div>
   );
 }
-function Metric({ icon: Icon, label, value, note, variant }: { icon: typeof Home; label: string; value: string; note?: React.ReactNode; variant?: string }) {
+function Metric({ icon: Icon, label, value, variant }: { icon: typeof Home; label: string; value: string; variant?: string }) {
   return (
     <div className={`npl-card npl-metric${variant ? " npl-metric--" + variant : ""}`}>
-      <span className="npl-metric__ic"><Icon size={21} /></span><b>{value}</b><span>{label}</span>{note && <small>{note}</small>}
+      <span className="npl-metric__ic"><Icon size={21} /></span>
+      <b>{value}</b>
+      <span>{label}</span>
     </div>
   );
 }
@@ -185,9 +187,9 @@ function HomeView({
 
       <div className="npl-grid cols-4">
         <Metric icon={TrendingUp} label="Invested capital" value={naira(portfolio.invested)} variant="royal" />
-        <Metric icon={Wallet} label="Available balance" value={naira(wallet.available)} note={<span className="npl-up">Ready to invest</span>} variant="gold" />
-        <Metric icon={Building2} label="Active holdings" value={String(holdings.length)} note="Across 3 models" />
-        <Metric icon={Clock3} label="Monthly income" value={naira(portfolio.monthlyIncome)} note={<span className="npl-up">+8% this quarter</span>} />
+        <Metric icon={Wallet} label="Available balance" value={naira(wallet.available)} variant="gold" />
+        <Metric icon={Building2} label="Active holdings" value={String(holdings.length)} />
+        <Metric icon={Clock3} label="Monthly income" value={naira(portfolio.monthlyIncome)} />
       </div>
 
       <div className="npl-grid cols-2">
@@ -304,7 +306,7 @@ function Investments() {
       <div className="npl-grid cols-3">
         <Metric icon={TrendingUp} label="Total invested" value={naira(portfolio.invested)} variant="royal" />
         <Metric icon={Building2} label="Current value" value={naira(portfolio.currentValue)} variant="gold" />
-        <Metric icon={Check} label="Total ROI" value={`+${portfolio.roi}%`} note={<span className="npl-up">{naira(portfolio.gain)} gain</span>} />
+        <Metric icon={Check} label="Total ROI" value={`+${portfolio.roi}%`} />
       </div>
       {holdings.map((h) => {
         const docs = docsForHolding(h);
@@ -377,7 +379,7 @@ function WalletView({ onFund, onWithdraw }: { onFund: () => void; onWithdraw: ()
       </div>
       <div className="npl-grid cols-3">
         <Metric icon={Wallet} label="Available" value={naira(wallet.available)} variant="gold" />
-        <Metric icon={Clock3} label="Pending income" value={naira(wallet.pending)} note="Settling soon" />
+        <Metric icon={Clock3} label="Pending income" value={naira(wallet.pending)} />
         <Metric icon={TrendingUp} label="Invested" value={naira(wallet.invested)} variant="royal" />
       </div>
       <div className="npl-card">
@@ -547,6 +549,7 @@ function Referral_() {
           <div className="npl-refcard__linkbox">
             <div className="npl-refcard__label">Your referral link</div>
             <div className="npl-refcard__input">
+              <span className="npl-refcard__input-ic"><Copy size={15} /></span>
               <input readOnly value={referral.link} />
               <button className="npl-btn npl-btn--primary npl-refcard__copy" onClick={copy}>{copied ? <Check size={15} /> : <Copy size={15} />} {copied ? "Copied" : "Copy"}</button>
             </div>

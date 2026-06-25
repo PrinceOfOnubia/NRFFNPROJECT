@@ -154,6 +154,7 @@
 .npl-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
 .npl-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
 .npl-grid.auto { grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); }
+.npl-grid.cols-3,
 .npl-grid.cols-4 { align-items: stretch; }
 
 .npl-card { background:#fff; border:1px solid var(--c-line); border-radius: var(--r-lg); padding: 1.4rem; box-shadow: var(--shadow-sm); }
@@ -161,7 +162,18 @@
 .npl-card__head h3 { font-size: 1.05rem; }
 .npl-card__head p { font-size: .82rem; color: var(--c-muted); }
 
-.npl-metric { display:flex; flex-direction:column; gap:.5rem; }
+.npl-metric {
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+  min-height: 152px;
+  height: 100%;
+  align-self: stretch;
+}
+.npl-grid.cols-3 > .npl-metric {
+  min-height: 152px;
+  height: 100%;
+}
 .npl-grid.cols-4 > .npl-metric {
   min-height: 186px;
   height: 100%;
@@ -177,7 +189,7 @@
 .npl-metric--royal span { color: rgba(255,255,255,.72); }
 .npl-metric--gold { background: linear-gradient(160deg,#fbf3d8,#f4e7bf); border-color:#efdca0; }
 .npl-metric--gold .npl-metric__ic { background:#fff; color:var(--c-gold); }
-.npl-metric { align-self: start; }
+.npl-metric { justify-content: flex-start; }
 
 .npl-up { color: var(--ok); } .npl-down { color: var(--hot); }
 
@@ -418,7 +430,16 @@
   .npl-side__brand { padding-bottom: .75rem; }
   .npl-side__group { padding: .65rem .6rem .28rem; }
   .npl-nav { padding: .56rem .65rem; font-size: .86rem; gap: .65rem; }
-  .npl-side__foot { padding-top: .6rem; }
+  .npl-side__foot { padding-top: .6rem; background: transparent; }
+  .npl-side__foot .npl-nav--danger {
+    background: rgba(255,255,255,.94);
+    color: var(--hot);
+    border-color: rgba(212,69,47,.22);
+  }
+  .npl-side__foot .npl-nav--danger:hover {
+    background: #fff;
+    color: var(--hot);
+  }
   .npl-top {
     grid-template-columns: 46px minmax(0, 1fr) 46px 46px;
     gap: .65rem;
@@ -435,6 +456,8 @@
     background: transparent;
     display: grid;
     place-items: center;
+    position: relative;
+    top: -5px;
   }
   .npl-top .npl-icnbtn,
   .npl-top .npl-pill-user {
@@ -574,15 +597,24 @@
   }
   .npl-refcard__share span { display: none; }
   .npl-refcard__copy {
-    min-height: 46px;
-    border-radius: 18px;
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    border-radius: 999px;
+    font-size: 0;
+    gap: 0;
   }
+  .npl-refcard__copy svg { margin: 0; }
+  .npl-refcard__input-ic { display: none; }
   .npl-refcard__input {
-    padding: .7rem .75rem .7rem 1rem;
-    gap: .5rem;
+    padding: .55rem .55rem .55rem .85rem;
+    gap: .45rem;
+    border-radius: 20px;
   }
   .npl-refcard__input input {
-    font-size: .84rem;
+    font-size: .78rem;
   }
 }
 @media (prefers-reduced-motion: reduce) { .npl * { transition:none !important; animation:none !important; } }
@@ -771,7 +803,7 @@
   }
   .npl-top .npl-pill-user {
     position: relative;
-    top: -1px;
+    top: -5px;
   }
   .npl-top .npl-avatar {
     width: 44px;
@@ -786,7 +818,16 @@
   .npl-side__brand { padding-bottom: 1rem; }
   .npl-side__group { padding-top: .65rem; }
   .npl-nav { padding: .52rem .62rem; border-radius: 10px; font-size: .84rem; gap: .65rem; }
-  .npl-side__foot { position: sticky; bottom: 0; margin-top: .45rem; padding-top: .65rem; background: linear-gradient(180deg, rgba(7,31,68,0), var(--c-royal-900) 18%); }
+  .npl-side__foot { position: sticky; bottom: 0; margin-top: .45rem; padding-top: .65rem; background: transparent; }
+  .npl-side__foot .npl-nav--danger {
+    background: rgba(255,255,255,.94);
+    color: var(--hot);
+    border-color: rgba(212,69,47,.22);
+  }
+  .npl-side__foot .npl-nav--danger:hover {
+    background: #fff;
+    color: var(--hot);
+  }
   .npl-hero-actions { gap: .55rem; }
 }
 @media (max-width: 720px) {
@@ -1008,6 +1049,17 @@
   border-radius: 28px;
   padding: .85rem .9rem .85rem 1.15rem;
   min-width: 0;
+}
+.npl-refcard__input-ic {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--c-royal);
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid #d4e4f0;
 }
 .npl-refcard__input input {
   flex: 1;
@@ -1240,7 +1292,7 @@
   }
   .npl-top .npl-pill-user {
     position: relative;
-    top: -1px;
+    top: -6px;
   }
   .npl-setup__cta { min-height: 46px; font-size: .88rem; }
   .npl-refcard__share a,
